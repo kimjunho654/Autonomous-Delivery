@@ -14,6 +14,20 @@ MAX_Velocity = 125
 
 teleop_pub = rospy.Publisher('/cmd_vel', Twist,queue_size=1)
 
+msg = """
+Control Your TurtleBot3!
+---------------------------
+Moving around:
+        w
+   a    s    d
+        x
+w/x : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
+a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
+space key, s : force stop
+CTRL-C to quit
+"""
+
+#Code for receiving input from the keyboard
 def getkey():
         fd = sys.stdin.fileno()
         original_attributes = termios.tcgetattr(fd)
@@ -23,6 +37,11 @@ def getkey():
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, original_attributes)
         return ch
+
+#Code for displaying changed values through the terminal.
+def vels(target_linear_vel, target_angular_vel):
+    return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
+
 
 def teleop():
     global velocity,steering,breakcontrol,gear
@@ -64,7 +83,8 @@ def teleop():
         pubmsg.linear.x = velocity
         pubmsg.angular.z = steering
         teleop_pub.publish(pubmsg)
-        print('cmd : ' + str(velocity) + ','+ str(steering))
+        print('currently:\tlinear vel ' + str(velocity) + '\t angular vel '+ str(steering))
+        "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
         #rate.sleep()
     rospy.spin()
 
