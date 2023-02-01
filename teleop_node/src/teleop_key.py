@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import rospy
 import sys, select, os
-import sys
 import tty
 import termios
 from geometry_msgs.msg import Twist
@@ -13,7 +12,7 @@ breakcontrol = 1
 gear = 0
 MAX_Velocity = 125
 
-publisher = rospy.Publisher('/cmd_vel', Twist,queue_size=1)
+teleop_pub = rospy.Publisher('/cmd_vel', Twist,queue_size=1)
 
 def getkey():
         fd = sys.stdin.fileno()
@@ -64,7 +63,7 @@ def teleop():
   
         pubmsg.linear.x = velocity
         pubmsg.angular.z = steering
-        publisher.publish(pubmsg)
+        teleop_pub.publish(pubmsg)
         print('cmd : ' + str(velocity) + ','+ str(steering))
         #rate.sleep()
     rospy.spin()
