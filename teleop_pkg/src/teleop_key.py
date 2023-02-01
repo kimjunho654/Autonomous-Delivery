@@ -12,7 +12,7 @@ breakcontrol = 1
 gear = 0
 MAX_Velocity = 125
 
-teleop_pub = rospy.Publisher('/cmd_vel', Twist,queue_size=1)
+teleop_pub = rospy.Publisher('teleop_cmd_vel', Twist,queue_size=1)
 
 msg = """
 Control Your TurtleBot3!
