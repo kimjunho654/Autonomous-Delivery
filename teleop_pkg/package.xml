@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>turtlebot3_teleop</name>
+  <name>teleop_pkg</name>
   <version>1.2.6</version>
   <description>
-    Provides teleoperation using keyboard for TurtleBot3.
+    Provides teleoperation using keyboard for Henes.
   </description>
   <license>BSD</license>
   <author>Melonee Wise</author>
@@ -17,4 +17,5 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>rospy</depend>
   <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
 </package>
