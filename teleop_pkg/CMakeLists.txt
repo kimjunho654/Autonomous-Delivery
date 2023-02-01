@@ -2,7 +2,7 @@
 # Set minimum required version of cmake, project name and compile options
 ################################################################################
 cmake_minimum_required(VERSION 3.0.2)
-project(turtlebot3_teleop)
+project(teleop)
 
 ################################################################################
 # Find catkin packages and libraries for catkin and system dependencies
@@ -10,6 +10,7 @@ project(turtlebot3_teleop)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   geometry_msgs
+  std_msgs
 )
 
 ################################################################################
