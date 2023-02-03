@@ -14,9 +14,9 @@ int velocity;
 
 ros::NodeHandle  nh;
 
-void cmd_vel_callback(const geometry_msgs::Twist& msg) 
+void cmd_vel_callback(const geometry_msgs::Twist& cmd_vel) 
 {
-  velocity = (int)msg.linear.x; //
+  velocity = (int)cmd_vel.linear.x; //
 //  steer_angle = (int)msg.angular.z; // steering motor
 
 if(velocity >= 100) velocity  = 100;  // pwm
@@ -40,16 +40,18 @@ void setup()
   pinMode(Direction1, OUTPUT);
   pinMode(Brake2, OUTPUT);
 
+  //Serial.begin(57600);
+
 }
 
 void loop()
 {
   analogWrite(PWM1, velocity);
   analogWrite(PWM2, velocity);
+  //Serial.println(velocity);
   
   digitalWrite(Direction1, LOW);
   digitalWrite(Direction2, LOW);
  
   nh.spinOnce();
-  delay(500);
 }
