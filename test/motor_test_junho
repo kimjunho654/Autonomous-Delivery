@@ -1,0 +1,57 @@
+#include <ros.h>
+#include <std_msgs/Int32.h>
+#include <geometry_msgs/Twist.h>
+
+ros::NodeHandle nh;
+std_msgs::Int32 duty_data;
+ros::Publisher chatter("chatter", &duty_data);
+
+int PWM1 = 2;
+int Direction1 = 52;
+int Brake1 = 53;
+
+int PWM2 = 5;
+int Direction2 = 50;
+int Brake2 = 51;
+
+int Duty = 0;
+
+void setup() {
+  nh.initNode();
+  nh.advertise(chatter);
+
+  analogWrite(PWM1, 0);
+  analogWrite(PWM2, 0);
+
+  pinMode(Direction1, OUTPUT);
+  pinMode(Brake2, OUTPUT);
+ 
+  pinMode(Direction1, OUTPUT);
+  pinMode(Brake2, OUTPUT);
+ 
+}
+
+void loop() {
+ 
+  for(int i = 0; i <=10; i++)
+  {
+    analogWrite(PWM1, Duty);
+    analogWrite(PWM2, Duty);
+    digitalWrite(Direction1, LOW);
+    digitalWrite(Direction2, LOW);
+    delay(1000);
+
+    duty_data.data = Duty;
+    chatter.publish(&duty_data);
+   
+    nh.spinOnce();
+   
+    Duty += 10;
+  }
+ 
+  if(Duty > 100)
+  {
+    Duty = 0;
+  }
+ 
+}
