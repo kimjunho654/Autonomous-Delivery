@@ -1,6 +1,7 @@
 #include <ros.h>
 #include <std_msgs/Int32.h>
 #include <geometry_msgs/Twist.h>
+//#include <MsTimer2.h>
 
 int PWM1 = 2;
 int Direction1 = 52;
@@ -11,6 +12,8 @@ int Direction2 = 50;
 int Brake2 = 51;
 
 int velocity;
+
+geometry_msgs::Twist cmd_pub;
 
 ros::NodeHandle  nh;
 
@@ -24,6 +27,7 @@ if(velocity <= -100) velocity = -100;  // pwm
 
 }
 
+ros::Publisher cmd_pub1("/cmd_pub", &cmd_pub);
 ros::Subscriber <geometry_msgs::Twist> cmd_sub("/cmd_vel", cmd_vel_callback);
 
 void setup()
@@ -48,7 +52,10 @@ void loop()
 {
   analogWrite(PWM1, velocity);
   analogWrite(PWM2, velocity);
-  //Serial.println(velocity);
+
+  cmd_pub.linear.x = velocity;
+  //cmd_pub1.publish(&cmd_pub);
+  
   
   digitalWrite(Direction1, LOW);
   digitalWrite(Direction2, LOW);
