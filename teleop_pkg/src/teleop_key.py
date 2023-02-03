@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import rospy
 import sys, select, os
 import tty
@@ -11,6 +10,9 @@ steering = 0
 breakcontrol = 1
 gear = 0
 MAX_Velocity = 125
+
+target_linear_vel = 0;
+target_angular_vel = 0;
 
 teleop_pub = rospy.Publisher('teleop_cmd_vel', Twist,queue_size=1)
 
