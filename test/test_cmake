@@ -1,0 +1,13 @@
+add_executable(teleop_node scripts/teleop_twist_keyboard.py)     
+# ﻿add_executable(teleop_node /opt/ros/noetic/lib/teleop_twist_keyboard/teleop_twist_keyboard.py) 
+# add_executable(arduino_node /home/Arduino/motor_test_sub2teleop/motor_test_sub2teleop_ino )
+
+add_dependencies(teleop_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(arduino_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(telop_node
+  ${CATKIN_LIBRARIES}
+)
+# target_link_libraries(arduino_node
+#  ${CATKIN_LIBRARIES}
+# )
