@@ -38,7 +38,7 @@ std::map<char, std::vector<float>> speedBindings
   {'w', {1, 0}},
   {'s', {0, 0}},
   {'a', {0, 1}},
-  {'d', {0, -1}}
+  {'d', {0, -1}},
   {'x', {-1, 0}}
 };
 
@@ -137,11 +137,7 @@ int main(int argc, char** argv)
       // Grab the speed data
       speed = speed + speedBindings[key][0];
       turn = turn + speedBindings[key][1];
-      if (speedBindings.count(key) == 's')
-      {
-        speed = 0;
-        turn = 0;
-      }
+      
 
       printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
     }
@@ -165,13 +161,13 @@ int main(int argc, char** argv)
     }
 
     // Update the Twist message
-    twist.linear.x = x * speed;
-    twist.linear.y = y * speed;
-    twist.linear.z = z * speed;
+    twist.linear.x = speed;
+    twist.linear.y = speed;
+    twist.linear.z = speed;
 
     twist.angular.x = 0;
     twist.angular.y = 0;
-    twist.angular.z = th * turn;
+    twist.angular.z = turn;
 
     // Publish it and resolve any remaining callbacks
     pub.publish(twist);
