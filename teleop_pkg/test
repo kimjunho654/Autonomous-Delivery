@@ -35,12 +35,11 @@ std::map<char, std::vector<float>> moveBindings
 // Map for speed keys
 std::map<char, std::vector<float>> speedBindings
 {
-  {'q', {1.1, 1.1}},
-  {'z', {0.9, 0.9}},
-  {'w', {1.1, 1}},
-  {'x', {0.9, 1}},
-  {'e', {1, 1.1}},
-  {'c', {1, 0.9}}
+  {'w', {1, 0}},
+  {'s', {0, 0}},
+  {'a', {0, 1}},
+  {'d', {0, -1}}
+  {'x', {-1, 0}}
 };
 
 // Reminder message
@@ -136,8 +135,13 @@ int main(int argc, char** argv)
     else if (speedBindings.count(key) == 1)
     {
       // Grab the speed data
-      speed = speed * speedBindings[key][0];
-      turn = turn * speedBindings[key][1];
+      speed = speed + speedBindings[key][0];
+      turn = turn + speedBindings[key][1];
+      if (speedBindings.count(key) == 's')
+      {
+        speed = 0;
+        turn = 0;
+      }
 
       printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
     }
