@@ -15,10 +15,12 @@ int Direction2 = 50;
 int Brake2 = 51;
 
 float velocity;
+float steer_angle;
 
 void cmd_vel_callback(const geometry_msgs::Twist& cmd_vel)
 {
   velocity = cmd_vel.linear.x;
+  steer_angle = cmd_vel.angular.z;
 
   if(velocity >= 100) velocity  = 100;  // pwm
   if(velocity <= -100) velocity = -100;  // pwm
