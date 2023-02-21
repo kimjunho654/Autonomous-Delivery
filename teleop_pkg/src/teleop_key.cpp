@@ -35,12 +35,11 @@ std::map<char, std::vector<float>> moveBindings
 // Map for speed keys
 std::map<char, std::vector<float>> speedBindings
 {
-  {'q', {1.1, 1.1}},
-  {'z', {0.9, 0.9}},
-  {'w', {1.1, 1}},
-  {'x', {0.9, 1}},
-  {'e', {1, 1.1}},
-  {'c', {1, 0.9}}
+  {'w', {10, 0}},
+  {'x', {-10, 0}},
+  {'a', {0, -10}},
+  {'d', {0, 10}}
+  
 };
 
 // Reminder message
@@ -66,8 +65,8 @@ CTRL-C to quit
 )";
 
 // Init variables
-float speed(0.5); // Linear velocity (m/s)
-float turn(1.0); // Angular velocity (rad/s)
+float speed(0); // Linear velocity (m/s)
+float turn(0); // Angular velocity (rad/s)
 float x(0), y(0), z(0), th(0); // Forward/backward/neutral direction vars
 char key(' ');
 
@@ -136,8 +135,8 @@ int main(int argc, char** argv)
     else if (speedBindings.count(key) == 1)
     {
       // Grab the speed data
-      speed = speed * speedBindings[key][0];
-      turn = turn * speedBindings[key][1];
+      speed = speed + speedBindings[key][0];
+      turn = turn + speedBindings[key][1];
 
       printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
     }
@@ -145,10 +144,8 @@ int main(int argc, char** argv)
     // Otherwise, set the robot to stop
     else
     {
-      x = 0;
-      y = 0;
-      z = 0;
-      th = 0;
+      speed = 0;
+      turn = 0;
 
       // If ctrl-C (^C) was pressed, terminate the program
       if (key == '\x03')
@@ -161,13 +158,13 @@ int main(int argc, char** argv)
     }
 
     // Update the Twist message
-    twist.linear.x = x * speed;
-    twist.linear.y = y * speed;
-    twist.linear.z = z * speed;
+    twist.linear.x = speed;
+    twist.linear.y = speed;
+    twist.linear.z = speed;
 
     twist.angular.x = 0;
     twist.angular.y = 0;
-    twist.angular.z = th * turn;
+    twist.angular.z = turn;
 
     // Publish it and resolve any remaining callbacks
     pub.publish(twist);
