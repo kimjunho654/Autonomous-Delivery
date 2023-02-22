@@ -146,7 +146,7 @@ void steer_PID_Control()
  error_s = (error_s >=  100) ?  100 : error_s;
  error_s = (error_s <= -100) ? -100 : error_s;
  
- pwm_output = Kp * error + Kd * error_d + Ki * error_s;
+ pwm_output = Kp * error + Ki * error_s + Kd * error_d;
  pwm_output = (pwm_output >=  255) ?  255 : pwm_output;
  pwm_output = (pwm_output <= -255) ? -255 : pwm_output;
  
@@ -269,7 +269,7 @@ void setup() {
  nh.advertise(sonar_pub2);
  nh.advertise(sonar_pub3);  
  
- MsTimer2::set(100, Steering_control_callback); // 500ms period
+ MsTimer2::set(100, Steering_control_callback); // 100ms period
  MsTimer2::start();
 }
 
