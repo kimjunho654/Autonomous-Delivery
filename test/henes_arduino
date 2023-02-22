@@ -42,7 +42,7 @@ ros::Publisher sonar_pub1("sonar1",&sonar_data1);
 ros::Publisher sonar_pub2("sonar2",&sonar_data2);
 ros::Publisher sonar_pub3("sonar3",&sonar_data3);
 
-// Front Motor Drive
+///////////////////////////////// Front and rear Motor Drive /////////////////////////////
 #define MOTOR1_PWM 2
 #define MOTOR1_DIR 3
 
@@ -183,6 +183,60 @@ void Steering_control_callback()
  Steering_angle_limit();
 }
 
+///////////////////////////////////////  encoder /////////////////////////////////////////////
+#define encoder0PinA 2
+#define encoder0PinB 3
+
+int encoder0Pos = 0;
+
+void doEncoderA(){
+  // look for a low-to-high on channel A
+  if (digitalRead(encoder0PinA) == HIGH) { 
+    // check channel B to see which way encoder is turning
+    if (digitalRead(encoder0PinB) == LOW) {  
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  else   // must be a high-to-low edge on channel A                                       
+  { 
+    // check channel B to see which way encoder is turning  
+    if (digitalRead(encoder0PinB) == HIGH) {   
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  Serial.println (encoder0Pos);
+}
+
+void doEncoderB(){
+  // look for a low-to-high on channel B
+  if (digitalRead(encoder0PinB) == HIGH) {   
+   // check channel A to see which way encoder is turning
+    if (digitalRead(encoder0PinA) == HIGH) {  
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  // Look for a high-to-low on channel B
+  else { 
+    // check channel B to see which way encoder is turning  
+    if (digitalRead(encoder0PinA) == LOW) {   
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  Serial.println (encoder0Pos);
+}
+
 void setup() {
  // put your setup code here, to run once:
  Serial.begin(57600);
@@ -191,19 +245,22 @@ void setup() {
  pinMode(MOTOR1_PWM, OUTPUT);
  pinMode(MOTOR1_DIR, OUTPUT);  // motor control direction
 
- 
  // Rear Motor Drive Pin Setup
  pinMode(MOTOR2_PWM, OUTPUT);
  pinMode(MOTOR2_DIR, OUTPUT);  // motor control direction
 
- 
   //Steer
  pinMode(MOTOR3_PWM, OUTPUT);
  pinMode(MOTOR3_DIR, OUTPUT);  // motor control direction
 
- 
  error = error_s = error_d = error_old = 0.0;
  pwm_output = 0;
+
+  // Read Encoder Values
+  pinMode(encoder0PinA, INPUT); 
+  pinMode(encoder0PinB, INPUT); 
+  attachInterrupt(0, doEncoderA, CHANGE); // encoder pin on interrupt 0 (pin 2)
+  attachInterrupt(1, doEncoderB, CHANGE); // encoder pin on interrupt 1 (pin 3)
  
  nh.initNode();
  nh.subscribe(teleop_cmd_sub);
