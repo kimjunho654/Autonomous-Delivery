@@ -43,12 +43,12 @@ ros::Publisher sonar_pub2("sonar2",&sonar_data2);
 ros::Publisher sonar_pub3("sonar3",&sonar_data3);
 
 ///////////////////////////////// Front and rear Motor Drive /////////////////////////////
-#define MOTOR1_PWM 2
-#define MOTOR1_DIR 3
+#define MOTOR1_PWM 4
+#define MOTOR1_DIR 5
 
 
-#define MOTOR2_PWM 5
-#define MOTOR2_DIR 6
+#define MOTOR2_PWM 6
+#define MOTOR2_DIR 7
 
 int f_speed = 0, r_speed = 0;
 
@@ -184,8 +184,8 @@ void Steering_control_callback()
 }
 
 ///////////////////////////////////////  encoder /////////////////////////////////////////////
-#define encoder0PinA 2
-#define encoder0PinB 3
+#define encoder0PinA 2  // interrupt 4 pin
+#define encoder0PinB 3  // interrupt 5 pin
 
 int encoder0Pos = 0;
 
@@ -259,8 +259,8 @@ void setup() {
   // Read Encoder Values
   pinMode(encoder0PinA, INPUT); 
   pinMode(encoder0PinB, INPUT); 
-  attachInterrupt(0, doEncoderA, CHANGE); // encoder pin on interrupt 0 (pin 2)
-  attachInterrupt(1, doEncoderB, CHANGE); // encoder pin on interrupt 1 (pin 3)
+  attachInterrupt(4, doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
+  attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
  
  nh.initNode();
  nh.subscribe(teleop_cmd_sub);
