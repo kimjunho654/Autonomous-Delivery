@@ -181,6 +181,12 @@ void Steering_control_callback()
  sensorValue = analogRead(Steering_Sensor);
  // map it to the range of the analog out:
  Steer_Angle_Measure = map(sensorValue, 50, 1050, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+  
+ Serial.print("sensorValue : ");
+ Serial.println(sensorValue);
+ Serial.print("Steer_Angle_Measure : ");
+ Serial.println(Steer_Angle_Measure);
+
  Steering_Angle = NEURAL_ANGLE + steer_angle;
  Steering_angle_limit();
 }
@@ -212,6 +218,7 @@ void doEncoderA(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
+  Serial.print("encoder0Pos : ");
   Serial.println (encoder0Pos);
 }
 
@@ -236,6 +243,7 @@ void doEncoderB(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
+  Serial.print("encoder0Pos : ");
   Serial.println (encoder0Pos);
 }
 
@@ -306,6 +314,4 @@ void loop(){
 
  nh.spinOnce();
 
- Serial.print("Steering : ");
- Serial.println(sensorValue);
 }
