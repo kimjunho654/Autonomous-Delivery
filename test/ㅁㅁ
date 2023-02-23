@@ -1,1 +1,0 @@
-sudo cp ~/librealsense/wrappers/python/pyrealsense2/__init__.py /usr/lib/python3/dist-packages/pyrealsense2/
