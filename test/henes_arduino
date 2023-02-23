@@ -15,6 +15,8 @@ std_msgs::Float32 sonar_data3;
 
 int velocity = 0;
 int steer_angle = 0;
+unsigned long now = 0;
+unsigned long past = 0;
 
 //Sonar Sensor
 
@@ -150,7 +152,7 @@ void steer_PID_Control()
  pwm_output = (pwm_output >=  255) ?  255 : pwm_output;
  pwm_output = (pwm_output <= -255) ? -255 : pwm_output;
  
- if (error == 0)
+ if ((error <= 0.3) && (error >= -0.3))
  {
    steer_motor_control(0);
    error_s = 0;
@@ -278,6 +280,14 @@ void loop(){
  f_speed = velocity;
  r_speed = velocity;
 
+/*    Uncomment when you want the motor to operate for a period of time only
+ now = millis();
+     if(now - past >= 3000){ 
+        motor_control(f_speed,r_speed);
+        past = now;
+    }
+*/
+
  motor_control(f_speed,r_speed);
 
  sonar_data1.data = sonar[0].ping_cm()/100.0;
@@ -298,6 +308,4 @@ void loop(){
 
  Serial.print("Steering : ");
  Serial.println(sensorValue);
- //Serial.print("Encoder : ");
-// Serial.println(encoder2count);
 }
