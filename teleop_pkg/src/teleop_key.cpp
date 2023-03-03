@@ -35,10 +35,10 @@ std::map<char, std::vector<float>> moveBindings
 // Map for speed keys
 std::map<char, std::vector<float>> speedBindings
 {
-  {'w', {10, 0}},
-  {'x', {-10, 0}},
-  {'a', {0, -10}},
-  {'d', {0, 10}}
+  {'w', {5, 0}},
+  {'x', {-5, 0}},
+  {'a', {0, -2}},
+  {'d', {0, 2}}
   
 };
 
