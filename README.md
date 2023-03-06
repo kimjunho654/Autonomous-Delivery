@@ -198,6 +198,7 @@ bashrc 파일을 수정해야 한다.
   https://developer.nvidia.com/rdp/cudnn-archive
 
 압축해제
+    
     cd ~/Downloads
     tar –xf cudnn-[버전]-linux-x64-v8.1.1.33.tgz                      // 본인이 설치한 cuDNN 버전에 맞게 [버전]을 지우고 숫자를 타이핑 한다. ex) 11.2
 
