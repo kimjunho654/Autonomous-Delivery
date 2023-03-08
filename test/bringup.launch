@@ -1,0 +1,8 @@
+<launch>
+  <include file="$(find rosserial_python)/serial_node.py" />
+  <param name="port" value="/dev/ttyUSB0" />
+
+  <include file="$(find realsense2_camera)/launch/opensource_tracking.launch" />
+
+  <include file="$(find rplidar_ros)/launch/view_rplidar.launch" />
+</launch>
