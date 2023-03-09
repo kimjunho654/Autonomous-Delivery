@@ -4,6 +4,7 @@
 
     :
     %s/kr.archive.ubuntu.com/mirror.kakao.com/
+    :
     %s/security.ubuntu.com/mirror.kakao.com/
     :wq! 
     sudo apt update
