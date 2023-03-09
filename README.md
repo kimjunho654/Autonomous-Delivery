@@ -206,10 +206,10 @@ bashrc 파일을 수정해야 한다.
   
 아래의 문구를 추가해준다. 이때 /usr/local/cuda-버전숫자 이 경로로 들어가서 cuda 버전을 확인하여 그에 맞게 수정해준다.
   
-    export PATH=/usr/local/cuda-11.2/bin${PATH:+:${PATH}}
+    export PATH=/usr/local/cuda-11.7/bin${PATH:+:${PATH}}
     export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     source ~/.bashrc
-    nvcc --version        // 설치 되었는지 버전 확인
+    nvcc --version        // 설치 되었는지 확인
   
 # cuDNN 설치
     
@@ -219,7 +219,7 @@ bashrc 파일을 수정해야 한다.
 압축해제
     
     cd ~/Downloads
-    tar –xf cudnn-[버전]-linux-x64-v8.1.1.33.tgz                      // 본인이 설치한 cuDNN 버전에 맞게 [버전]을 지우고 숫자를 타이핑 한다. ex) 11.2
+    tar xf cudnn-[버전]-linux-x64-v8.1.1.33.tgz                      // 본인이 설치한 압축파일의 이름을 복사, 붙여넣기 하여 압축 해제한다.
 
   여기서 압축해제한 폴더 이름은 cuda로 바꾼다.
   
@@ -237,7 +237,7 @@ bashrc 파일을 수정해야 한다.
 
   설치를 확인한다.
   
-    ldconfig -p | grep cudnn
+    ldconfig -p | grep cudnn                    // 아무것도 디스플레이 되지 않을때가 있다.
   
 # tensorflow install
   
