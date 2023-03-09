@@ -96,9 +96,27 @@ ID_SERIAL= 의 뒤에 있는 내용들은 이후에 사용할 예정이므로 �
 Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 모델명은 rplidar a2m12 이다. 대부분의 a2 라이더는 115200으로 통신하지만
 해당 모델의 경우(rplidar a2m12) serial_baudrate를 256000으로 사용하기 때문에 launch 파일에서 이러한 부분을 수정 할 필요가 있다.
 
-# realsense-ros 설치
+# realsense 패키지 설치
     sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
     sudo apt-get install ros-$ROS_DISTRO-realsense2-description
+    
+# 빌드 의존성 설치
+    sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+    git clone https://github.com/IntelRealSense/librealsense.git
+    cd librealsense
+    sudo apt-get install git libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
+
+우분투 버전에 따라 아래 3가지 명령어 중 선택
+
+    // 우분투 14
+    ./scripts/install_glfw3.sh              
+
+    // 우분투 16
+    sudo apt-get install libglfw3-dev
+
+    // 우분투 18/20
+    sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at
+
 # Intel® RealSense™ SDK 2.0 설치
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
     
@@ -115,7 +133,6 @@ Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 
 
 # Intel® RealSense™ ROS 설치
     cd ~/catkin_ws/src/
-    sudo apt install git
     git clone https://github.com/IntelRealSense/realsense-ros.git
     cd realsense-ros/
     git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
@@ -123,7 +140,8 @@ Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 
     catkin_make clean
     catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
     catkin_make install
-    source devel/setup.bash
+    echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+    source ~/.bashrc
   
 # pointcloud 옵션을 사용하여 카메라 노드 실행
     roslaunch realsense2_camera rs_camera.launch filters:=pointcloud              // 뒤에 붙는 옵션은 다양하게 붙을 수 있다.
