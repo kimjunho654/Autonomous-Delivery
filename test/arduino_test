@@ -2,7 +2,7 @@
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Int32.h>
 
-ros::NodeHandle  nh; 
+//ros::NodeHandle  nh; 
 std_msgs::Int32 str_msg;
 geometry_msgs::Twist cmd_vel; 
 
@@ -19,21 +19,21 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg)
 
 }
 
-ros::Subscriber<geometry_msgs::Twist> teleop_cmd_sub("cmd_vel", cmd_vel_callback);
-ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);
+//ros::Subscriber<geometry_msgs::Twist> teleop_cmd_sub("cmd_vel", cmd_vel_callback);
+//ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);
 
 // Front Motor Drive
 #define MOTOR1_PWM 4
 #define MOTOR1_DIR 5
-//#define MOTOR1_Brake 4
+#define MOTOR1_Brake 10
 
 #define MOTOR2_PWM 6
 #define MOTOR2_DIR 7
-//#define MOTOR2_Brake 7
+#define MOTOR2_Brake 11
 
 #define MOTOR3_PWM 8
 #define MOTOR3_DIR 9
-//#define MOTOR3_Brake 10
+#define MOTOR3_Brake 12
 
 void first_Step(int velocity_1) // @@ forward @@
 {
@@ -67,9 +67,9 @@ void third_Step(int velocity_3) // @@ turn right @@
 
 void fourth_Step(int velocity_4) // @@ Brake @@
 {
-//  digitalWrite(MOTOR1_Brake, HIGH);
-//  digitalWrite(MOTOR2_Brake, HIGH);
-//  digitalWrite(MOTOR3_Brake, HIGH);
+  digitalWrite(MOTOR1_Brake, HIGH);
+  digitalWrite(MOTOR2_Brake, HIGH);
+  digitalWrite(MOTOR3_Brake, HIGH);
 
   analogWrite(MOTOR1_PWM, velocity_4);
   analogWrite(MOTOR2_PWM, velocity_4);
@@ -104,34 +104,41 @@ void setup()
   // Front Motor
   pinMode(MOTOR1_PWM, OUTPUT);
   pinMode(MOTOR1_DIR, OUTPUT);  
-//  pinMode(MOTOR1_Brake, OUTPUT);
+  pinMode(MOTOR1_Brake, OUTPUT);
 
-  // Rear Motor 
+  // steer Motor 
   pinMode(MOTOR2_PWM, OUTPUT);
   pinMode(MOTOR2_DIR, OUTPUT);  
-//  pinMode(MOTOR2_Brake, OUTPUT);
+  pinMode(MOTOR2_Brake, OUTPUT);
 
-  //steer motor
+  //real motor
   pinMode(MOTOR3_PWM, OUTPUT);
   pinMode(MOTOR3_DIR, OUTPUT); 
-//  pinMode(MOTOR3_Brake, OUTPUT); 
+  pinMode(MOTOR3_Brake, OUTPUT);
 
-  nh.initNode(); 
-  nh.subscribe(teleop_cmd_sub); 
-  nh.advertise(cmd_pub);
+  analogWrite(MOTOR1_PWM, 0);
+  analogWrite(MOTOR2_PWM, 0);
+  analogWrite(MOTOR3_PWM, 0);
+
+  digitalWrite(MOTOR1_DIR, HIGH);
+  digitalWrite(MOTOR2_DIR, HIGH);
+  digitalWrite(MOTOR3_DIR, HIGH);
+
+//  nh.initNode(); 
+//  nh.subscribe(teleop_cmd_sub); 
+//  nh.advertise(cmd_pub);
 }
 
 void loop() 
 {
-//  digitalWrite(MOTOR1_Brake, LOW);
-//  digitalWrite(MOTOR2_Brake, LOW);
-//  digitalWrite(MOTOR3_Brake, LOW);
 
-  motor_control();
+//  analogWrite(MOTOR1_PWM, 60);
+//  analogWrite(MOTOR2_PWM, 60);
+  analogWrite(MOTOR3_PWM, 60);
+//  motor_control();
 
-  cmd_vel.linear.x = velocity;
-  cmd_vel.angular.z = steer_angle;
-  cmd_pub.publish(&cmd_vel);
 
-  nh.spinOnce();
+
+// nh.spinOnce();
+  delay(1000);
 }
