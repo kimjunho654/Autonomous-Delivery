@@ -1,4 +1,3 @@
-
 #include <MsTimer2.h>
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
@@ -47,10 +46,11 @@ ros::Publisher sonar_pub3("sonar3",&sonar_data3);
 ///////////////////////////////// Front and rear Motor Drive /////////////////////////////
 #define MOTOR1_PWM 4
 #define MOTOR1_DIR 5
+#define MOTOR1_BRK 10
 
-
-#define MOTOR2_PWM 6
-#define MOTOR2_DIR 7
+#define MOTOR3_PWM 6
+#define MOTOR3_DIR 7
+#define MOTOR3_BRK 11
 
 int f_speed = 0, r_speed = 0;
 
@@ -73,22 +73,22 @@ void front_motor_control(int motor1_pwm)
   }
 }
 
-void rear_motor_control(int motor2_pwm)
+void rear_motor_control(int motor3_pwm)
 {
-  if (motor2_pwm > 0) // forward
+  if (motor3_pwm > 0) // forward
     {
-      digitalWrite(MOTOR2_DIR, HIGH);
-      analogWrite(MOTOR2_PWM, motor2_pwm);
+      digitalWrite(MOTOR3_DIR, HIGH);
+      analogWrite(MOTOR3_PWM, motor3_pwm);
   }
-  else if (motor2_pwm < 0) // backward
+  else if (motor3_pwm < 0) // backward
     {
-      digitalWrite(MOTOR2_DIR, LOW);
-      analogWrite(MOTOR2_PWM, -motor2_pwm);
+      digitalWrite(MOTOR3_DIR, LOW);
+      analogWrite(MOTOR3_PWM, -motor3_pwm);
   }
   else
     {
-      digitalWrite(MOTOR2_DIR, HIGH);
-      digitalWrite(MOTOR2_PWM, 0);
+      digitalWrite(MOTOR3_DIR, HIGH);
+      digitalWrite(MOTOR3_PWM, 0);
   }
 }
 
@@ -105,9 +105,9 @@ void motor_control(int front_speed, int rear_speed)
 #define NEURAL_ANGLE -3
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
-#define MOTOR3_PWM 8
-#define MOTOR3_DIR 9 
-
+#define MOTOR2_PWM 8
+#define MOTOR2_DIR 9 
+#define MOTOR2_BRK 12
 
 float Kp = 3.0;
 float Ki = 2;
@@ -125,18 +125,18 @@ void steer_motor_control(int motor_pwm)
 {
   if (motor_pwm > 0) // forward
     {
-      digitalWrite(MOTOR3_DIR, HIGH);
-      analogWrite(MOTOR3_PWM, motor_pwm);
+      digitalWrite(MOTOR2_DIR, HIGH);
+      analogWrite(MOTOR2_PWM, motor_pwm);
   }
   else if (motor_pwm < 0) // backward
     {
-      digitalWrite(MOTOR3_DIR, LOW);
-      analogWrite(MOTOR3_PWM, -motor_pwm);
+      digitalWrite(MOTOR2_DIR, LOW);
+      analogWrite(MOTOR2_PWM, -motor_pwm);
   }
   else // stop
     {
-       digitalWrite(MOTOR3_DIR, HIGH);
-       analogWrite(MOTOR3_PWM, 0);
+       digitalWrite(MOTOR2_DIR, HIGH);
+       analogWrite(MOTOR2_PWM, 0);
   }
 }
 
@@ -254,14 +254,17 @@ void setup() {
 // Front Motor Drive Pin Setup
  pinMode(MOTOR1_PWM, OUTPUT);
  pinMode(MOTOR1_DIR, OUTPUT);  // motor control direction
+ pinMode(MOTOR1_BRK, OUTPUT); 
 
  // Rear Motor Drive Pin Setup
- pinMode(MOTOR2_PWM, OUTPUT);
- pinMode(MOTOR2_DIR, OUTPUT);  // motor control direction
-
-  //Steer
  pinMode(MOTOR3_PWM, OUTPUT);
  pinMode(MOTOR3_DIR, OUTPUT);  // motor control direction
+ pinMode(MOTOR3_BRK, OUTPUT); 
+
+  //Steer
+ pinMode(MOTOR2_PWM, OUTPUT);
+ pinMode(MOTOR2_DIR, OUTPUT);  // motor control direction
+ pinMode(MOTOR2_BRK, OUTPUT); 
 
  error = error_s = error_d = error_old = 0.0;
  pwm_output = 0;
@@ -285,8 +288,7 @@ void setup() {
 
 void loop(){
  // put your main code here, to run repeatedly:
- f_speed = velocity;
- r_speed = velocity;
+ f_speed = r_speed = velocity;
 
 /*    Uncomment when you want the motor to operate for a period of time only
  now = millis();
