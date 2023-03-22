@@ -19,7 +19,7 @@ include_directories(
 
 SET(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
-add_executable(ld08_driver src/ld08_driver.cpp src/cmd_interface_linux.cpp src/$
+add_executable(ld08_driver src/ld08_driver.cpp src/cmd_interface_linux.cpp src/lipkg.cpp src/slbf.cpp src/transform.cpp)
 target_link_libraries(ld08_driver pthread udev  ${catkin_LIBRARIES})
 
 install(TARGETS ld08_driver ld08_driver
