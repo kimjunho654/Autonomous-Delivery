@@ -296,11 +296,16 @@ void loop(){
 
  motor_control(f_speed,r_speed);
 
- sonar_data1.data = sonar[0].ping_cm()/100.0;
- sonar_data2.data = sonar[1].ping_cm()/100.0;
- sonar_data3.data = sonar[2].ping_cm()/100.0;
+ //sonar_data1.data = sonar[0].ping_cm()/100.0;
+ //sonar_data2.data = sonar[1].ping_cm()/100.0;
+ //sonar_data3.data = sonar[2].ping_cm()/100.0;
+sonar_data3.data = 100.0;
+ //encoder_data.data = encoder0Pos;
+ 
+ encoder_data.data = 10;
 
- encoder_data.data = encoder0Pos;
+ encoder_pub.publish(&encoder_data);
+
 
  sonar_pub1.publish(&sonar_data1);
  sonar_pub2.publish(&sonar_data2);
