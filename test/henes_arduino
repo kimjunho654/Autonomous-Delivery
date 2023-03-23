@@ -6,8 +6,7 @@
 
 ros::NodeHandle  nh;
 geometry_msgs::Twist cmd_vel;   //
-//std_msgs::Int32 encoder_data1;  //
-//std_msgs::Int32 encoder_data2;  //
+std_msgs::Int32 encoder_data;  //  //
 std_msgs::Float32 sonar_data1;
 std_msgs::Float32 sonar_data2;
 std_msgs::Float32 sonar_data3;
@@ -24,10 +23,11 @@ unsigned long past = 0;
 #define MAX_DISTANCE 200
 
 NewPing sonar[SONAR_NUM]={
-  NewPing(11,11,MAX_DISTANCE),
-  NewPing(12,12,MAX_DISTANCE),
-  NewPing(13,13,MAX_DISTANCE)
+  NewPing(22, 23,MAX_DISTANCE),
+  NewPing(24, 25,MAX_DISTANCE),
+  NewPing(26, 27,MAX_DISTANCE)
 };
+
 void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
   velocity = (int)msg.linear.x;       // 
   steer_angle = (int)msg.angular.z;   // steering motor 
@@ -37,20 +37,19 @@ void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
 
 ros::Subscriber<geometry_msgs::Twist> teleop_cmd_sub("cmd_vel", teleop_cmd_vel_callback);
 ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);              //cmd_vel 
-//ros::Publisher encoder_pub1("encoder1", &encoder_data1);
-//ros::Publisher encoder_pub2("encoder2", &encoder_data2);
+ros::Publisher encoder_pub("encoder", &encoder_data);
 ros::Publisher sonar_pub1("sonar1",&sonar_data1);
 ros::Publisher sonar_pub2("sonar2",&sonar_data2);
 ros::Publisher sonar_pub3("sonar3",&sonar_data3);
 
 ///////////////////////////////// Front and rear Motor Drive /////////////////////////////
-#define MOTOR1_PWM 4
+#define MOTOR1_PWM 4  //front_motor
 #define MOTOR1_DIR 5
-#define MOTOR1_BRK 10
+#define MOTOR1_BRK 6
 
-#define MOTOR3_PWM 6
-#define MOTOR3_DIR 7
-#define MOTOR3_BRK 11
+#define MOTOR3_PWM 7  //rear_motor
+#define MOTOR3_DIR 8
+#define MOTOR3_BRK 9
 
 int f_speed = 0, r_speed = 0;
 
@@ -105,8 +104,8 @@ void motor_control(int front_speed, int rear_speed)
 #define NEURAL_ANGLE -3
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
-#define MOTOR2_PWM 8
-#define MOTOR2_DIR 9 
+#define MOTOR2_PWM 10  //steer_motor
+#define MOTOR2_DIR 11 
 #define MOTOR2_BRK 12
 
 float Kp = 3.0;
@@ -168,12 +167,8 @@ void Steering_angle_limit()
  steer_PID_Control();
 }
 
-void Steering_control_callback()
+void Steering_control_interrupt()
 {
- static boolean output = HIGH;
- 
- digitalWrite(13, output);
- output = !output;
  
  motor_control(f_speed, r_speed);
  
@@ -182,18 +177,18 @@ void Steering_control_callback()
  // map it to the range of the analog out:
  Steer_Angle_Measure = map(sensorValue, 50, 1050, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
   
- Serial.print("sensorValue : ");
- Serial.println(sensorValue);
- Serial.print("Steer_Angle_Measure : ");
- Serial.println(Steer_Angle_Measure);
+ //Serial.print("sensorValue : ");
+ //Serial.println(sensorValue);
+ //Serial.print("Steer_Angle_Measure : ");
+ //Serial.println(Steer_Angle_Measure);
 
  Steering_Angle = NEURAL_ANGLE + steer_angle;
  Steering_angle_limit();
 }
 
 ///////////////////////////////////////  encoder /////////////////////////////////////////////
-#define encoder0PinA 2  // interrupt 4 pin
-#define encoder0PinB 3  // interrupt 5 pin
+#define encoder0PinA 2  // interrupt 4 use
+#define encoder0PinB 3  // interrupt 5 use
 
 int encoder0Pos = 0;
 
@@ -218,8 +213,8 @@ void doEncoderA(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
-  Serial.print("encoder0Pos : ");
-  Serial.println (encoder0Pos);
+  //Serial.print("encoder0Pos : ");
+  //Serial.println (encoder0Pos);
 }
 
 void doEncoderB(){
@@ -243,14 +238,13 @@ void doEncoderB(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
-  Serial.print("encoder0Pos : ");
-  Serial.println (encoder0Pos);
+  //Serial.print("encoder0Pos : ");
+  //Serial.println (encoder0Pos);
 }
 
 void setup() {
  // put your setup code here, to run once:
  Serial.begin(57600);
- pinMode(13, OUTPUT);
 // Front Motor Drive Pin Setup
  pinMode(MOTOR1_PWM, OUTPUT);
  pinMode(MOTOR1_DIR, OUTPUT);  // motor control direction
@@ -269,20 +263,22 @@ void setup() {
  error = error_s = error_d = error_old = 0.0;
  pwm_output = 0;
 
-  // Read Encoder Values
-  pinMode(encoder0PinA, INPUT); 
-  pinMode(encoder0PinB, INPUT); 
-  attachInterrupt(4, doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
-  attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
+ // Read Encoder Values
+ pinMode(encoder0PinA, INPUT); 
+ pinMode(encoder0PinB, INPUT); 
+ attachInterrupt(4, doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
+ attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
  
  nh.initNode();
+ 
  nh.subscribe(teleop_cmd_sub);
  nh.advertise(cmd_pub);
+ nh.advertise(encoder_pub);
  nh.advertise(sonar_pub1);
  nh.advertise(sonar_pub2);
  nh.advertise(sonar_pub3);  
  
- MsTimer2::set(100, Steering_control_callback); // 100ms period
+ MsTimer2::set(100, Steering_control_interrupt); // 100ms period
  MsTimer2::start();
 }
 
@@ -304,6 +300,8 @@ void loop(){
  sonar_data2.data = sonar[1].ping_cm()/100.0;
  sonar_data3.data = sonar[2].ping_cm()/100.0;
 
+ encoder_data.data = encoder0Pos;
+
  sonar_pub1.publish(&sonar_data1);
  sonar_pub2.publish(&sonar_data2);
  sonar_pub3.publish(&sonar_data3);
@@ -315,5 +313,7 @@ void loop(){
  cmd_pub.publish(&cmd_vel);
 
  nh.spinOnce();
+
+ delay(100);
 
 }
