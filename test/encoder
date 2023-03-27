@@ -1,5 +1,5 @@
-#define encoder0PinA 2  // interrupt 4 pin
-#define encoder0PinB 3  // interrupt 5 pin
+#define encoder0PinA 2  // interrupt 4 use
+#define encoder0PinB 3  // interrupt 5 use
 
 int encoder0Pos = 0;
 
@@ -24,7 +24,8 @@ void doEncoderA(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
-  Serial.println (encoder0Pos);
+  //Serial.print("encoder0Pos : ");
+  //Serial.println (encoder0Pos);
 }
 
 void doEncoderB(){
@@ -48,5 +49,6 @@ void doEncoderB(){
       encoder0Pos = encoder0Pos - 1;
     }
   }
-  Serial.println (encoder0Pos);
+  //Serial.print("encoder0Pos : ");
+  //Serial.println (encoder0Pos);
 }
