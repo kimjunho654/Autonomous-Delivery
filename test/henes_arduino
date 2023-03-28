@@ -206,24 +206,24 @@ const int DRIFT_MULTIPLIER = 120;
 
 
 // Set linear velocity and PWM variable values for each wheel
-double velLeftWheel = 0;
-double pwmLeftReq = 0;
+double vel_Wheel = 0;
+double pwm_Req = 0;
 
 // Record the time that the last velocity command was received
 double lastCmdVelReceived = 0;
 
 // Calculate the left wheel linear velocity in m/s every time a 
 // tick count message is rpublished on the /left_ticks topic. 
-void calc_vel_left_wheel(){
+void calc_vel_wheel(){
    
   // Previous timestamp
   static double prevTime = 0;
    
   // Variable gets created and initialized the first time a function is called.
-  static int prevLeftCount = 0;
+  static int prev_Count = 0;
  
   // Manage rollover and rollunder when we get outside the 16-bit integer range 
-  int numOfTicks = (65535 + encoder0Pos - prevLeftCount) % 65535;
+  int numOfTicks = (65535 + encoder0Pos - prev_Count) % 65535;
  
   // If we have had a big jump, it means the tick count has rolled over.
   if (numOfTicks > 10000) {
@@ -231,10 +231,10 @@ void calc_vel_left_wheel(){
   }
  
   // Calculate wheel velocity in meters per second
-  velLeftWheel = numOfTicks/TICKS_PER_METER/((millis()/1000)-prevTime);
+  vel_Wheel = numOfTicks/TICKS_PER_METER/((millis()/1000)-prevTime);
  
   // Keep track of the previous tick count
-  prevLeftCount = encoder0Pos;
+  prev_Count = encoder0Pos;
  
   // Update the timestamp
   prevTime = (millis()/1000);
@@ -248,7 +248,7 @@ void calc_pwm_values(const geometry_msgs::Twist& cmdVel) {
   lastCmdVelReceived = (millis()/1000);
    
   // Calculate the PWM value given the desired velocity 
-  pwmLeftReq = K_P * cmdVel.linear.x + b;
+  pwm_Req = K_P * cmdVel.linear.x + b;
  
 }
 
