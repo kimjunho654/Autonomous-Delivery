@@ -5,8 +5,9 @@
 #include <std_msgs/Float32.h>
 
 ros::NodeHandle  nh;
-geometry_msgs::Twist cmd_vel;   //
-std_msgs::Int32 encoder_data;  //  //
+geometry_msgs::Twist cmd_vel;   
+std_msgs::Int32 encoder_data;  
+std_msgs::Float32 real_cmd_vel;
 std_msgs::Float32 sonar_data1;
 std_msgs::Float32 sonar_data2;
 std_msgs::Float32 sonar_data3;
@@ -38,6 +39,7 @@ void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
 ros::Subscriber<geometry_msgs::Twist> teleop_cmd_sub("cmd_vel", teleop_cmd_vel_callback);
 ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);              //cmd_vel 
 ros::Publisher encoder_pub("encoder", &encoder_data);
+ros::Publisher real_cmd_vel_pub("real_cmd_vel", &real_cmd_vel);
 ros::Publisher sonar_pub1("sonar1",&sonar_data1);
 ros::Publisher sonar_pub2("sonar2",&sonar_data2);
 ros::Publisher sonar_pub3("sonar3",&sonar_data3);
@@ -334,6 +336,7 @@ void setup() {
  nh.subscribe(teleop_cmd_sub);
  nh.advertise(cmd_pub);
  nh.advertise(encoder_pub);
+ nh.advertise(real_cmd_vel_pub);
  nh.advertise(sonar_pub1);
  nh.advertise(sonar_pub2);
  nh.advertise(sonar_pub3);  
@@ -366,7 +369,10 @@ void loop(){
 
  //encoder_publish
  encoder_data.data = encoder0Pos;
- encoder_pub.publish(&encoder_data);  
+ encoder_pub.publish(&encoder_data); 
+ 
+ //real_cmd_vel_publish
+ real_cmd_vel.data = vel_Wheel;
  
  //cmd_vel 
  cmd_vel.linear.x = velocity;
