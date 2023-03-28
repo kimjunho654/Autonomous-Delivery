@@ -19,12 +19,6 @@ const int b = 52;
 // Correction multiplier for drift. Chosen through experimentation.
 const int DRIFT_MULTIPLIER = 120;
 
-// Turning PWM output (0 = min, 255 = max for PWM values)
-const int PWM_TURN = 80;
-
-// Set maximum and minimum limits for the PWM values
-const int PWM_MIN = 80; // about 0.1 m/s
-const int PWM_MAX = 100; // about 0.172 m/s
 
 // Set linear velocity and PWM variable values for each wheel
 double velLeftWheel = 0;
