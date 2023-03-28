@@ -201,10 +201,6 @@ const int K_P = 278;
 // Y-intercept for the PWM-Linear Velocity relationship for the robot
 const int b = 52;
 
-// Correction multiplier for drift. Chosen through experimentation.
-const int DRIFT_MULTIPLIER = 120;
-
-
 // Set linear velocity and PWM variable values for each wheel
 double vel_Wheel = 0;
 double pwm_Req = 0;
