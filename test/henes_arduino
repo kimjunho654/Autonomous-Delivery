@@ -5,9 +5,11 @@
 #include <std_msgs/Float32.h>
 
 ros::NodeHandle  nh;
-geometry_msgs::Twist cmd_vel;   
 std_msgs::Int32 encoder_data;  
 std_msgs::Float32 real_cmd_vel;
+std_msgs::Int32 steering_vel; 
+std_msgs::Float32 steering_angle;
+std_msgs::Int32 pwm_steer; 
 //std_msgs::Float32 sonar_data1;
 //std_msgs::Float32 sonar_data2;
 //std_msgs::Float32 sonar_data3;
@@ -37,9 +39,13 @@ void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
 }
 
 ros::Subscriber<geometry_msgs::Twist> teleop_cmd_sub("cmd_vel", teleop_cmd_vel_callback);
-ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);              //cmd_vel 
 ros::Publisher encoder_pub("encoder", &encoder_data);
 ros::Publisher real_cmd_vel_pub("real_cmd_vel", &real_cmd_vel);
+ros::Publisher steering_sensor_pub("steering_sensor", &steering_vel);
+ros::Publisher steering_angle_pub("steering_angle", &steering_angle);
+ros::Publisher pwm_steer_pub("pwm_steer_vel", &pwm_steer);
+
+
 //ros::Publisher sonar_pub1("sonar1",&sonar_data1);
 //ros::Publisher sonar_pub2("sonar2",&sonar_data2);
 //ros::Publisher sonar_pub3("sonar3",&sonar_data3);
@@ -103,7 +109,7 @@ void motor_control(int front_speed, int rear_speed)
 
 ///////////////////////////////////////  Steering PID /////////////////////////////////////////////
 #define Steering_Sensor A15  // Analog input pin that the potentiometer is attached to
-#define NEURAL_ANGLE -3
+#define NEURAL_ANGLE 0
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
 #define MOTOR2_PWM 10  //steer_motor
@@ -207,6 +213,8 @@ const int b = 52;
 double vel_Wheel = 0;
 double pwm_Req = 0;
 
+int encoder0Pos = 0;
+
 // Record the time that the last velocity command was received
 double lastCmdVelReceived = 0;
 
@@ -249,8 +257,6 @@ void calc_pwm_values(const geometry_msgs::Twist& cmdVel) {
   pwm_Req = K_P * cmdVel.linear.x + b;
  
 }
-
-int encoder0Pos = 0;
 
 void doEncoderA(){
   // look for a low-to-high on channel A
@@ -328,15 +334,17 @@ void setup() {
  // Read Encoder Values
  pinMode(encoder0PinA, INPUT); 
  pinMode(encoder0PinB, INPUT); 
- attachInterrupt(4, doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
- attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
+ attachInterrupt(4, doEncoderA, RISING); // encoder pin on interrupt 4 (pin 2)
+ //attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
  
  nh.initNode();
  
  nh.subscribe(teleop_cmd_sub);
- nh.advertise(cmd_pub);
  nh.advertise(encoder_pub);
  nh.advertise(real_cmd_vel_pub);
+ nh.advertise(steering_sensor_pub);
+ nh.advertise(steering_angle_pub);
+ nh.advertise(pwm_steer_pub);
  //nh.advertise(sonar_pub1);
  //nh.advertise(sonar_pub2);
  //nh.advertise(sonar_pub3);  
@@ -369,15 +377,18 @@ void loop(){
 
  //encoder_publish
  encoder_data.data = encoder0Pos;
- encoder_pub.publish(&encoder_data); 
+ encoder_pub.publish(&encoder_data);
  
  //real_cmd_vel_publish
  real_cmd_vel.data = vel_Wheel;
- 
- //cmd_vel 
- cmd_vel.linear.x = velocity;
- cmd_vel.angular.z = steer_angle;
- cmd_pub.publish(&cmd_vel);
+
+ //steering_vel_publish
+ steering_vel.data = sensorValue;
+ steering_angle.data = Steer_Angle_Measure;
+ pwm_steer.data = pwm_output;
+ steering_sensor_pub.publish(&steering_vel);
+ steering_angle_pub.publish(&steering_angle);
+ pwm_steer_pub.publish(&pwm_steer);
 
  nh.spinOnce();
 
