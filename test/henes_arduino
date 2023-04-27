@@ -9,7 +9,6 @@ std_msgs::Int32 encoder_data;
 std_msgs::Float32 real_cmd_vel;
 std_msgs::Int32 steering_vel; 
 std_msgs::Float32 steering_angle;
-std_msgs::Int32 pwm_steer; 
 
 int velocity = 0;
 int steer_angle = 0;
@@ -28,7 +27,6 @@ ros::Publisher encoder_pub("encoder", &encoder_data);
 ros::Publisher real_cmd_vel_pub("real_cmd_vel", &real_cmd_vel);
 ros::Publisher steering_sensor_pub("steering_sensor", &steering_vel);
 ros::Publisher steering_angle_pub("steering_angle", &steering_angle);
-ros::Publisher pwm_steer_pub("pwm_steer_vel", &pwm_steer);
 
 
 ///////////////////////////////// Front and rear Motor Drive /////////////////////////////
@@ -47,16 +45,19 @@ void front_motor_control(int motor1_pwm)
   if (motor1_pwm > 0) // forward
     {
     digitalWrite(MOTOR1_DIR, HIGH);
+    digitalWrite(MOTOR1_BRK, LOW);
     analogWrite(MOTOR1_PWM, motor1_pwm);
   }
   else if (motor1_pwm < 0) // backward
     {
    digitalWrite(MOTOR1_DIR, LOW);
+   digitalWrite(MOTOR1_BRK, LOW);
    analogWrite(MOTOR1_PWM, -motor1_pwm);
   }
   else
     {
    digitalWrite(MOTOR1_DIR, HIGH);
+   digitalWrite(MOTOR1_BRK, LOW);
    digitalWrite(MOTOR1_PWM, 0);
   }
 }
@@ -66,16 +67,19 @@ void rear_motor_control(int motor3_pwm)
   if (motor3_pwm > 0) // forward
     {
       digitalWrite(MOTOR3_DIR, HIGH);
+      digitalWrite(MOTOR3_BRK, LOW);
       analogWrite(MOTOR3_PWM, motor3_pwm);
   }
   else if (motor3_pwm < 0) // backward
     {
       digitalWrite(MOTOR3_DIR, LOW);
+      digitalWrite(MOTOR3_BRK, LOW);
       analogWrite(MOTOR3_PWM, -motor3_pwm);
   }
   else
     {
       digitalWrite(MOTOR3_DIR, HIGH);
+      digitalWrite(MOTOR3_BRK, LOW);
       digitalWrite(MOTOR3_PWM, 0);
   }
 }
@@ -115,23 +119,26 @@ void steer_motor_control(int motor_pwm)
   if (motor_pwm > 0) // forward
     {
       digitalWrite(MOTOR2_DIR, HIGH);
+      digitalWrite(MOTOR2_BRK, LOW);
       analogWrite(MOTOR2_PWM, motor_pwm);
   }
   else if (motor_pwm < 0) // backward
     {
       digitalWrite(MOTOR2_DIR, LOW);
+      digitalWrite(MOTOR2_BRK, LOW);
       analogWrite(MOTOR2_PWM, -motor_pwm);
   }
   else // stop
     {
        digitalWrite(MOTOR2_DIR, HIGH);
+       digitalWrite(MOTOR2_BRK, LOW);
        analogWrite(MOTOR2_PWM, 0);
   }
 }
 
 void steer_PID_Control()
 {
- error = Steering_Angle - Steer_Angle_Measure ;
+ error = Steering_Angle - Steer_Angle_Measure;
  error_s += error;
  error_d = error - error_old;
  error_s = (error_s >=  100) ?  100 : error_s;
@@ -141,7 +148,7 @@ void steer_PID_Control()
  pwm_output = (pwm_output >=  80) ?  80 : pwm_output;
  pwm_output = (pwm_output <= -80) ? -80 : pwm_output;
  
- if ((error <= 1) && (error >= -1))
+ if (fabs(error)<= 1)
  {
    steer_motor_control(0);
    error_s = 0;
@@ -319,8 +326,8 @@ void setup() {
  // Read Encoder Values
  pinMode(encoder0PinA, INPUT_PULLUP); 
  pinMode(encoder0PinB, INPUT_PULLUP); 
- //attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, RISING); // encoder pin on interrupt 4 (pin 2)
- attachInterrupt(digitalPinToInterrupt(encoder0PinB), doEncoderB, RISING); // encoder pin on interrupt 5 (pin 3)
+ attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
+ attachInterrupt(digitalPinToInterrupt(encoder0PinB), doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
  
  nh.initNode();
  
@@ -329,7 +336,6 @@ void setup() {
  nh.advertise(real_cmd_vel_pub);
  nh.advertise(steering_sensor_pub);
  nh.advertise(steering_angle_pub);
- nh.advertise(pwm_steer_pub);
 
  
  MsTimer2::set(100, Steering_control_interrupt); // 100ms period
@@ -354,20 +360,22 @@ void loop(){
  //encoder_publish
  encoder_data.data = encoder0Pos;
  encoder_pub.publish(&encoder_data);
- 
+
+ calc_vel_wheel();
  //real_cmd_vel_publish
  real_cmd_vel.data = vel_Wheel;
+ real_cmd_vel_pub.publish(&real_cmd_vel);
 
  //steering_vel_publish
  steering_vel.data = sensorValue;
  steering_angle.data = Steer_Angle_Measure;
- pwm_steer.data = pwm_output;
  steering_sensor_pub.publish(&steering_vel);
  steering_angle_pub.publish(&steering_angle);
- pwm_steer_pub.publish(&pwm_steer);
-
- nh.spinOnce();
 
  delay(100);
+ 
+ nh.spinOnce();
+
+ 
 
 }
