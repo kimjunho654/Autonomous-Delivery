@@ -349,6 +349,7 @@ void loop(){
 */
 
  motor_control(f_speed,r_speed);
+ Steering_control_interrupt();
 
  //encoder_publish
  encoder_data.data = encoder0Pos;
