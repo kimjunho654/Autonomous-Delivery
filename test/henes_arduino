@@ -10,26 +10,11 @@ std_msgs::Float32 real_cmd_vel;
 std_msgs::Int32 steering_vel; 
 std_msgs::Float32 steering_angle;
 std_msgs::Int32 pwm_steer; 
-//std_msgs::Float32 sonar_data1;
-//std_msgs::Float32 sonar_data2;
-//std_msgs::Float32 sonar_data3;
 
 int velocity = 0;
 int steer_angle = 0;
 unsigned long now = 0;
 unsigned long past = 0;
-
-//Sonar Sensor
-
-//#include<NewPing.h>
-//#define SONAR_NUM 3
-//#define MAX_DISTANCE 200
-
-//NewPing sonar[SONAR_NUM]={
-//  NewPing(22, 23,MAX_DISTANCE),
-//  NewPing(24, 25,MAX_DISTANCE),
-//  NewPing(26, 27,MAX_DISTANCE)
-//};
 
 void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
   velocity = (int)msg.linear.x;       // 
@@ -45,10 +30,6 @@ ros::Publisher steering_sensor_pub("steering_sensor", &steering_vel);
 ros::Publisher steering_angle_pub("steering_angle", &steering_angle);
 ros::Publisher pwm_steer_pub("pwm_steer_vel", &pwm_steer);
 
-
-//ros::Publisher sonar_pub1("sonar1",&sonar_data1);
-//ros::Publisher sonar_pub2("sonar2",&sonar_data2);
-//ros::Publisher sonar_pub3("sonar3",&sonar_data3);
 
 ///////////////////////////////// Front and rear Motor Drive /////////////////////////////
 #define MOTOR1_PWM 4  //front_motor
@@ -109,6 +90,7 @@ void motor_control(int front_speed, int rear_speed)
 
 ///////////////////////////////////////  Steering PID /////////////////////////////////////////////
 #define Steering_Sensor A15  // Analog input pin that the potentiometer is attached to
+
 #define NEURAL_ANGLE 0
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
@@ -156,10 +138,10 @@ void steer_PID_Control()
  error_s = (error_s <= -100) ? -100 : error_s;
  
  pwm_output = Kp * error + Ki * error_s + Kd * error_d;
- pwm_output = (pwm_output >=  255) ?  255 : pwm_output;
- pwm_output = (pwm_output <= -255) ? -255 : pwm_output;
+ pwm_output = (pwm_output >=  80) ?  80 : pwm_output;
+ pwm_output = (pwm_output <= -80) ? -80 : pwm_output;
  
- if ((error <= 0.3) && (error >= -0.3))
+ if ((error <= 1) && (error >= -1))
  {
    steer_motor_control(0);
    error_s = 0;
@@ -183,7 +165,7 @@ void Steering_control_interrupt()
  // read the analog in value:
  sensorValue = analogRead(Steering_Sensor);
  // map it to the range of the analog out:
- Steer_Angle_Measure = map(sensorValue, 50, 1050, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+ Steer_Angle_Measure = map(sensorValue, 0, 1023, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
   
  //Serial.print("sensorValue : ");
  //Serial.println(sensorValue);
@@ -331,11 +313,14 @@ void setup() {
  error = error_s = error_d = error_old = 0.0;
  pwm_output = 0;
 
+ //Read steering sensor value
+ //pinMode(Steering_Sensor, INPUT); 
+
  // Read Encoder Values
- pinMode(encoder0PinA, INPUT); 
- pinMode(encoder0PinB, INPUT); 
- attachInterrupt(4, doEncoderA, RISING); // encoder pin on interrupt 4 (pin 2)
- //attachInterrupt(5, doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
+ pinMode(encoder0PinA, INPUT_PULLUP); 
+ pinMode(encoder0PinB, INPUT_PULLUP); 
+ //attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, RISING); // encoder pin on interrupt 4 (pin 2)
+ attachInterrupt(digitalPinToInterrupt(encoder0PinB), doEncoderB, RISING); // encoder pin on interrupt 5 (pin 3)
  
  nh.initNode();
  
@@ -345,9 +330,7 @@ void setup() {
  nh.advertise(steering_sensor_pub);
  nh.advertise(steering_angle_pub);
  nh.advertise(pwm_steer_pub);
- //nh.advertise(sonar_pub1);
- //nh.advertise(sonar_pub2);
- //nh.advertise(sonar_pub3);  
+
  
  MsTimer2::set(100, Steering_control_interrupt); // 100ms period
  MsTimer2::start();
@@ -366,14 +349,6 @@ void loop(){
 */
 
  motor_control(f_speed,r_speed);
-
- //sonar_publish
- //sonar_data1.data = sonar[0].ping_cm()/100.0;
- //sonar_data2.data = sonar[1].ping_cm()/100.0;
- //sonar_data3.data = sonar[2].ping_cm()/100.0;
- //sonar_pub1.publish(&sonar_data1);
- //sonar_pub2.publish(&sonar_data2);
- //sonar_pub3.publish(&sonar_data3);
 
  //encoder_publish
  encoder_data.data = encoder0Pos;
