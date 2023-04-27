@@ -338,7 +338,7 @@ void setup() {
  nh.advertise(steering_angle_pub);
 
  
- MsTimer2::set(100, Steering_control_interrupt); // 100ms period
+ MsTimer2::set(200, Steering_control_interrupt); // 100ms period
  MsTimer2::start();
 }
 
