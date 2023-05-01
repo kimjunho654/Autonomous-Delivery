@@ -6,12 +6,17 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include <cmath>
  
+
+double steer_angle = 0.0;
+
 // Create odometry data publishers
 ros::Publisher odom_data_pub;
 ros::Publisher odom_data_pub_quat;
 nav_msgs::Odometry odomNew;
 nav_msgs::Odometry odomOld;
- 
+
+
+
 // Initial pose
 const double initialX = 0.0;
 const double initialY = 0.0;
@@ -19,14 +24,11 @@ const double initialTheta = 0.00000000001;
 const double PI = 3.141592;
  
 // Robot physical constants
-const double TICKS_PER_REVOLUTION = 620; // For reference purposes.
-const double WHEEL_RADIUS = 0.033; // Wheel radius in meters
 const double WHEEL_BASE = 0.17; // Center of left tire to center of right tire
-const double TICKS_PER_METER = 3100; // Original was 2800
+const double TICKS_PER_METER = 333; // Original was 2800
  
 // Distance both wheels have traveled
 double distanceLeft = 0;
-double distanceRight = 0;
  
 // Flag to see if initial pose has been received
 bool initialPoseRecieved = false;
@@ -44,12 +46,12 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
  
 // Calculate the distance the left wheel has traveled since the last cycle
 void Calc_Left(const std_msgs::Int16& leftCount) {
- 
+
   static int lastCountL = 0;
   if(leftCount.data != 0 && lastCountL != 0) {
-         
+
     int leftTicks = (leftCount.data - lastCountL);
- 
+
     if (leftTicks > 10000) {
       leftTicks = 0 - (65535 - leftTicks);
     }
@@ -63,23 +65,9 @@ void Calc_Left(const std_msgs::Int16& leftCount) {
 }
  
 // Calculate the distance the right wheel has traveled since the last cycle
-void Calc_Right(const std_msgs::Int16& rightCount) {
-   
-  static int lastCountR = 0;
-  if(rightCount.data != 0 && lastCountR != 0) {
- 
-    int rightTicks = rightCount.data - lastCountR;
-     
-    if (rightTicks > 10000) {
-      distanceRight = (0 - (65535 - distanceRight))/TICKS_PER_METER;
-    }
-    else if (rightTicks < -10000) {
-      rightTicks = 65535 - rightTicks;
-    }
-    else{}
-    distanceRight = rightTicks/TICKS_PER_METER;
-  }
-  lastCountR = rightCount.data;
+void steering_angle_callback(const std_msgs::Float32& msg) {
+  
+ steer_angle = msg.data / 180.*PI;
 }
  
 // Publish a nav_msgs::Odometry message in quaternion format
@@ -126,10 +114,10 @@ void publish_quat() {
 void update_odom() {
  
   // Calculate the average distance
-  double cycleDistance = (distanceRight + distanceLeft) / 2;
+  double cycleDistance = distanceLeft;
    
   // Calculate the number of radians the robot has turned since the last cycle
-  double cycleAngle = asin((distanceRight-distanceLeft)/WHEEL_BASE);
+  double cycleAngle = steer_angle;
  
   // Average angle during the last cycle
   double avgAngle = cycleAngle/2 + odomOld.pose.pose.orientation.z;
@@ -201,8 +189,8 @@ int main(int argc, char **argv) {
   ros::NodeHandle node;
  
   // Subscribe to ROS topics
-  ros::Subscriber subForRightCounts = node.subscribe("right_ticks", 100, Calc_Right, ros::TransportHints().tcpNoDelay());
-  ros::Subscriber subForLeftCounts = node.subscribe("left_ticks", 100, Calc_Left, ros::TransportHints().tcpNoDelay());
+  ros::Subscriber subForRightCounts = node.subscribe("steering_angle", 1, steering_angle_callback, ros::TransportHints().tcpNoDelay());
+  ros::Subscriber subForLeftCounts = node.subscribe("encoder", 100, Calc_Left, ros::TransportHints().tcpNoDelay());
   ros::Subscriber subInitialPose = node.subscribe("initial_2d", 1, set_initial_2d);
  
   // Publisher of simple odom message where orientation.z is an euler angle
