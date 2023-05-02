@@ -45,7 +45,7 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 }
  
 // Calculate the distance the left wheel has traveled since the last cycle
-void Calc_Left(const std_msgs::Int16& leftCount) {
+void Calc_distance(const std_msgs::Int16& leftCount) {
 
   static int lastCountL = 0;
   if(leftCount.data != 0 && lastCountL != 0) {
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
  
   // Subscribe to ROS topics
   ros::Subscriber subForRightCounts = node.subscribe("steering_angle", 1, steering_angle_callback, ros::TransportHints().tcpNoDelay());
-  ros::Subscriber subForLeftCounts = node.subscribe("encoder", 100, Calc_Left, ros::TransportHints().tcpNoDelay());
+  ros::Subscriber subForLeftCounts = node.subscribe("encoder", 100, Calc_distance, ros::TransportHints().tcpNoDelay());
   ros::Subscriber subInitialPose = node.subscribe("initial_2d", 1, set_initial_2d);
  
   // Publisher of simple odom message where orientation.z is an euler angle
