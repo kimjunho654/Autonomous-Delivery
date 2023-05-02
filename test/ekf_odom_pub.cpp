@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/Int16.h"
+#include "std_msgs/Float32.h"
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
@@ -7,7 +8,8 @@
 #include <cmath>
  
 
-double steer_angle = 0.0;
+double steer_angle_deg = 0.0;
+double steer_angle_rad = 0.0;
 
 // Create odometry data publishers
 ros::Publisher odom_data_pub;
@@ -67,7 +69,8 @@ void Calc_distance(const std_msgs::Int16& leftCount) {
 // Calculate the distance the right wheel has traveled since the last cycle
 void steering_angle_callback(const std_msgs::Float32& msg) {
   
- steer_angle = msg.data / 180.*PI;
+ steer_angle_deg = msg.data;
+ steer_angle_rad = steer_angle_deg / 180.*PI;
 }
  
 // Publish a nav_msgs::Odometry message in quaternion format
@@ -117,7 +120,7 @@ void update_odom() {
   double cycleDistance = distanceLeft;
    
   // Calculate the number of radians the robot has turned since the last cycle
-  double cycleAngle = steer_angle;
+  double cycleAngle = steer_angle_rad;
  
   // Average angle during the last cycle
   double avgAngle = cycleAngle/2 + odomOld.pose.pose.orientation.z;
