@@ -1,6 +1,6 @@
 <launch>
  
-
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 30" />
 
   <!-- Transformation Configuration ... Setting Up the Relationships Between Coordinate Frames -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0.06 0 0.08 0 0 0 base_link laser 30" />
@@ -42,7 +42,7 @@
     <param name="freq" value="30.0"/>
     <param name="sensor_timeout" value="1.0"/>
     <param name="odom_used" value="true"/>
-    <param name="imu_used" value="false"/>
+    <param name="imu_used" value="true"/>
     <param name="vo_used" value="false"/>
     <param name="gps_used" value="false"/>
     <param name="debug" value="false"/>
@@ -50,13 +50,13 @@
   </node>
      
   <!-- Map server -->
-  <arg name="map_file" default="$HOME/map.yaml"/>
-  <node pkg = "map_server" name="map_server" type="map_server" args="arg map_file">
-  </node> 
- 
+  <arg name="map_file" default="$(find localization_data_pub)/maps/map.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+
   <!-- Initial Pose and Goal Publisher -->
   <!-- Publish: /initialpose, /move_base_simple/goal -->
-  <node pkg="rviz" type="rviz" name="rviz" args="/home/catkin_ws/src/rplidar_ros/rviz/rplidar.rviz">
+  <node pkg="rviz" type="rviz" name="rviz">
   </node> 
  
   <!-- Subscribe: /initialpose, /move_base_simple/goal -->
@@ -73,5 +73,20 @@
   <param name="angle_compensate"    type="bool"   value="true"/>
   </node>
 
-  
+    <!-- Move Base Node -->
+  <!-- Subscribe: /move_base_simple/goal -->
+  <!-- Publish: /cmd_vel -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find localization_data_pub)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find localization_data_pub)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find localization_data_pub)/param/local_costmap_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find localization_data_pub)/param/global_costmap_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find localization_data_pub)/param/base_local_planner_params.yaml" command="load" />
+  </node>
+
+  <!-- Add AMCL example for differential drive robots for Localization -->
+  <!-- Subscribe: /scan, /tf, /initialpose, /map -->
+  <!-- Publish: /amcl_pose, /particlecloud, /tf -->
+  <include file="$(find amcl)/examples/amcl_diff.launch"/>
+
 </launch>
