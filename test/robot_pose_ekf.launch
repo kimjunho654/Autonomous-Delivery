@@ -51,8 +51,9 @@
      
   <!-- Map server -->
   <arg name="map_file" default="$HOME/map.yaml"/>
-  <node pkg = "map_server" name="map_server" type="map_server" args="arg map_file"
-
+  <node pkg = "map_server" name="map_server" type="map_server" args="arg map_file">
+  </node> 
+ 
   <!-- Initial Pose and Goal Publisher -->
   <!-- Publish: /initialpose, /move_base_simple/goal -->
   <node pkg="rviz" type="rviz" name="rviz" args="/home/catkin_ws/src/rplidar_ros/rviz/rplidar.rviz">
