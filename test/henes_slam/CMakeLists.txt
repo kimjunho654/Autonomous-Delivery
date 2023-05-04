@@ -10,7 +10,6 @@ project(henes_slam)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
-  cartographer_ros
 )
 
 ## System dependencies are found with CMake's conventions
