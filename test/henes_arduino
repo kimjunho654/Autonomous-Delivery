@@ -318,7 +318,7 @@ void setup() {
  pinMode(MOTOR2_BRK, OUTPUT); 
 
  error = error_s = error_d = error_old = 0.0;
- pwm_output = 0;
+ pwm_output = velocity = 0;
 
  //Read steering sensor value
  //pinMode(Steering_Sensor, INPUT); 
