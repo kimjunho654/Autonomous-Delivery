@@ -10,8 +10,8 @@ std_msgs::Float32 real_cmd_vel;
 std_msgs::Int32 steering_vel; 
 std_msgs::Float32 steering_angle;
 
-int velocity = 0;
-int steer_angle = 0;
+double velocity = 0;
+double steer_angle = 0;
 unsigned long now = 0;
 unsigned long past = 0;
 
@@ -19,30 +19,38 @@ double pwm_Req = 0;
 int pwm_output = 0;
 
 void teleop_cmd_vel_callback(const geometry_msgs::Twist& msg) {
-  velocity = (int)msg.linear.x;       //
-  if (velocity > 0.05) pwm_Req = 50;
-  else if (velocity > 0.04) pwm_Req = 45;
-  else if (velocity > 0.03) pwm_Req = 40;
-  else if (velocity > 0.02) pwm_Req = 35;
-  else if (velocity > 0.01) pwm_Req = 30;
-  else if (velocity < -0.05) pwm_Req = -50;
-  else if (velocity < -0.04) pwm_Req = -45;
-  else if (velocity < -0.03) pwm_Req = -40;
-  else if (velocity < -0.02) pwm_Req = -35;
-  else if (velocity < -0.01) pwm_Req = -30;
+  velocity = msg.linear.x;       //
+  if (velocity > 0.2) pwm_Req = 50;
+  else if (velocity > 0.17) pwm_Req = 45;
+  else if (velocity > 0.14) pwm_Req = 40;
+  else if (velocity > 0.11) pwm_Req = 35;
+  else if (velocity > 0.08) pwm_Req = 30;
+  else if (velocity > 0.05) pwm_Req = 25;
+  else if (velocity > 0.02) pwm_Req = 20;
+  else if (velocity < -0.2) pwm_Req = -50;
+  else if (velocity < -0.17) pwm_Req = -45;
+  else if (velocity < -0.14) pwm_Req = -40;
+  else if (velocity < -0.11) pwm_Req = -35;
+  else if (velocity < -0.08) pwm_Req = -30;
+  else if (velocity < -0.05) pwm_Req = -25;
+  else if (velocity < -0.02) pwm_Req = -20;
   else pwm_Req = 0;
 
-  steer_angle = (int)msg.angular.z;   // steering motor 
-  if (steer_angle > 0.5) pwm_output = 50;
-  else if (steer_angle > 0.4) pwm_output = 45;
-  else if (steer_angle > 0.3) pwm_output = 40;
-  else if (steer_angle > 0.2) pwm_output = 35;
-  else if (steer_angle > 0.1) pwm_output = 30;
-  else if (steer_angle < -0.5) pwm_output = -50;
-  else if (steer_angle < -0.4) pwm_output = -45;
-  else if (steer_angle < -0.3) pwm_output = -40;
-  else if (steer_angle < -0.2) pwm_output = -35;
-  else if (steer_angle < -0.1) pwm_output = -30;
+  steer_angle = msg.angular.z;   // steering motor 
+  if (steer_angle > 0.7) pwm_output = 45;
+  else if (steer_angle > 0.6) pwm_output = 40;
+  else if (steer_angle > 0.5) pwm_output = 35;
+  else if (steer_angle > 0.4) pwm_output = 30;
+  else if (steer_angle > 0.3) pwm_output = 25;
+  else if (steer_angle > 0.2) pwm_output = 20;
+  else if (steer_angle > 0.1) pwm_output = 15;
+  else if (steer_angle < -0.7) pwm_output = -45;
+  else if (steer_angle < -0.6) pwm_output = -40;
+  else if (steer_angle < -0.5) pwm_output = -35;
+  else if (steer_angle < -0.4) pwm_output = -30;
+  else if (steer_angle < -0.3) pwm_output = -25;
+  else if (steer_angle < -0.2) pwm_output = -20;
+  else if (steer_angle < -0.1) pwm_output = -15;
   else pwm_output = 0;
 
   
@@ -196,7 +204,7 @@ void Steering_control_interrupt()
 {
  
  motor_control(f_speed, r_speed);
- steer_motor_control(pwm_output);
+ steer_motor_control(0);
  
  // read the analog in value:
  sensorValue = analogRead(Steering_Sensor);
@@ -368,8 +376,8 @@ void setup() {
  nh.advertise(steering_angle_pub);
 
  
- MsTimer2::set(200, Steering_control_interrupt); // 100ms period
- MsTimer2::start();
+ //MsTimer2::set(200, Steering_control_interrupt); // 100ms period
+ //MsTimer2::start();
 }
 
 void loop(){
@@ -388,12 +396,12 @@ void loop(){
  Steering_control_interrupt();
 
  //encoder_publish
- encoder_data.data = encoder0Pos;
+ encoder_data.data = pwm_Req;
  encoder_pub.publish(&encoder_data);
 
  calc_vel_wheel();
  //real_cmd_vel_publish
- real_cmd_vel.data = vel_Wheel;
+ real_cmd_vel.data = pwm_output;
  real_cmd_vel_pub.publish(&real_cmd_vel);
 
  //steering_vel_publish
