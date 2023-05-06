@@ -139,6 +139,9 @@ target_link_libraries(odometry_publisher_node ${catkin_LIBRARIES})
 add_executable(map_to_odom_publisher src/map_to_odom.cpp)
 target_link_libraries(map_to_odom_publisher ${catkin_LIBRARIES})
 
+add_executable(rviz_click_to_2d src/rviz_click_to_2d.cpp)
+target_link_libraries(rviz_click_to_2d ${catkin_LIBRARIES})
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/henes_bringup.cpp

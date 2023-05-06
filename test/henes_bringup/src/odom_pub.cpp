@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     odom.pose.pose.orientation.z = 0.0;
     odom.pose.pose.orientation.w = 1.0;
 
-    odom.twist.twist.linear.x = 1.0;
+    odom.twist.twist.linear.x = 0.0;
     odom.twist.twist.linear.y = 0.0;
     odom.twist.twist.linear.z = 0.0;
 

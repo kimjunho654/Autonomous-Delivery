@@ -23,5 +23,6 @@
     <param name="angle_compensate"    type="bool"   value="true"/>
   </node>
 
-
+  <node pkg="henes_bringup" type="rviz_click_to_2d" name="rviz_click_to_2d">
+  </node>
 </launch>
