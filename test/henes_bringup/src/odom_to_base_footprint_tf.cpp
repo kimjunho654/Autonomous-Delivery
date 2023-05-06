@@ -1,0 +1,36 @@
+#include <ros/ros.h>
+#include <tf2_msgs/TFMessage.h>
+#include <geometry_msgs/TransformStamped.h>
+
+int main(int argc, char** argv){
+    ros::init(argc, argv, "odom_base_footprint_tf_publisher");
+    ros::NodeHandle nh;
+
+    ros::Publisher tf_pub = nh.advertise<tf2_msgs::TFMessage>("/tf", 1);
+
+    tf2_msgs::TFMessage tf_msg;
+    geometry_msgs::TransformStamped transformStamped;
+
+    ros::Rate loop_rate(10);
+    while(nh.ok()){
+        transformStamped.header.stamp = ros::Time::now();
+        transformStamped.header.frame_id = "odom";
+        transformStamped.child_frame_id = "base_footprint";
+        transformStamped.transform.translation.x = 0.0;
+        transformStamped.transform.translation.y = 0.0;
+        transformStamped.transform.translation.z = 0.0;
+        transformStamped.transform.rotation.x = 0.0;
+        transformStamped.transform.rotation.y = 0.0;
+        transformStamped.transform.rotation.z = 0.0;
+        transformStamped.transform.rotation.w = 1.0;
+        tf_msg.transforms.push_back(transformStamped);
+        tf_pub.publish(tf_msg);
+        tf_msg.transforms.clear();
+        loop_rate.sleep();
+    }
+
+    ros::spin();
+
+    return 0;
+}
+

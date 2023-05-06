@@ -1,20 +1,10 @@
 <launch>
-  
-  <arg name="multi_robot_name" default="" />
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="50.0"/>
-    <param name="tf_prefix" value="$(arg multi_robot_name)" />
-  </node>    
+  <node pkg="henes_bringup" type="odom_base_footprint_tf_publisher" name="odom_base_footprint_tf_publisher" output="screen"/>
+  <node pkg="henes_bringup" type="joint_state_publisher" name="joint_state_publisher" output="screen"/>
+  <node pkg="henes_bringup" type="flat_world_imu_node" name="flat_world_imu_node" output="screen"/>
+  <node pkg="henes_bringup" type="odometry_publisher_node" name="odometry_publisher_node" output="screen"/>
+  <node pkg="henes_bringup" type="map_to_odom_publisher" name="map_to_odom_publisher" output="screen"/>
 
-  <arg name="urdf_file" default="$(find xacro)/xacro '$(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro'" />
-  <param name="robot_description" command="$(arg urdf_file)" />
-
-  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_footprint" args="0 0 0 0 0 0 odom base_footprint 30" />
-  <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_base_link" args="0 0 0.01 0 0 0 base_footprint base_link 30" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0.06 0 0.08 0 0 0 base_link laser 30" />
-  <node pkg="tf" type="static_transform_publisher" name="imu_broadcaster" args="-0.032 0 0.068 0 0 0 base_link imu_link 30" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_wheel_left" args="0 0.08 0.023 -0.70683 0 0 0.70739 base_link wheel_left_link 30" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_wheel_right" args="0 -0.08 0.023 -0.70683 0 0 0.70739 base_link wheel_right_link 30" />
 
 
   <node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
@@ -23,13 +13,15 @@
   </node>
 
 
+
   <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
     <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
     <param name="serial_baudrate"     type="int"    value="256000"/><!--A1/A2 -->
     <!--param name="serial_baudrate"     type="int"    value="256000"--><!--A3 -->
-    <param name="frame_id"            type="string" value="laser"/>
+    <param name="frame_id"            type="string" value="base_scan"/>
     <param name="inverted"            type="bool"   value="false"/>
     <param name="angle_compensate"    type="bool"   value="true"/>
   </node>
+
 
 </launch>

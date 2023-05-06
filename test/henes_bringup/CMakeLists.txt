@@ -10,6 +10,10 @@ project(henes_bringup)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
+  tf2_msgs
+  tf2_ros
+  geometry_msgs
+  nav_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -118,6 +122,22 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
 )
+
+
+add_executable(odom_base_footprint_tf_publisher src/odom_to_base_footprint_tf.cpp)
+target_link_libraries(odom_base_footprint_tf_publisher ${catkin_LIBRARIES})
+
+add_executable(joint_state_publisher src/joint_state_pub.cpp)
+target_link_libraries(joint_state_publisher ${catkin_LIBRARIES})
+
+add_executable(flat_world_imu_node src/flat_world_imu_node.cpp)
+target_link_libraries(flat_world_imu_node ${catkin_LIBRARIES})
+
+add_executable(odometry_publisher_node src/odom_pub.cpp)
+target_link_libraries(odometry_publisher_node ${catkin_LIBRARIES})
+
+add_executable(map_to_odom_publisher src/map_to_odom.cpp)
+target_link_libraries(map_to_odom_publisher ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
