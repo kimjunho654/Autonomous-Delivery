@@ -502,3 +502,59 @@ if __name__ == '__main__':
   
     cd ~/yolov7
     python3 detect.py
+
+# 자율주행을 위한 ros 의존성 패키지 설치
+
+    sudo apt-get install ros-melodic-joy ros-melodic-teleop-twist-joy \
+    ros-melodic-teleop-twist-keyboard ros-melodic-laser-proc \
+    ros-melodic-rgbd-launch ros-melodic-depthimage-to-laserscan \
+    ros-melodic-rosserial-arduino ros-melodic-rosserial-python \
+    ros-melodic-rosserial-server ros-melodic-rosserial-client \
+    ros-melodic-rosserial-msgs ros-melodic-amcl ros-melodic-map-server \
+    ros-melodic-move-base ros-melodic-urdf ros-melodic-xacro \
+    ros-melodic-compressed-image-transport ros-melodic-rqt* \
+    ros-melodic-gmapping ros-melodic-navigation ros-melodic-interactive-markers
+    
+# turtlebot3 패키지 설치
+
+    cd ~/catkin_ws/src/
+    git clone -b melodic-devel https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+    git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+    git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
+    cd ~/catkin_ws
+    catkin_make
+    source devel/setup.bash 
+    echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+    
+# cartographer 패키지 설치
+    
+    sudo apt-get update
+    sudo apt-get install -y python-wstool python-rosdep ninja-build stow
+    cd ~/catkin_ws
+    wstool init src
+    wstool merge -t src https://raw.githubusercontent.com/cartographer-project/cartographer_ros/master/cartographer_ros.rosinstall
+    wstool update -t src
+    sudo rosdep init
+    rosdep update
+    rosdep install -y --from-paths src --ignore-src -r
+    src/cartographer/scripts/install_abseil.sh
+    catkin_make_isolated --install --use-ninja
+    source ~/catkin_ws/install_isolated/setup.bash                                // 매번 터미널에 입력하기 귀찮으면 ~/.bashrc 에 작성
+    roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=cartographer   // cartographer slam 실행
+    
+catkin_make_isolated  이 빌드 명령어는 cartographer 패키지를 빌드하는데 필수적이며 이 과정을 통해 빌드된 실행 파일은 ~/catkin_ws/install_isolated/share 안에 위치하게 된다.
+하지만 이 때문에 기존에 src에 있던 다른 여러가지 패키지들이 빌드되지 않을 수 있다.
+이는 ~/catkin_ws/install_isolated/share 경로 안에 빌드를 원하는 패키지를 삭제하고 하나의 패키지만 따로 빌드하는 아래의 명령어를 통해 빌드 할 수 있다.
+
+    catkin_make --only-pkg-with-deps [패키지 명]
+    
+# turtlebot3_slam 및 navigation 을 정상적으로 실행시키기 위한 bringup 패키지 생성
+
+rplidar, arduino를 실행시키고 tf frame 변환관계 , /odom, /imu, /joint_states 토픽을 publish 하는 패키지를 제작하여 사용하였다.
+이를 통해 pc, lidar, arduino 만을 사용해서 turtlebot3 패키지를 사용할 수 있으며 navigation 코드 또한 사용 할 수 있다.
+
+    roslaunch henes_bringup henes_bringup.launch
+    
+    
+    
+    
