@@ -3,10 +3,14 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
 
 ros::NodeHandle  nh;
 
-geometry_msgs::Twist cmd_vel;  
+std_msgs::Float32 encoder_data;
+std_msgs::Float32 steering_angle;
+std_msgs::Int32 pwm_data;
+
 
 int velocity = 0;
 int steer_angle = 0;
@@ -20,17 +24,19 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
 }
 
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
-ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);              
-ros::Publisher encoder_pub1("encoder1", &encoder_data1);
+ros::Publisher encoder_pub("encoder", &encoder_data);
+ros::Publisher steerAngle_pub("steering_angle", &steering_angle);
+ros::Publisher pwm_pub("steer_pwm", &pwm_data);
+
 
 // Front Motor Drive
-#define MOTOR1_PWM 2
-#define MOTOR1_DIR 3
-#define MOTOR1_BRK 4
+#define MOTOR1_PWM 4
+#define MOTOR1_DIR 5
+#define MOTOR1_BRK 6
  
-#define MOTOR3_PWM 5
-#define MOTOR3_DIR 6
-#define MOTOR3_BRK 7
+#define MOTOR3_PWM 7
+#define MOTOR3_DIR 8
+#define MOTOR3_BRK 9
 
 int f_speed = 0, r_speed = 0;
 
@@ -88,22 +94,22 @@ void motor_control(int front_speed, int rear_speed)
 
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
 #define Steering_Sensor A15  // Analog input pin that the potentiometer is attached to
-#define NEURAL_ANGLE 3
+#define NEURAL_ANGLE 0
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
-#define MOTOR2_PWM 8
-#define MOTOR2_DIR 9
-#define MOTOR2_BRK 10
+#define MOTOR2_PWM 14
+#define MOTOR2_DIR 15
+#define MOTOR2_BRK 16
 
-float Kp = 1.7;
-float Ki = 1.5;
-float Kd = 7.0; //PID 
+float Kp = 3.0;
+float Ki = 2.0;
+float Kd = 10.0; //PID 
 double error, error_old;
 double error_s, error_d;
 int pwm_output;
 
 int sensorValue = 0;        // value read from the pot
-int Steer_Angle_Measure = 0;        // value output to the PWM (analog out)
+double Steer_Angle_Measure = 0.0;        // value output to the PWM (analog out)
 int Steering_Angle = NEURAL_ANGLE;
 
 void steer_motor_control(int motor_pwm)
@@ -140,7 +146,7 @@ void PID_Control()
   pwm_output = (pwm_output >=  255) ?  255 : pwm_output;
   pwm_output = (pwm_output <= -255) ? -255 : pwm_output;
 
-  if (fabs(error)<= 1)
+  if (error == 0)
   {
     steer_motor_control(0);
     error_s = 0;
@@ -170,7 +176,55 @@ void control_callback()
   
 }
 
+/////////////////////////////////////////////// encoder ///////////////////////
+
+#define encoder0PinA 2  // interrupt 4 use
+#define encoder0PinB 3  // interrupt 5 use
+
+volatile int encoder0Pos = 0;
+
+void doEncoderA(){
+  if (digitalRead(encoder0PinA) == HIGH) { 
+    if (digitalRead(encoder0PinB) == LOW) {  
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  else                                     
+  { 
+    if (digitalRead(encoder0PinB) == HIGH) {   
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+}
+
+
+void doEncoderB(){
+  if (digitalRead(encoder0PinB) == HIGH) {   
+    if (digitalRead(encoder0PinA) == HIGH) {  
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+  else { 
+    if (digitalRead(encoder0PinA) == LOW) {   
+      encoder0Pos = encoder0Pos + 1;
+    } 
+    else {
+      encoder0Pos = encoder0Pos - 1;
+    }
+  }
+}
+
 void setup() {
+   Serial.begin(115200);
 
  // Front Motor Drive Pin Setup
   pinMode(MOTOR1_PWM, OUTPUT);
@@ -193,9 +247,16 @@ void setup() {
   nh.initNode();
   
   nh.subscribe(cmd_sub);
-  nh.advertise(cmd_pub);
-  nh.advertise(encoder_pub1);
-  nh.advertise(encoder_pub2);  
+  nh.advertise(encoder_pub);
+  nh.advertise(steerAngle_pub);
+  nh.advertise(pwm_pub);
+
+  // Read Encoder Values
+  pinMode(encoder0PinA, INPUT_PULLUP); 
+  pinMode(encoder0PinB, INPUT_PULLUP); 
+  attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, CHANGE); // encoder pin on interrupt 4 (pin 2)
+  attachInterrupt(digitalPinToInterrupt(encoder0PinB), doEncoderB, CHANGE); // encoder pin on interrupt 5 (pin 3)
+
 
   MsTimer2::set(200, control_callback); // 500ms period
   MsTimer2::start();
@@ -208,6 +269,15 @@ void loop() {
   f_speed = r_speed = velocity;
   motor_control(r_speed, r_speed);
   control_callback();
+
+  encoder_data.data = encoder0Pos;
+  encoder_pub.publish(&encoder_data);
+
+  steering_angle.data = Steer_Angle_Measure;
+  steerAngle_pub.publish(&steering_angle);
+
+  pwm_data.data = pwm_output;
+  pwm_pub.publish(&pwm_data);
 
   nh.spinOnce();
 }
