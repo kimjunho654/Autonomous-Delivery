@@ -1,0 +1,213 @@
+#include <MsTimer2.h>
+
+#include <ros.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Int32.h>
+
+ros::NodeHandle  nh;
+
+geometry_msgs::Twist cmd_vel;  
+
+int velocity = 0;
+int steer_angle = 0;
+
+void cmd_vel_callback(const geometry_msgs::Twist& msg) {
+  velocity = (int)msg.linear.x;       
+  steer_angle = (int)msg.angular.z;   
+
+  if(velocity >= 255) velocity  = 255;  
+  if(velocity <=-255) velocity = -255;  
+}
+
+ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
+ros::Publisher cmd_pub("cmd_vel2", &cmd_vel);              
+ros::Publisher encoder_pub1("encoder1", &encoder_data1);
+
+// Front Motor Drive
+#define MOTOR1_PWM 2
+#define MOTOR1_DIR 3
+#define MOTOR1_BRK 4
+ 
+#define MOTOR3_PWM 5
+#define MOTOR3_DIR 6
+#define MOTOR3_BRK 7
+
+int f_speed = 0, r_speed = 0;
+
+void front_motor_control(int motor1_pwm)
+{
+   if (motor1_pwm > 0) // forward
+  {
+    digitalWrite(MOTOR1_DIR, HIGH);
+    digitalWrite(MOTOR1_BRK, LOW);
+    analogWrite(MOTOR1_PWM, motor1_pwm);
+  }
+  else if (motor1_pwm < 0) // backward
+  {
+    digitalWrite(MOTOR1_DIR, LOW);
+    digitalWrite(MOTOR1_BRK, LOW);
+    analogWrite(MOTOR1_PWM, -motor1_pwm);
+  }
+  else
+  {
+    digitalWrite(MOTOR1_DIR, LOW);
+    digitalWrite(MOTOR1_BRK, LOW);
+    digitalWrite(MOTOR1_PWM, 0);
+  }
+}
+
+void rear_motor_control(int motor3_pwm)
+{
+   if (motor3_pwm > 0) // forward
+  {
+    digitalWrite(MOTOR3_DIR, HIGH);
+    digitalWrite(MOTOR3_BRK, LOW);
+    analogWrite(MOTOR3_PWM, motor3_pwm);
+  }
+  else if (motor3_pwm < 0) // backward
+  {
+    digitalWrite(MOTOR3_DIR, LOW);
+    digitalWrite(MOTOR3_BRK, LOW);
+    analogWrite(MOTOR3_PWM, -motor3_pwm);
+  }
+  else
+  {
+    digitalWrite(MOTOR3_DIR, LOW);
+    digitalWrite(MOTOR3_BRK, LOW);
+    digitalWrite(MOTOR3_PWM, 0);
+  }
+}
+
+void motor_control(int front_speed, int rear_speed)
+{
+  front_motor_control(front_speed);
+  rear_motor_control(rear_speed);  
+}
+
+
+
+///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
+#define Steering_Sensor A15  // Analog input pin that the potentiometer is attached to
+#define NEURAL_ANGLE 3
+#define LEFT_STEER_ANGLE  -30
+#define RIGHT_STEER_ANGLE  30
+#define MOTOR2_PWM 8
+#define MOTOR2_DIR 9
+#define MOTOR2_BRK 10
+
+float Kp = 1.7;
+float Ki = 1.5;
+float Kd = 7.0; //PID 
+double error, error_old;
+double error_s, error_d;
+int pwm_output;
+
+int sensorValue = 0;        // value read from the pot
+int Steer_Angle_Measure = 0;        // value output to the PWM (analog out)
+int Steering_Angle = NEURAL_ANGLE;
+
+void steer_motor_control(int motor_pwm)
+{
+  if (motor_pwm > 0) // forward
+  {
+    digitalWrite(MOTOR2_DIR, LOW);
+    digitalWrite(MOTOR2_BRK, LOW);
+    analogWrite(MOTOR2_PWM, motor_pwm);
+  }
+  else if (motor_pwm < 0) // backward
+  {
+    digitalWrite(MOTOR2_DIR, HIGH);
+    digitalWrite(MOTOR2_BRK, LOW);
+    analogWrite(MOTOR2_PWM, -motor_pwm);
+  }
+  else // stop
+  {
+    digitalWrite(MOTOR2_DIR, LOW);
+    digitalWrite(MOTOR2_BRK, LOW);
+    analogWrite(MOTOR2_PWM, 0);
+  }
+}
+
+void PID_Control()
+{
+  error = Steering_Angle - Steer_Angle_Measure ;
+  error_s += error;
+  error_d = error - error_old;
+  error_s = (error_s >=  80) ?  80 : error_s;
+  error_s = (error_s <= -80) ? -80 : error_s;
+
+  pwm_output = Kp * error + Kd * error_d + Ki * error_s;
+  pwm_output = (pwm_output >=  255) ?  255 : pwm_output;
+  pwm_output = (pwm_output <= -255) ? -255 : pwm_output;
+
+  if (fabs(error)<= 1)
+  {
+    steer_motor_control(0);
+    error_s = 0;
+  }
+  else          steer_motor_control(pwm_output);
+  error_old = error;  
+}
+
+void steering_control()
+{
+  if (Steering_Angle <= LEFT_STEER_ANGLE + NEURAL_ANGLE)  Steering_Angle  = LEFT_STEER_ANGLE + NEURAL_ANGLE;
+  if (Steering_Angle >= RIGHT_STEER_ANGLE + NEURAL_ANGLE)  Steering_Angle = RIGHT_STEER_ANGLE + NEURAL_ANGLE;
+  PID_Control(); 
+}
+
+void control_callback()
+{
+
+  motor_control(f_speed, r_speed);
+
+  // read the analog in value:
+  sensorValue = analogRead(Steering_Sensor);
+  // map it to the range of the analog out:
+  Steer_Angle_Measure = map(sensorValue, 92, 1023, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+  Steering_Angle = NEURAL_ANGLE + steer_angle;
+  steering_control();
+  
+}
+
+void setup() {
+
+ // Front Motor Drive Pin Setup
+  pinMode(MOTOR1_PWM, OUTPUT);
+  pinMode(MOTOR1_DIR, OUTPUT);  
+  pinMode(MOTOR1_BRK, OUTPUT);
+
+  // Rear Motor Drive Pin Setup
+  pinMode(MOTOR3_PWM, OUTPUT);
+  pinMode(MOTOR3_DIR, OUTPUT);  
+  pinMode(MOTOR3_BRK, OUTPUT);
+
+   //Steer
+  pinMode(MOTOR2_PWM, OUTPUT);
+  pinMode(MOTOR2_DIR, OUTPUT);
+  pinMode(MOTOR2_BRK, OUTPUT);
+
+  error = error_s = error_d = error_old = 0.0;
+  pwm_output = 0;
+
+  nh.initNode();
+  
+  nh.subscribe(cmd_sub);
+  nh.advertise(cmd_pub);
+  nh.advertise(encoder_pub1);
+  nh.advertise(encoder_pub2);  
+
+  MsTimer2::set(200, control_callback); // 500ms period
+  MsTimer2::start();
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  f_speed = r_speed = velocity;
+  motor_control(r_speed, r_speed);
+  control_callback();
+
+  nh.spinOnce();
+}
