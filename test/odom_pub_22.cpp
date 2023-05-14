@@ -3,10 +3,13 @@
 #include "std_msgs/Float32.h"
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
+#include <tf/transform_broadcaster.h>
 #include <cmath>
 
+ros::Publisher odom_pub;
 
 double distanceLeft;
 const double TICKS_PER_METER = 333;
@@ -32,6 +35,7 @@ void Calc_distance(const std_msgs::Float32& leftCount) {
 }
 
 #define TICK2RAD 0.001533981
+
 nav_msgs::Odometry odom;
 
 float odom_pose[3];
@@ -44,7 +48,7 @@ void initOdom(void)
         odom_pose[i] = 0.0;
         odom_vel[i] = 0.0;
     }
-
+    odom.header.frame_id = "odom";
     odom.pose.pose.position.x = 0.0;
     odom.pose.pose.position.y = 0.0;
     odom.pose.pose.position.z = 0.0;
@@ -143,31 +147,65 @@ void updateOdometry(void)
 
     odom.twist.twist.linear.x = odom_vel[0];
     odom.twist.twist.angular.z = odom_vel[2];
+    odom_pub.publish(odom);
 }
 
-void updateTF(ge)
+/*
+tf2_ros::TransformBroadcaster tf_broadcaster;
+geometry_msgs::TransformStamped odom_tf;
+
+void updateTF()
+{
+    odom_tf.header.frame_id = "odom";
+    odom_tf.child_frame_id = "base_footprint";
+    odom_tf.transform.translation.x = odom.pose.pose.position.x;
+    odom_tf.transform.translation.y = odom.pose.pose.position.y;
+    odom_tf.transform.translation.z = odom.pose.pose.position.z;
+    odom_tf.transform.rotation = odom.pose.pose.orientation;
 
 
+}
+*/
 
+void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
+ 
+  odom.pose.pose.position.x = rvizClick.pose.position.x;
+  odom.pose.pose.position.y = rvizClick.pose.position.y;
+  odom.pose.pose.orientation.z = rvizClick.pose.orientation.z;
+
+}
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "odom_pub_22");
+    ros::init(argc, argv, "odom_pub_22_node");
     ros::NodeHandle node;
 
-    ros::Publisher odom_pub = node.advertise<nav_msgs::Odometry>("odom", 1);
+    odom_pub = node.advertise<nav_msgs::Odometry>("odom", 1);
 
     ros::Subscriber encoder_sub = node.subscribe("encoder", 1, Calc_distance);
+    ros::Subscriber subInitialPose = node.subscribe("initial_2d", 1, set_initial_2d);
 
     initOdom();
-    publishDriveInformation();
+   
+
+    ros::Rate loop_rate(30); 
+
+    while(ros::ok())
+    {
+        publishDriveInformation();
 
 
-    updateOdometry();
-    odom.header.stamp = stamp_now;
-    odom_pub.publish(odom);
+        updateOdometry();
+        odom.header.stamp = ros::Time::now();
 
-    updateTF(odom_tf);
+
+        //updateTF();
+        //odom_tf.header.stamp = ros::Time::now();
+        //tf_broadcaster.sendTransform(odom_tf);
+
+        loop_rate.sleep();
+    }
     
+    ros::spin();
 
-
+    return 0;
 }
