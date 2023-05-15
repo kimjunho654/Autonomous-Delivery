@@ -1,14 +1,21 @@
 <launch>
-  <node pkg="henes_bringup" type="odom_base_footprint_tf_publisher" name="odom_base_footprint_tf_publisher" output="screen"/>
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_footprint" args="0 0 0 0 0 0 odom base_footprint 10" />
+
   <node pkg="henes_bringup" type="joint_state_publisher" name="joint_state_publisher" output="screen"/>
   <node pkg="henes_bringup" type="flat_world_imu_node" name="flat_world_imu_node" output="screen"/>
+  <!--node pkg="henes_bringup" type="map_to_odom_publisher" name="map_to_odom_publisher" output="screen"-->
+  <!--node pkg="henes_bringup" type="odom_pub_22_node" name="odom_pub_22_node" output="screen"-->
+  <node pkg="henes_bringup" type="odom_test_node" name="odom_test_node" output="screen"/>
+
+  <!--node pkg="henes_bringup" type="ekf_odom_pub" name="ekf_odom_pub" output="screen"-->
+  <!--node pkg="henes_bringup" type="odom_base_footprint_tf_publisher" name="odom_base_footprint_tf_publisher" output="screen"-->
+
   <!--node pkg="henes_bringup" type="odometry_publisher_node" name="odometry_publisher_node" output="screen"-->
-  <node pkg="henes_bringup" type="map_to_odom_publisher" name="map_to_odom_publisher" output="screen"/>
-  <node pkg="henes_bringup" type="ekf_odom_pub" name="ekf_odom_pub" output="screen"/>
+
 
 
   <node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
-    <param name="port" value="/dev/ttyACM0"/>
+    <param name="port" value="/dev/ttyUSB1"/>
     <param name="baud" value="57600"/>
   </node>
 
@@ -25,4 +32,5 @@
 
   <node pkg="henes_bringup" type="rviz_click_to_2d" name="rviz_click_to_2d">
   </node>
+
 </launch>

@@ -7,12 +7,12 @@ int main(int argc, char **argv)
     
     ros::NodeHandle n;
 
-    ros::Publisher imu_pub = n.advertise<sensor_msgs::Imu>("/flat_imu", 0);
+    ros::Publisher imu_pub = n.advertise<sensor_msgs::Imu>("/flat_imu", 100);
 
     sensor_msgs::Imu imu_out;
 
 
-    imu_out.orientation.x = 0.0;
+    imu_out.orientation.x = 1.0;
     imu_out.orientation.y = 0.0;
     imu_out.orientation.z = 0.0;
     imu_out.orientation.w = 1.0;
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
     imu_out.linear_acceleration.x = 0.0;
     imu_out.linear_acceleration.y = 0.0;
-    imu_out.linear_acceleration.z = 1.0;
+    imu_out.linear_acceleration.z = 9.8;
 
     imu_out.linear_acceleration_covariance[0] = 0.04;
     imu_out.linear_acceleration_covariance[4] = 0.04;

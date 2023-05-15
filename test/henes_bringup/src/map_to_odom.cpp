@@ -14,12 +14,12 @@ int main(int argc, char** argv) {
         transformStamped.header.stamp = ros::Time::now();
         transformStamped.header.frame_id = "map";
         transformStamped.child_frame_id = "odom";
-        transformStamped.transform.translation.x = 0.0; 
-        transformStamped.transform.translation.y = 0.0;  
+        transformStamped.transform.translation.x = 0.0; ///
+        transformStamped.transform.translation.y = 0.0;  ///
         transformStamped.transform.translation.z = -0.078; 
         transformStamped.transform.rotation.x = 0.0;  
         transformStamped.transform.rotation.y = 0.0;   
-        transformStamped.transform.rotation.z = -0.01;   
+        transformStamped.transform.rotation.z = 0.0;   ////
         transformStamped.transform.rotation.w = 1.0;    
 
         broadcaster.sendTransform(transformStamped);

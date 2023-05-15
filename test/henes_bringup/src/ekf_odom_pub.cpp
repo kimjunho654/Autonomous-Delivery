@@ -1,12 +1,14 @@
 #include "ros/ros.h"
-#include "std_msgs/Int16.h"
+#include "std_msgs/Int32.h"
 #include "std_msgs/Float32.h"
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <cmath>
  
+
 
 double steer_angle_deg = 0.0;
 double steer_angle_rad = 0.0;
@@ -16,6 +18,7 @@ ros::Publisher odom_data_pub;
 ros::Publisher odom_data_pub_quat;
 nav_msgs::Odometry odomNew;
 nav_msgs::Odometry odomOld;
+
 
 
 
@@ -47,7 +50,7 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 }
  
 // Calculate the distance the left wheel has traveled since the last cycle
-void Calc_distance(const std_msgs::Float32& leftCount) {
+void Calc_distance(const std_msgs::Int32& leftCount) {
 
   static int lastCountL = 0;
   if(leftCount.data != 0 && lastCountL != 0) {
@@ -169,32 +172,50 @@ void update_odom() {
   // Publish the odometry message
   odom_data_pub.publish(odomNew);
 }
- 
+/*
+void updateTF()
+{
+    odom_tf.header.stamp = ros::Time::now();
+    odom_tf.header.frame_id = "odom";
+    odom_tf.child_frame_id = "base_footprint";
+    odom_tf.transform.translation.x = odomNew.pose.pose.position.x;
+    odom_tf.transform.translation.y = odomNew.pose.pose.position.y;
+    odom_tf.transform.translation.z = odomNew.pose.pose.position.z;
+    odom_tf.transform.rotation = odomNew.pose.pose.orientation;
+
+
+}
+*/
 int main(int argc, char **argv) {
    
   // Set the data fields of the odometry message
   odomNew.header.frame_id = "odom";
+  odomOld.pose.pose.position.x = initialX;
+  odomOld.pose.pose.position.y = initialY;
   odomNew.pose.pose.position.z = 0;
   odomNew.pose.pose.orientation.x = 0;
   odomNew.pose.pose.orientation.y = 0;
+  odomOld.pose.pose.orientation.z = initialTheta;
   odomNew.twist.twist.linear.x = 0;
   odomNew.twist.twist.linear.y = 0;
   odomNew.twist.twist.linear.z = 0;
   odomNew.twist.twist.angular.x = 0;
   odomNew.twist.twist.angular.y = 0;
   odomNew.twist.twist.angular.z = 0;
-  odomOld.pose.pose.position.x = initialX;
-  odomOld.pose.pose.position.y = initialY;
-  odomOld.pose.pose.orientation.z = initialTheta;
+
+
  
   // Launch ROS and create a node
   ros::init(argc, argv, "ekf_odom_pub");
   ros::NodeHandle node;
- 
+
+  geometry_msgs::TransformStamped odom_tf;
+  tf2_ros::TransformBroadcaster tf_broadcaster;
+
   // Subscribe to ROS topics
   ros::Subscriber subForRightCounts = node.subscribe("steering_angle", 1, steering_angle_callback, ros::TransportHints().tcpNoDelay());
   ros::Subscriber subForLeftCounts = node.subscribe("encoder", 1, Calc_distance, ros::TransportHints().tcpNoDelay());
-  ros::Subscriber subInitialPose = node.subscribe("initial_2d", 1, set_initial_2d);
+  //ros::Subscriber subInitialPose = node.subscribe("initial_2d", 1, set_initial_2d);
  
   // Publisher of simple odom message where orientation.z is an euler angle
   odom_data_pub = node.advertise<nav_msgs::Odometry>("odom_data_euler", 1);
@@ -209,6 +230,17 @@ int main(int argc, char **argv) {
     if(initialPoseRecieved) {
       update_odom();
       publish_quat();
+/*
+      updateTF();
+      odom_tf.header.stamp = odomNew.header.stamp;
+      odom_tf.header.frame_id = "odom";
+      odom_tf.child_frame_id = "base_footprint";
+      odom_tf.transform.translation.x = odomNew.pose.pose.position.x;
+      odom_tf.transform.translation.y = odomNew.pose.pose.position.y;
+      odom_tf.transform.translation.z = odomNew.pose.pose.position.z;
+      odom_tf.transform.rotation = odomNew.pose.pose.orientation;
+      tf_broadcaster.sendTransform(odom_tf);
+*/
     }
     ros::spinOnce();
     loop_rate.sleep();

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(henes_bringup)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+ add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,9 +11,12 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   tf2_msgs
+  tf2
   tf2_ros
   geometry_msgs
   nav_msgs
+  std_msgs
+
 )
 
 ## System dependencies are found with CMake's conventions
@@ -144,6 +147,12 @@ target_link_libraries(rviz_click_to_2d ${catkin_LIBRARIES})
 
 add_executable(ekf_odom_pub src/ekf_odom_pub.cpp)
 target_link_libraries(ekf_odom_pub ${catkin_LIBRARIES})
+
+add_executable(odom_pub_22_node src/odom_pub_22.cpp)
+target_link_libraries(odom_pub_22_node ${catkin_LIBRARIES})
+
+add_executable(odom_test_node src/odom_test.cpp)
+target_link_libraries(odom_test_node ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
