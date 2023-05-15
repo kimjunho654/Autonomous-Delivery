@@ -109,9 +109,9 @@ int main(int argc, char **argv) {
     tf2_ros::TransformBroadcaster tf_broadcaster;
     geometry_msgs::TransformStamped odom_tf;
 
-    ros::Rate loop_rate(30); 
+    ros::Rate loop_rate(10); 
     while(ros::ok()) {
-
+/*
       odom_tf.header.stamp = ros::Time::now();
       odom_tf.header.frame_id = "map";
       odom_tf.child_frame_id = "odom";
@@ -120,10 +120,10 @@ int main(int argc, char **argv) {
       odom_tf.transform.translation.z = 0.0;
       odom_tf.transform.rotation.x = 0;
       odom_tf.transform.rotation.y = 0;
-      odom_tf.transform.rotation.z = 0;
+      odom_tf.transform.rotation.z = 0.0;
       odom_tf.transform.rotation.w = 1.0;
       tf_broadcaster.sendTransform(odom_tf);
-
+*/
       updateOdometry();
       odom_pub.publish(odom);
 

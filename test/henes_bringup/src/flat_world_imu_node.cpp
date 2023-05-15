@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     sensor_msgs::Imu imu_out;
 
 
-    imu_out.orientation.x = 1.0;
+    imu_out.orientation.x = 0.0;
     imu_out.orientation.y = 0.0;
     imu_out.orientation.z = 0.0;
     imu_out.orientation.w = 1.0;
