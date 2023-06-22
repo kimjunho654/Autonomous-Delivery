@@ -33,7 +33,8 @@ ros::Publisher pwm_pub("steer_pwm", &pwm_data);
 #define MOTOR1_PWM 4
 #define MOTOR1_DIR 5
 #define MOTOR1_BRK 6
- 
+
+// Rear Motor Drive
 #define MOTOR3_PWM 7
 #define MOTOR3_DIR 8
 #define MOTOR3_BRK 9
