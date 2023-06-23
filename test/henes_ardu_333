@@ -94,7 +94,7 @@ void motor_control(int front_speed, int rear_speed)
 
 
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
-#define Steering_Sensor A15  // Analog input pin that the potentiometer is attached to
+#define Steering_Sensor A8  // Analog input pin that the potentiometer is attached to
 #define NEURAL_ANGLE 0
 #define LEFT_STEER_ANGLE  -30
 #define RIGHT_STEER_ANGLE  30
