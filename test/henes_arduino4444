@@ -5,6 +5,7 @@
 #include <std_msgs/Int32.h>
 #include <std_msgs/Float32.h>
 #include <nav_msgs/Odometry.h>
+#include <tf/tf.h>
 
 ros::NodeHandle  nh;
 
@@ -15,10 +16,11 @@ nav_msgs::Odometry odom;
 #define TICK2RAD  0.001533981  // 0.087890625[deg] * 3.14159265359 / 180 = 0.001533981f
 #define WHEEL_RADIUS                     0.27             // meter
 float odom_pose[3];
-odom_pose[0] = odom_pose[1] = odom_pose[2] = 0.0;
-float* orientation;
+
+
+float orientation[4];
 double wheel;
-double delta_s, theta, delta_theta;
+double delta_s, theta, delta_theta, last_diff_tick, wheel_l, last_theta;
 
 int velocity = 0;
 int steer_angle = 0;
@@ -233,7 +235,7 @@ void doEncoderB(){
     }
   }
 }
-
+static bool state;
 void setup() {
   Serial.begin(115200);
 
@@ -252,6 +254,11 @@ void setup() {
   pinMode(MOTOR2_DIR, OUTPUT);
   pinMode(MOTOR2_BRK, OUTPUT);
 
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH);
+  state = HIGH;
+
+
   error = error_s = error_d = error_old = 0.0;
   pwm_output = 0;
 
@@ -263,6 +270,13 @@ void setup() {
   nh.subscribe(cmd_sub);
   nh.advertise(encoder_pub);
   nh.advertise(steerAngle_pub);
+  nh.advertise(odom_pub);
+  
+  last_theta = 0.0;
+  odom_pose[0] = odom_pose[1] = odom_pose[2] = 0.0;
+  orientation[0] = orientation[1] = orientation[2] = 0.0;
+  orientation[3] = 1.0;
+
   
   initOdom();
   
@@ -277,7 +291,6 @@ void setup() {
   MsTimer2::start();
 
 }
-
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -293,6 +306,10 @@ void loop() {
 
   updateMotorInfo();
   updateOdometry();
+
+  state = !state;
+  digitalWrite(13, state);
+  delay(1000);
   
   nh.spinOnce();
 }
@@ -325,7 +342,7 @@ void updateMotorInfo(void)
   wheel_l = TICK2RAD * (double)last_diff_tick;
   delta_s     = WHEEL_RADIUS * wheel_l;
 
-  orientation = sensors.getOrientation();
+  //orientation = ;
   theta       = atan2f(orientation[1]*orientation[2] + orientation[0]*orientation[3], 
                 0.5f - orientation[2]*orientation[2] - orientation[3]*orientation[3]);
 
@@ -348,8 +365,10 @@ void updateOdometry(void)
 
   odom.twist.twist.linear.x  = 0;
   odom.twist.twist.angular.z = 0;
+  
+  odom_pub.publish(&odom);
+  
 }
-
 
 
 
