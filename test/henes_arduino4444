@@ -235,7 +235,7 @@ void doEncoderB(){
     }
   }
 }
-static bool state;
+
 void setup() {
   Serial.begin(115200);
 
@@ -254,9 +254,7 @@ void setup() {
   pinMode(MOTOR2_DIR, OUTPUT);
   pinMode(MOTOR2_BRK, OUTPUT);
 
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
-  state = HIGH;
+
 
 
   error = error_s = error_d = error_old = 0.0;
@@ -307,9 +305,6 @@ void loop() {
   updateMotorInfo();
   updateOdometry();
 
-  state = !state;
-  digitalWrite(13, state);
-  delay(1000);
   
   nh.spinOnce();
 }
