@@ -10,12 +10,22 @@ ros::NodeHandle  nh;
 
 std_msgs::Float32 encoder_data;
 std_msgs::Float32 steering_angle;
-std_msgs::Int32 pwm_data;
 nav_msgs::Odometry odom;
+
+#define TICK2RAD  0.001533981  // 0.087890625[deg] * 3.14159265359 / 180 = 0.001533981f
+#define WHEEL_RADIUS                     0.27             // meter
+float odom_pose[3];
+odom_pose[0] = odom_pose[1] = odom_pose[2] = 0.0;
+float* orientation;
+double wheel;
+double delta_s, theta, delta_theta;
 
 int velocity = 0;
 int steer_angle = 0;
 
+int32_t current_tick = 0;
+int32_t last_tick = 0;
+  
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   velocity = 300 * msg.linear.x;       
   steer_angle = 10 * msg.angular.z;   
@@ -27,8 +37,7 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
 ros::Publisher encoder_pub("encoder", &encoder_data);
 ros::Publisher steerAngle_pub("steering_angle", &steering_angle);
-ros::Publisher pwm_pub("steer_pwm", &pwm_data);
-
+ros::Publisher odom_pub("odom", &odom);
 
 // Front Motor Drive
 #define MOTOR1_PWM 4
@@ -226,7 +235,7 @@ void doEncoderB(){
 }
 
 void setup() {
-   Serial.begin(115200);
+  Serial.begin(115200);
 
  // Front Motor Drive Pin Setup
   pinMode(MOTOR1_PWM, OUTPUT);
@@ -246,13 +255,17 @@ void setup() {
   error = error_s = error_d = error_old = 0.0;
   pwm_output = 0;
 
+  current_tick = 0;
+  last_tick = 0;
+
   nh.initNode();
   
   nh.subscribe(cmd_sub);
   nh.advertise(encoder_pub);
   nh.advertise(steerAngle_pub);
-  nh.advertise(pwm_pub);
-
+  
+  initOdom();
+  
   // Read Encoder Values
   pinMode(encoder0PinA, INPUT_PULLUP); 
   pinMode(encoder0PinB, INPUT_PULLUP); 
@@ -278,9 +291,9 @@ void loop() {
   steering_angle.data = Steer_Angle_Measure;
   steerAngle_pub.publish(&steering_angle);
 
-  pwm_data.data = pwm_output;
-  pwm_pub.publish(&pwm_data);
-
+  updateMotorInfo();
+  updateOdometry();
+  
   nh.spinOnce();
 }
 
@@ -299,12 +312,43 @@ void initOdom(void)
   odom.twist.twist.angular.z = 0.0;
 }
 
-void updateMotorInfo()
+
+void updateMotorInfo(void)
 {
   
+  current_tick = encoder0Pos;
+  last_diff_tick = current_tick - last_tick;
+
+
+  delta_s = delta_theta = theta = 0.0;
+
+  wheel_l = TICK2RAD * (double)last_diff_tick;
+  delta_s     = WHEEL_RADIUS * wheel_l;
+
+  orientation = sensors.getOrientation();
+  theta       = atan2f(orientation[1]*orientation[2] + orientation[0]*orientation[3], 
+                0.5f - orientation[2]*orientation[2] - orientation[3]*orientation[3]);
+
+  delta_theta = theta - last_theta;
+  odom_pose[0] += delta_s * cos(odom_pose[2] + (delta_theta / 2.0));
+  odom_pose[1] += delta_s * sin(odom_pose[2] + (delta_theta / 2.0));
+  odom_pose[2] += delta_theta;
+        
 }
 
+void updateOdometry(void)
+{
+  odom.header.frame_id = "odom";
+  odom.child_frame_id  = "base_footprint";
 
+  odom.pose.pose.position.x = odom_pose[0];
+  odom.pose.pose.position.y = odom_pose[1];
+  odom.pose.pose.position.z = 0;
+  odom.pose.pose.orientation = tf::createQuaternionFromYaw(odom_pose[2]);
+
+  odom.twist.twist.linear.x  = 0;
+  odom.twist.twist.angular.z = 0;
+}
 
 
 
