@@ -24,7 +24,7 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
 }
 
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
-ros::Publisher encoder_pub("encoder", &encoder_data);
+ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
 ros::Publisher steerAngle_pub("steering_angle", &steering_angle);
 ros::Publisher pwm_pub("steer_pwm", &pwm_data);
 
