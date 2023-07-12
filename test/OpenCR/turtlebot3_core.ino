@@ -74,8 +74,8 @@ void setup()
   nh.getHardware()->setBaud(115200);
 
   nh.advertise(encoder_pub);
-  pinMode(encoder0PinA, INPUT_PULLUP); 
-  pinMode(encoder0PinB, INPUT_PULLUP); 
+  pinMode(encoder0PinA, INPUT_PULLDOWN); 
+  pinMode(encoder0PinB, INPUT_PULLDOWN); 
   attachInterrupt(0, doEncoderA, CHANGE);
   attachInterrupt(1, doEncoderB, CHANGE);
   encoder0Pos = 0;
