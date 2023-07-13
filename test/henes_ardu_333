@@ -9,9 +9,8 @@ ros::NodeHandle  nh;
 
 std_msgs::Float32 encoder_data;
 std_msgs::Float32 steering_angle;
-std_msgs::Int32 pwm_data;
 
-
+int f_speed = 0, r_speed = 0;
 int velocity = 0;
 int steer_angle = 0;
 
@@ -26,7 +25,6 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
 ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
 ros::Publisher steerAngle_pub("steering_angle", &steering_angle);
-ros::Publisher pwm_pub("steer_pwm", &pwm_data);
 
 
 // Front Motor Drive
@@ -39,7 +37,6 @@ ros::Publisher pwm_pub("steer_pwm", &pwm_data);
 #define MOTOR3_DIR 8
 #define MOTOR3_BRK 9
 
-int f_speed = 0, r_speed = 0;
 
 void front_motor_control(int motor1_pwm)
 {
@@ -250,7 +247,6 @@ void setup() {
   nh.subscribe(cmd_sub);
   nh.advertise(encoder_pub);
   nh.advertise(steerAngle_pub);
-  nh.advertise(pwm_pub);
 
   // Read Encoder Values
   pinMode(encoder0PinA, INPUT_PULLUP); 
@@ -276,9 +272,6 @@ void loop() {
 
   steering_angle.data = Steer_Angle_Measure;
   steerAngle_pub.publish(&steering_angle);
-
-  pwm_data.data = pwm_output;
-  pwm_pub.publish(&pwm_data);
 
   nh.spinOnce();
 }
