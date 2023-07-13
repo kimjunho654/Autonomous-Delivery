@@ -26,6 +26,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/Vector3.h>
 #include <tf/tf.h>
@@ -51,6 +52,8 @@
 #define VERSION_INFORMATION_PUBLISH_FREQUENCY  1    //hz 
 #define DEBUG_LOG_FREQUENCY                    10   //hz 
 
+
+
 #define WHEEL_NUM                        2
 
 #define LEFT                             0
@@ -62,7 +65,7 @@
 #define DEG2RAD(x)                       (x * 0.01745329252)  // *PI/180
 #define RAD2DEG(x)                       (x * 57.2957795131)  // *180/PI
 
-#define TICK2RAD                         0.001533981  // 0.087890625[deg] * 3.14159265359 / 180 = 0.001533981f
+#define TICK2RAD                         0.81945  // 0.087890625[deg] * 3.14159265359 / 180 = 0.001533981f
 
 #define TEST_DISTANCE                    0.300     // meter
 #define TEST_RADIAN                      3.14      // 180 degree
@@ -70,14 +73,13 @@
 // #define DEBUG                            
 #define DEBUG_SERIAL                     SerialBT2
 
-std_msgs::Int32 encoder_data;
-ros::Publisher encoder_pub("encoder", &encoder_data);
 
 // Callback function prototypes
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg);
 void soundCallback(const turtlebot3_msgs::Sound& sound_msg);
 void motorPowerCallback(const std_msgs::Bool& power_msg);
 void resetCallback(const std_msgs::Empty& reset_msg);
+void encoder_callback(const std_msgs::Float32& encoder_msg);
 
 // Function prototypes
 void publishCmdVelFromRC100Msg(void);
@@ -140,6 +142,8 @@ ros::Subscriber<turtlebot3_msgs::Sound> sound_sub("sound", soundCallback);
 ros::Subscriber<std_msgs::Bool> motor_power_sub("motor_power", motorPowerCallback);
 
 ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
+
+ros::Subscriber<std_msgs::Float32> encoder_sub("encoder_arduino", encoder_callback);
 
 /*******************************************************************************
 * Publisher
@@ -223,6 +227,7 @@ float goal_velocity[WHEEL_NUM] = {0.0, 0.0};
 float goal_velocity_from_button[WHEEL_NUM] = {0.0, 0.0};
 float goal_velocity_from_cmd[WHEEL_NUM] = {0.0, 0.0};
 float goal_velocity_from_rc100[WHEEL_NUM] = {0.0, 0.0};
+int32_t dummy;/////////////////////////////////////////////////////////////////////////////////////////////
 
 /*******************************************************************************
 * Declaration for diagnosis
