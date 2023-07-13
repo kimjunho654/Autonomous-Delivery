@@ -18,49 +18,10 @@
 
 #include "turtlebot3_core_config.h"
 
-#define encoder0PinA 2  // interrupt 4 use
-#define encoder0PinB 3  // interrupt 5 use
 
-volatile int encoder0Pos = 0;
+int32_t encoder0Pos = 0;
 
-void doEncoderA(){
-  if (digitalRead(encoder0PinA) == HIGH) { 
-    if (digitalRead(encoder0PinB) == LOW) {  
-      encoder0Pos = encoder0Pos + 1;
-    } 
-    else {
-      encoder0Pos = encoder0Pos - 1;
-    }
-  }
-  else                                     
-  { 
-    if (digitalRead(encoder0PinB) == HIGH) {   
-      encoder0Pos = encoder0Pos + 1;
-    } 
-    else {
-      encoder0Pos = encoder0Pos - 1;
-    }
-  }
-}
 
-void doEncoderB(){
-  if (digitalRead(encoder0PinB) == HIGH) {   
-    if (digitalRead(encoder0PinA) == HIGH) {  
-      encoder0Pos = encoder0Pos + 1;
-    } 
-    else {
-      encoder0Pos = encoder0Pos - 1;
-    }
-  }
-  else { 
-    if (digitalRead(encoder0PinA) == LOW) {   
-      encoder0Pos = encoder0Pos + 1;
-    } 
-    else {
-      encoder0Pos = encoder0Pos - 1;
-    }
-  }
-}
 
 /*******************************************************************************
 * Setup function
@@ -73,17 +34,13 @@ void setup()
   nh.initNode();
   nh.getHardware()->setBaud(115200);
 
-  nh.advertise(encoder_pub);
-  pinMode(encoder0PinA, INPUT_PULLDOWN); 
-  pinMode(encoder0PinB, INPUT_PULLDOWN); 
-  attachInterrupt(0, doEncoderA, CHANGE);
-  attachInterrupt(1, doEncoderB, CHANGE);
-  encoder0Pos = 0;
+
    
   nh.subscribe(cmd_vel_sub);
   nh.subscribe(sound_sub);
   nh.subscribe(motor_power_sub);
   nh.subscribe(reset_sub);
+  nh.subscribe(encoder_sub);
 
   nh.advertise(sensor_state_pub);  
   nh.advertise(version_info_pub);
@@ -125,8 +82,6 @@ void setup()
 *******************************************************************************/
 void loop()
 {
-  encoder_data.data = encoder0Pos;
-  encoder_pub.publish(&encoder_data);
   
   uint32_t t = millis();
   updateTime();
@@ -236,6 +191,10 @@ void soundCallback(const turtlebot3_msgs::Sound& sound_msg)
   sensors.makeSound(sound_msg.value);
 }
 
+void encoder_callback(const std_msgs::Float32& encoder_msg)
+{
+  encoder0Pos = (int32_t)encoder_msg.data;
+}
 /*******************************************************************************
 * Callback function for motor_power msg
 *******************************************************************************/
@@ -274,7 +233,8 @@ void resetCallback(const std_msgs::Empty& reset_msg)
 *******************************************************************************/
 void publishCmdVelFromRC100Msg(void)
 {
-  cmd_vel_rc100_msg.linear.x  = goal_velocity_from_rc100[LINEAR];
+  //cmd_vel_rc100_msg.linear.x  = goal_velocity_from_rc100[LINEAR];
+  cmd_vel_rc100_msg.linear.x  = dummy;
   cmd_vel_rc100_msg.angular.z = goal_velocity_from_rc100[ANGULAR];
 
   cmd_vel_rc100_pub.publish(&cmd_vel_rc100_msg);
@@ -318,7 +278,7 @@ void publishSensorStateMsg(void)
 
   dxl_comm_result = motor_driver.readEncoder(sensor_state_msg.left_encoder, sensor_state_msg.right_encoder);
 
-  if (dxl_comm_result == true)
+  if (true)
     updateMotorInfo(encoder0Pos, encoder0Pos);
   else
     return;
@@ -515,6 +475,7 @@ void updateTF(geometry_msgs::TransformStamped& odom_tf)
 void updateMotorInfo(int32_t left_tick, int32_t right_tick)
 {
   int32_t current_tick = 0;
+  dummy = left_tick;
   static int32_t last_tick[WHEEL_NUM] = {0, 0};
   
   if (init_encoder)
