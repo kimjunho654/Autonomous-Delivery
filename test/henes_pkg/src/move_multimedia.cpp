@@ -15,10 +15,10 @@ void initializeGoal(move_base_msgs::MoveBaseActionGoal& goal_msg, double x, doub
     goal_msg.goal.target_pose.header.frame_id = "map";
     goal_msg.goal.target_pose.pose.position.x = x;  // x 좌표
     goal_msg.goal.target_pose.pose.position.y = y;  // y 좌표
-    goal_msg.goal.target_pose.pose.position.z = z;
+    goal_msg.goal.target_pose.pose.position.z = 0.0;
     goal_msg.goal.target_pose.pose.orientation.x = 0.0;
     goal_msg.goal.target_pose.pose.orientation.y = 0.0;
-    goal_msg.goal.target_pose.pose.orientation.z = 0.0;
+    goal_msg.goal.target_pose.pose.orientation.z = z;
     goal_msg.goal.target_pose.pose.orientation.w = w;
 }
 
@@ -53,11 +53,37 @@ int main(int argc, char** argv) {
         // 목표 위치 초기화
         if(target_string == "M101") {  
            
-          initializeGoal(goal_msg, 1.0, 2.0, 0.0, 1.0);  
+          initializeGoal(goal_msg, 39.0784, 17.26032, 0.68539626, 0.72817028);  
           goal_pub.publish(goal_msg);
         }
+        else if(target_string == "M102"){
+
+          initializeGoal(goal_msg, 39.00028, 8.6892986, 0.69865868, 0.71545512);  
+          goal_pub.publish(goal_msg);
+        }
+        else if(target_string == "M103"){
+
+          initializeGoal(goal_msg, 38.5534133, -4.626766, -0.715472482, 0.69864091);  
+          goal_pub.publish(goal_msg);
+        }
+        else if(target_string == "elevator"){
+
+          initializeGoal(goal_msg, 35.33877182, -4.9327178, 0.008332466, 0.999965284);  
+          goal_pub.publish(goal_msg);
+        }
+        else if(target_string == "restroom"){
+
+          initializeGoal(goal_msg, 33.3310165405, -4.9717502594, 0.00684893318029, 0.999976545782);  
+          goal_pub.publish(goal_msg);
+        }
+        else if(target_string == "restroom"){
+
+          initializeGoal(goal_msg, 33.3310165405, -4.9717502594, 0.00684893318029, 0.999976545782);  
+          goal_pub.publish(goal_msg);
+        }
+
         else {
-          initializeGoal(goal_msg, 0.0, 0.0, 0.0, 0.0);  
+          initializeGoal(goal_msg, 0, 0, 0, 0);  
           goal_pub.publish(goal_msg);
         }
 
@@ -78,5 +104,4 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
 
