@@ -16,7 +16,7 @@ int steer_angle = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   velocity = 300 * msg.linear.x;       
-  steer_angle = 10 * msg.angular.z;   
+  steer_angle = 40 * msg.angular.z;   
 
   if(velocity >= 255) velocity  = 255;  
   if(velocity <=-255) velocity = -255;  
