@@ -1,0 +1,6 @@
+<launch>
+
+  <node pkg="henes_pkg" type="move_multimedia" name="move_multimedia" output="screen">
+  </node>
+
+</launch>
