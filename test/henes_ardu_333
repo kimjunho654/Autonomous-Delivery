@@ -15,8 +15,8 @@ int velocity = 0;
 int steer_angle = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
-  velocity = 300 * msg.linear.x;       
-  steer_angle = 40 * msg.angular.z;   
+  velocity = msg.linear.x;       
+  steer_angle = msg.angular.z;   
 
   if(velocity >= 255) velocity  = 255;  
   if(velocity <=-255) velocity = -255;  
@@ -93,8 +93,8 @@ void motor_control(int front_speed, int rear_speed)
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
 #define Steering_Sensor A8  // Analog input pin that the potentiometer is attached to
 #define NEURAL_ANGLE 0
-#define LEFT_STEER_ANGLE  -30
-#define RIGHT_STEER_ANGLE  30
+#define LEFT_STEER_ANGLE  -21.0
+#define RIGHT_STEER_ANGLE  17.0
 #define MOTOR2_PWM 14
 #define MOTOR2_DIR 15
 #define MOTOR2_BRK 16
@@ -106,7 +106,7 @@ double error, error_old;
 double error_s, error_d;
 int pwm_output;
 
-int sensorValue = 0;        // value read from the pot
+long sensorValue = 0;        // value read from the pot
 double Steer_Angle_Measure = 0.0;        // value output to the PWM (analog out)
 int Steering_Angle = NEURAL_ANGLE;
 
@@ -160,6 +160,11 @@ void steering_control()
   PID_Control(); 
 }
 
+long map(long x, long in_min, long in_max,long out_min, long out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  
+}
 void control_callback()
 {
 
@@ -168,7 +173,7 @@ void control_callback()
   // read the analog in value:
   sensorValue = analogRead(Steering_Sensor);
   // map it to the range of the analog out:
-  Steer_Angle_Measure = map(sensorValue, 92, 1023, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+  Steer_Angle_Measure = map(sensorValue, 0.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
   Steering_Angle = NEURAL_ANGLE + steer_angle;
   steering_control();
   
@@ -270,7 +275,8 @@ void loop() {
   encoder_data.data = encoder0Pos;
   encoder_pub.publish(&encoder_data);
 
-  steering_angle.data = Steer_Angle_Measure;
+  //steering_angle.data = Steer_Angle_Measure;
+  steering_angle.data = sensorValue;
   steerAngle_pub.publish(&steering_angle);
 
   nh.spinOnce();
