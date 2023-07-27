@@ -1,3 +1,6 @@
+import rospy
+from std_msgs.msg import String
+
 import argparse
 import time
 from pathlib import Path
@@ -67,41 +70,43 @@ def detect(save_img=False):
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
     old_img_w = old_img_h = imgsz
     old_img_b = 1
-    
+
     config = rs.config()
     config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
     config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-    
+
     pipeline = rs.pipeline()
     profile = pipeline.start(config)
-    
+
     align_to = rs.stream.color
     align = rs.align(align_to)
-    
+
     while(True):
+       rospy.init_node('detect_publisher')
+       pub = rospy.Publisher('/depth', String, queue_size=10)
+
        frames = pipeline.wait_for_frames()
-       
+
        aligned_frames = align.process(frames)
        color_frame = aligned_frames.get_color_frame()
        depth_frame = aligned_frames.get_depth_frame()
        if not depth_frame or not color_frame:
            continue
-          
+
        img = np.asanyarray(color_frame.get_data())
        depth_image = np.asanyarray(depth_frame.get_data())
        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.08), cv2.COLORMAP_JET)
-       
+
        #Letterbox
-       im0 = imh.copy()
+       im0 = img.copy()
        img = img[np.newaxis, :, :, :]
-       
+
        #stack
        img = np.stack(img, 0)
-       
+
        #convert
        img = img[..., ::-1].transpose((0, 3, 1, 2)) #BGR to RGB, BHWC to BCHW
        img = np.ascontiguousarray(img)
-       
 
        img = torch.from_numpy(img).to(device)
        img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -133,7 +138,7 @@ def detect(save_img=False):
 
        # Process detections
        for i, det in enumerate(pred):  # detections per image
-            
+
            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
            if len(det):
                # Rescale boxes from img_size to im0 size
@@ -147,10 +152,18 @@ def detect(save_img=False):
                # Write results
                for *xyxy, conf, cls in reversed(det):
                    c = int(cls) #integer class
+
                    label = f'{names[c]} {conf:.2f}'
+                   
+                   if names[c] == 'person':
+                       x_center = (xyxy[0] + xyxy[2]) / 2
+                       y_center = (xyxy[1] + xyxy[3]) / 2
+                       depth_value = depth_frame.get_distance(int(x_center), int(y_center))
+                       msg = f'{label}:  Z: {depth_value}'
+                       pub.publish(msg)
+
                    plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
                    plot_one_box(xyxy, depth_colormap, label=label, color=colors[int(cls)], line_thickness=2)
-                 
 
            # Print time (inference + NMS)
            #print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -160,7 +173,6 @@ def detect(save_img=False):
                cv2.imshow("Recongnition result depth", depth_colormap)
                if cv2.waitKey(1) & 0xFF == ord('q'):
                    break
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -193,3 +205,4 @@ if __name__ == '__main__':
                 strip_optimizer(opt.weights)
         else:
             detect()
+
