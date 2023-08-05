@@ -15,6 +15,9 @@ import math
 import rospy
 from nav_msgs.msg import Odometry
 
+lat = 36.76905957
+lon = 126.93517886
+
 def clamp(val):
     while val < -pi/2.0:
         val += 2.0*pi
@@ -23,20 +26,22 @@ def clamp(val):
     return val
 
 def gps_callback(msg):
+    global lat, lon
     lat = msg.latitude
     lon = msg.longitude
    
 
 def talker():
+    global lat, lon
     pub = rospy.Publisher('/odom', Odometry, queue_size=10)
     
     rospy.Subscriber('/ublox_gps/fix', NavSatFix, gps_callback)   
 
     rospy.init_node('odomtester')
     rate = rospy.Rate(2) # 10hz
-    lat = 36.6137
+    #lat = 36.76905957
     dlat = 0.0 #0.000001
-    lon = -121.912
+    #lon = 126.93517886
     dlon = 0.0 #0.000001
 
     roll = 0.0
@@ -77,7 +82,7 @@ def talker():
 
         omsg.twist.covariance = range(36,36+36)
 
-        #lat += 0.00001
+        lat += 0.00001
         #lon += 0.00001
 
         rospy.loginfo("publishing odom (%.10f, %.10f, %.2f)"%(omsg.pose.pose.position.y,omsg.pose.pose.position.x,omsg.pose.pose.position.z))
