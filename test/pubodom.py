@@ -82,7 +82,7 @@ def talker():
 
         omsg.twist.covariance = range(36,36+36)
 
-        lat += 0.00001
+        #lat += 0.00001
         #lon += 0.00001
 
         rospy.loginfo("publishing odom (%.10f, %.10f, %.2f)"%(omsg.pose.pose.position.y,omsg.pose.pose.position.x,omsg.pose.pose.position.z))
