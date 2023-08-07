@@ -14,9 +14,12 @@ import math
 # ROS
 import rospy
 from nav_msgs.msg import Odometry
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 lat = 36.76905957
 lon = 126.93517886
+
+
 
 def clamp(val):
     while val < -pi/2.0:
@@ -31,10 +34,33 @@ def gps_callback(msg):
     lon = msg.longitude
    
 
+new_msg = PoseWithCovarianceStamped()
+def pose_callback(msg):
+
+    global new_msg
+
+    new_msg.header.stamp = rospy.Time.now()
+    new_msg.header.frame_id = "map"
+
+    new_msg.pose.pose.position = msg.pose.pose.position
+
+    new_msg.pose.pose.orientation.z = 0.003
+    new_msg.pose.pose.orientation.w = 1.0
+
+
+
+
+
 def talker():
     global lat, lon
     pub = rospy.Publisher('/odom', Odometry, queue_size=10)
+
+
+
     
+    rospy.Subscriber('/initialpose', PoseWithCovarianceStamped, pose_callback)
+
+
     rospy.Subscriber('/ublox_gps/fix', NavSatFix, gps_callback)   
 
     rospy.init_node('odomtester')
@@ -69,7 +95,7 @@ def talker():
         omsg.pose.pose.orientation.x = q[0]
         omsg.pose.pose.orientation.y = q[1]
         omsg.pose.pose.orientation.z = q[2]
-        omsg.pose.pose.orientation.w = q[3]
+        omsg.pose.pose.orientation.w = 20 #q[3]
 
         omsg.pose.covariance = range(36)
 
@@ -82,7 +108,10 @@ def talker():
 
         omsg.twist.covariance = range(36,36+36)
 
-        #lat += 0.00001
+        initpose_pub = rospy.Publisher('/initialpose_modified', PoseWithCovarianceStamped, queue_size=10)
+        initpose_pub.publish(new_msg)
+
+        #lat -= 0.00001
         #lon += 0.00001
 
         rospy.loginfo("publishing odom (%.10f, %.10f, %.2f)"%(omsg.pose.pose.position.y,omsg.pose.pose.position.x,omsg.pose.pose.position.z))
