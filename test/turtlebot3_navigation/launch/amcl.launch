@@ -8,6 +8,8 @@
   <!-- AMCL -->
   <node pkg="amcl" type="amcl" name="amcl">
 
+    <remap from="/initialpose" to="/initialpose_modified" />
+
     <param name="min_particles"             value="1"/>
     <param name="max_particles"             value="1"/>
     <param name="kld_err"                   value="0.02"/>
