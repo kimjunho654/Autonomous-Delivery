@@ -56,9 +56,17 @@ public:
             filtered_longitude = prev_longitude_;
         }
 
+
+        if (msg->position_covariance[0] < threshold_covariance_) {
+            prev_latitude_ = filtered_latitude;
+        }
+        if (msg->position_covariance[4] < threshold_covariance_) {
+            prev_longitude_ = filtered_longitude;
+        }
+
         // Update previous values
-        prev_latitude_ = filtered_latitude;
-        prev_longitude_ = filtered_longitude;
+        //prev_latitude_ = filtered_latitude;
+        //prev_longitude_ = filtered_longitude;
 
         // Create filtered GPS message
         sensor_msgs::NavSatFix filtered_gps;
@@ -89,5 +97,4 @@ int main(int argc, char** argv) {
     ros::spin();
     return 0;
 }
-
 
