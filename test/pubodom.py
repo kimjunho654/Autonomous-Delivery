@@ -5,7 +5,7 @@ hack to publish some 0 odometry
 
 # Python
 import rospy
-from sensor_msgs.msg import NavSatFix
+from sensor_msgs.msg import NavSatFix, Imu
 import sys
 from math import *
 import tf
@@ -45,12 +45,18 @@ def pose_callback(msg):
 
     new_msg.pose.pose.position = msg.pose.pose.position
 
-    new_msg.pose.pose.orientation.z = 0.003
+    new_msg.pose.pose.orientation.z = 0.00
     new_msg.pose.pose.orientation.w = 1.0
 
     call_pose = True
 
 
+orientation_z = 0.0
+orientation_w = 1.0
+def imu_callback(msg):
+    global orientation_z, orientation_w
+    orientation_z = msg.orientation.z
+    orientation_w = msg.orientation.w 
 
 
 
@@ -62,9 +68,10 @@ def talker():
 
     
     pose_sub = rospy.Subscriber('/initialpose', PoseWithCovarianceStamped, pose_callback)
+    rospy.Subscriber('/imu/data', Imu, imu_callback)
 
 
-    rospy.Subscriber('/ublox_gps/fix', NavSatFix, gps_callback)   
+    rospy.Subscriber('/filtered_gps_topic', NavSatFix, gps_callback)   
 
     rospy.init_node('odomtester')
     rate = rospy.Rate(2) # 10hz
@@ -97,8 +104,8 @@ def talker():
         q = tf.transformations.quaternion_from_euler(r,p,y)
         omsg.pose.pose.orientation.x = q[0]
         omsg.pose.pose.orientation.y = q[1]
-        omsg.pose.pose.orientation.z = q[2]
-        omsg.pose.pose.orientation.w = 20 #q[3]
+        omsg.pose.pose.orientation.z = orientation_z #q[2]
+        omsg.pose.pose.orientation.w = orientation_w #q[3]
 
         omsg.pose.covariance = range(36)
 
