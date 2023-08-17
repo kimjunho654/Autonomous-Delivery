@@ -13,14 +13,19 @@ std_msgs::Float32 steering_angle;
 int f_speed = 0, r_speed = 0;
 int velocity = 0;
 int steer_angle = 0;
+double dummy = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
-  //velocity = 250*msg.linear.x;       
+  dummy = msg.linear.x;       
   steer_angle = 20*msg.angular.z;   
 
-  if(msg.linear.x > 0) velocity  = 80;  
-  else if (velocity < 0) velocity = -80; 
-  else velocity = 0; 
+  if(dummy > 0){
+    velocity  = 80;  
+  }
+  else if (dummy < 0){
+    velocity = -80; 
+  }
+
 }
 
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
@@ -94,8 +99,8 @@ void motor_control(int front_speed, int rear_speed)
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
 #define Steering_Sensor A8  // Analog input pin that the potentiometer is attached to
 #define NEURAL_ANGLE 0
-#define LEFT_STEER_ANGLE  17.0
-#define RIGHT_STEER_ANGLE  -17.0
+#define LEFT_STEER_ANGLE  -17.0
+#define RIGHT_STEER_ANGLE  17.0
 #define MOTOR2_PWM 14
 #define MOTOR2_DIR 15
 #define MOTOR2_BRK 16
@@ -247,6 +252,7 @@ void setup() {
 
   error = error_s = error_d = error_old = 0.0;
   pwm_output = 0;
+  dummy = 0;
 
   nh.initNode();
   
