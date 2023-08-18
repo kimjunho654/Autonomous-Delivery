@@ -17,7 +17,7 @@ double dummy = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   dummy = msg.linear.x;       
-  steer_angle = 20*msg.angular.z;   
+  steer_angle = 40*msg.angular.z;   
 
   if(dummy > 0){
     velocity  = 80;  
