@@ -35,6 +35,7 @@ double init_yaw;
 int init_flag=0;
 float imu_offset = 35;
 double gps_heading_angle = 0;
+int steering_angle = 0;
 
 struct Point 
 { 
@@ -57,8 +58,8 @@ double error1, error_old1, error_d1;
 
 
 geometry_msgs::Pose2D my_pose,my_target_pose_goal,my_target_pose_start;
-
-
+geometry_msgs::PoseStamped utm_fix;
+/*
 void gps_utm_poseCallback(const geometry_msgs::Pose2D& msg)
 {
 	my_pose.x     =   msg.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
@@ -66,9 +67,21 @@ void gps_utm_poseCallback(const geometry_msgs::Pose2D& msg)
 	my_pose.theta =  msg.theta;
 	
 //if(msg.theta <=0) my_pose.theta =  msg.theta + 2*M_PI;   
+}*/
+////////////////////////////////////////////////////////////////////////////////////////
+void gps_utm_fixCallback(const geometry_msgs::PoseStamped::ConstPtr& msgs)
+{
+	utm_fix.header = msgs->header;
+	utm_fix.pose.position.x     =  msgs->pose.position.x ;
+	utm_fix.pose.position.y     =  msgs->pose.position.y ;
+	utm_fix.pose.position.z   =  msgs->pose.position.z ;
+
+	my_pose.x     =  utm_fix.pose.position.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+	my_pose.y     =  utm_fix.pose.position.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+	//my_pose.theta =  utm_fix.pose.position.z;
+	
 }
-
-
+////////////////////////////////////////////////////////////////////////////////////////
 double low_pass_filter(double input, double input_old , double alpha)
 {
 	
@@ -110,7 +123,7 @@ void imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
       m.getRPY(roll, pitch, yaw);
      
       yaw = yaw+ DEG2RAD(imu_offset);
-      //my_pose.theta = yaw;
+      my_pose.theta = yaw;
       //printf("%6.3lf(rad)  %6.3lf \n",yaw, yaw*180/3.14159);   
 }
 
@@ -128,6 +141,10 @@ int heading_angle_steering_control(double c_heading_angle)
 	
 }
 
+void SteeringCallback(const std_msgs::Int16& msg)
+{
+	steering_angle  = msg.data;
+}
 
 int main(int argc, char **argv)
 {
@@ -144,21 +161,22 @@ int main(int argc, char **argv)
   ros::param::get("/heading_control_p_gain",  p_gain);   //P  gain
   ros::param::get("/heading_control_pd_gain",  pd_gain); //pd gain
     
-  ros::Subscriber sub1 = n.subscribe("/gps/utm_pos1",10, &gps_utm_poseCallback);
+  //ros::Subscriber sub1 = n.subscribe("/my_pose",10, &gps_utm_poseCallback);
+  ros::Subscriber sub1 = n.subscribe("/utm",1,&gps_utm_fixCallback);
   ros::Subscriber sub2 = n.subscribe("/utm_my_pose",10, &gpsposeCallback);
   
   ros::Subscriber sub3 = n.subscribe("/pose_goal",10, &targetPoseCallback);
   
-  ros::Subscriber sub4 = n.subscribe("/handsfree/imu",10,&imuCallback);
+  ros::Subscriber sub4 = n.subscribe("/imu/data",10,&imuCallback);
   ros::Subscriber sub5 = n.subscribe("/gps_heading_angle",1,&GPSHeadingAngleCallback);
+  ros::Subscriber car_control_sub = n.subscribe("/Steering_angle_Int16",1, &SteeringCallback);
+  
        
   ros::Publisher car_control_pub1 = n.advertise<std_msgs::Int16>("Car_Control_cmd/W_SteerAngle_Int16", 10);
   
   printf("%6.3lf %6.3lf\n",p_gain , pd_gain);
   printf("%6.3lf %6.3lf\n",p_gain1 , pd_gain1);
 
-  
-  //ros::Publisher car_control_pub2 = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
   
   ros::Rate loop_rate(5);  // 10
   
@@ -181,15 +199,15 @@ int main(int argc, char **argv)
 	my_pose.theta = DEG2RAD(60);	
 	*/
 	double waypoint_pos_base_link_x     = 0.0;
-	double waypoint_pos_base_link_y     = 0.0; 
-	double waypoint_pos_base_link_theta = 0.0; 
-	double tf_base_map_x = 0.0,tf_base_map_y = 0.0; 
+	double waypoint_pos_base_link_y     = 0.0;
+	double waypoint_pos_base_link_theta = 0.0;
+	double tf_base_map_x = 0.0,tf_base_map_y = 0.0;
 	
 	tf_base_map_x = - my_pose.x;   //상대좌표로 변환  no translation
 	tf_base_map_y = - my_pose.y;
 	
 	tf_base_map_x += my_target_pose_goal.x;   //상대좌표로 변환  no translation
-	tf_base_map_y += my_target_pose_goal.y;     
+	tf_base_map_y += my_target_pose_goal.y;
     
     //printf("TF base_link to map : %lf %lf\n", tf_base_map_x,tf_base_map_y);	
     
@@ -211,11 +229,9 @@ int main(int argc, char **argv)
 	printf("4: WayPoint Distance %6.3lf , WayPoint Angle %6.3lf \n",waypoint_distance, RAD2DEG(waypoint_angle));	
 	
 	
-	
-	
 	printf("=========== Heading Angle Correction Motion Enable =========== \n");
     s_angle.data = heading_angle_steering_control(RAD2DEG(waypoint_angle));
-	printf("5: control Steering angle %2d\n", s_angle.data);
+	printf("5: control Steering angle %2d  %2d\n", s_angle.data, steering_angle);
 	printf("\n\n");
 	if((RAD2DEG(waypoint_angle) >=-ANGLE_LOCK) && (RAD2DEG(waypoint_angle) <=ANGLE_LOCK))
 	{
@@ -224,7 +240,7 @@ int main(int argc, char **argv)
 		printf("-------------------------\n");
 	}	
 		
-	s_angle.data = s_angle.data%360; // 각도 확인 할것 ROS 좌표축에 맞도록 수정했음 2022.07.10	
+	s_angle.data = s_angle.data%360; // 각도 확인 할것 ROS 좌표축에 맞도록 수정했음 2022.07.10
 
     ROS_INFO("Steering Angle %d",s_angle.data);
     car_control_pub1.publish(s_angle);
@@ -236,4 +252,3 @@ int main(int argc, char **argv)
   }
   return 0;
 }
-
