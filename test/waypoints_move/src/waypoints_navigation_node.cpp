@@ -2,6 +2,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Int16.h"
 #include "std_msgs/Int8.h"
+#include "std_msgs/Float64.h"
 #include "std_msgs/Float32.h"
 #include "geometry_msgs/Twist.h"
 #include "geometry_msgs/PoseStamped.h"
@@ -9,9 +10,11 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "nav_msgs/Odometry.h"
 #include "nav_msgs/Path.h"
+#include "sensor_msgs/Imu.h" ///////////////////////////
 
 
 #include <math.h>
+
 
 #define MAX_L_STEER -30
 #define MAX_R_STEER 30
@@ -45,6 +48,9 @@ double waypoint_line_angle = 0.0;
 double datum_lat;
 double datum_lon;
 double datum_yaw;
+double f_s_angle;
+double f_c_speed;
+float imu_offset = 35; ////////////////////////
 
 
 //init_flag
@@ -80,6 +86,8 @@ geometry_msgs::Pose2D my_target_pose_goal;
 geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::Pose2D my_pose_utm_waypoint;    // coordinate,  current waypoint to goal waypoint
 geometry_msgs::Pose2D initial_utm_pose;
+geometry_msgs::PoseStamped utm_fix;
+geometry_msgs::Twist control_vel;
 
 
 struct Rect_Region Vision_Region[V_Region_NO];
@@ -90,15 +98,32 @@ struct Rect_Region Passing_Region[Pass_Region_NO];
 struct Rect_Region Parking_Region[Park_Region_NO];
 
 //GPS의경우 UTM 좌표를 따라서 XY가 다름
-
+/*
 void gps_utm_poseCallback(const geometry_msgs::Pose2D& msg)
 {
 	my_pose.x     =  msg.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
 	my_pose.y     =  msg.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
 	my_pose.theta =  msg.theta;
 	
-//if(msg.theta <=0) my_pose.theta =  msg.theta + 2*M_PI;   
+//if(msg.theta <=0) my_pose.theta =  msg.theta + 2*M_PI;
+}*/
+
+
+///////////////////////////////////////
+void utm_fixCallback(const geometry_msgs::PoseStamped::ConstPtr& msgs)
+{
+	utm_fix.header = msgs->header;
+	utm_fix.pose.position.x     =  msgs->pose.position.x ;
+	utm_fix.pose.position.y     =  msgs->pose.position.y ;
+	//utm_fix.pose.position.z   =  msgs->pose.position.z ;  ///////////////////////////
+
+	my_pose.x     =  utm_fix.pose.position.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+	my_pose.y     =  utm_fix.pose.position.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+	//my_pose.theta =  utm_fix.pose.position.z;  ////////////////////////////////////
+	
 }
+/////////////////////////////////////////
+
 
 void gps_datum_Callback(const geometry_msgs::Vector3::ConstPtr& msg)
 {
@@ -124,7 +149,7 @@ void GPSHeadingAngleCallback(const std_msgs::Float32& msg)
 {
 	gps_heading_angle = msg.data;   // radian 으로 받을 것
 }
-
+/*//////////////////////////////////////////////////////////////
 void odomCallback(const nav_msgs::Odometry& msg)
 {
 	my_pose.x = (double)msg.pose.pose.position.x;
@@ -138,12 +163,10 @@ void odomCallback(const nav_msgs::Odometry& msg)
     m.getRPY(roll, pitch, yaw);
     my_pose.theta = yaw;		
 }
-
+*//////////////////////////////////////////////////////////
 void init_waypoint_region(void)
 {
-	FILE *fp;
-	
-	fp= fopen("//home//amap//waypoints//waypoint_region.txt","r");
+	FILE *fp= fopen("//home//yun//waypoints//waypoint_data_sch.txt","r");;
 	
 	if(fp == NULL)
 	{
@@ -162,20 +185,20 @@ void init_waypoint_region(void)
  
 void init_waypoint(void)
 {
-	FILE *fp;
-	
-	fp= fopen("//home//amap//amap//waypoints//waypoints_data.txt","r");
+	/*
+	FILE *fp = fopen("waypoint_data_sch.txt","r");
 	
 	//fp = NULL;
 	
 	if(fp == NULL)
 	{
+		
 		ROS_INFO("Waypoints_data does not exit!");
 		
-	    my_waypoints_list[0].x = 1;   
-        my_waypoints_list[0].y = 1;
+	    my_waypoints_list[0].x = 0;   
+        my_waypoints_list[0].y = 0;
 	
-	    my_waypoints_list[1].x = 3;   
+	    my_waypoints_list[1].x = 10;   
         my_waypoints_list[1].y = 3;
   
         my_waypoints_list[2].x = 2;   
@@ -204,7 +227,51 @@ void init_waypoint(void)
 			ROS_INFO("WayPoints-%d : [%.2lf]%.2lf]",i,my_waypoints_list[i].x,my_waypoints_list[i].y);
 	    }
 	    fclose(fp);
-   }
+    }*/
+	/*
+        my_waypoints_list[0].x = 315717.454331;   
+        my_waypoints_list[0].y = 4071242.991651;
+	
+	    my_waypoints_list[1].x = 315719.193040;   
+        my_waypoints_list[1].y = 4071240.880626;
+  
+        my_waypoints_list[2].x = 315720.931749;   
+        my_waypoints_list[2].y = 4071238.769601;  		*/
+ 
+        my_waypoints_list[0].x = 315722.670459;   
+        my_waypoints_list[0].y = 4071236.658576; 
+
+/*
+		my_waypoints_list[4].x = 315724.409168;   
+        my_waypoints_list[4].y = 4071234.547552; 
+
+		my_waypoints_list[5].x = 315726.147878;   
+        my_waypoints_list[5].y = 4071232.436528; 
+
+		my_waypoints_list[6].x = 315727.597220;   
+        my_waypoints_list[6].y = 4071230.351730; 
+
+		my_waypoints_list[7].x = 315729.046562;   
+        my_waypoints_list[7].y = 4071228.266931;          */
+
+		my_waypoints_list[1].x = 315730.495905;   
+        my_waypoints_list[1].y = 4071226.182133; 
+/*
+		my_waypoints_list[9].x = 315730.293538;   
+        my_waypoints_list[9].y = 4071223.011866; 
+
+		my_waypoints_list[10].x = 315728.437577;   
+        my_waypoints_list[10].y = 4071221.815598;            */
+
+		my_waypoints_list[2].x = 315725.517577;   
+        my_waypoints_list[2].y = 4071218.815598; 
+        
+        no_waypoints = 3;
+        wp_finish_id = no_waypoints;
+	
+
+
+
 }
 
 void WaySteerControlCallback(const std_msgs::Int16& angle)
@@ -221,6 +288,24 @@ void obs_detect_Callback(const std_msgs::Int8& msg)
 	obs = msg.data;
 	printf("obs : %d\n", obs);
 }
+////////////////////////////////////////////////////////////
+
+void imuCallback(const sensor_msgs::Imu::ConstPtr& msg) 
+{
+      tf2::Quaternion q(
+        msg->orientation.x,
+        msg->orientation.y,
+        msg->orientation.z,
+        msg->orientation.w);
+      tf2::Matrix3x3 m(q);      
+ 
+      m.getRPY(roll, pitch, yaw);
+     
+      yaw = yaw+ DEG2RAD(imu_offset);
+      my_pose.theta = yaw;
+      //printf("%6.3lf(rad)  %6.3lf \n",yaw, yaw*180/3.14159);   
+}
+///////////////////////////////////////////////////////
 
 void waypoint_tf(void)
 {
@@ -245,7 +330,7 @@ void base_link_tf_utm(void)
 	double waypoint_pos_base_link_theta = 0.0; 
 	double tf_base_map_x,tf_base_map_y; 
 	double waypoint_angle, waypoint_distance;	 
-	
+	///////////////////////////////////////////////////
 	tf_base_map_x = -my_pose.x;   //상대좌표로 변환  no translation
 	tf_base_map_y = -my_pose.y;
 	
@@ -273,6 +358,8 @@ void check_inside_waypoint(int waypoint_id)
 	//printf("%d %d \n", wp_go_id, no_waypoints);
 	    if(waypoint_id != 0)
 	    { 
+
+
 	        my_target_pose_goal_prev.x = my_waypoints_list[waypoint_id-1].x ;//- initial_utm_pose.x;
 	        my_target_pose_goal_prev.y = my_waypoints_list[waypoint_id-1].y ;//- initial_utm_pose.x;
 	        
@@ -280,7 +367,7 @@ void check_inside_waypoint(int waypoint_id)
 	        double delta_y = my_target_pose_goal.y - my_target_pose_goal_prev.y;
 	        waypt_line_angle = atan2(delta_y, delta_x);
 	        
-	        printf("1: tf angle %lf\n", RAD2DEG( waypt_line_angle)); 
+	        printf("1: tf angle %lf\n", RAD2DEG( waypt_line_angle));
 	       // printf("%6.3lf , %6.3lf \n",my_target_pose_goal_prev.x, my_target_pose_goal_prev.y);
 	       // printf("%6.3lf , %6.3lf \n",my_target_pose_goal_prev.x, my_target_pose_goal_prev.y);
 		}
@@ -301,6 +388,8 @@ int main(int argc, char **argv)
   std_msgs::Int16 c_speed;
   std_msgs::Int16 ros_waypoint_id;
   std_msgs::String slam_reset;
+ // std_msgs::Float64 f_s_angle;//////////////////////////////////////////////
+ // std_msgs::Float64 f_c_speed;/////////////////////////////////////////////
   
   geometry_msgs::Pose2D gps_init_pose2d_data;
 
@@ -309,23 +398,25 @@ int main(int argc, char **argv)
   datum_lat = datum_lon =  datum_yaw = 0.0; 
    
   ros::Subscriber sub1 = n.subscribe("/Car_Control_cmd/W_SteerAngle_Int16",10, &WaySteerControlCallback);
-  ros::Subscriber sub2 = n.subscribe("/gps/utm_pos1",10, &gps_utm_poseCallback);
-    
-  ros::param::get("~use_utm_absolute_mode", use_utm_absolute_mode);        //2개의 GPS를 사용할 경우 yaw값은 2개의 GPS로 부터 계산함   
+  //ros::Subscriber sub2 = n.subscribe("/gps/ublox_fix",10, &gps_utm_poseCallback); //
+
+  //ros::param::get("~use_utm_absolute_mode", use_utm_absolute_mode);        //2개의 GPS를 사용할 경우 yaw값은 2개의 GPS로 부터 계산함   
   
   
   ros::Subscriber sub_gps_datum = n.subscribe("/gps/datum",1,&gps_datum_Callback);  // front gps      
   ros::Subscriber sub3 = n.subscribe("/start_waypoint_id_no",1, &waypointstartIDCallback);
   ros::Subscriber sub4 = n.subscribe("/finish_waypoint_id_no",1, &waypointfinishIDCallback);
   ros::Subscriber sub5 = n.subscribe("/gps_heading_angle",1,&GPSHeadingAngleCallback);
- 
- 
+  ros::Subscriber sub6 = n.subscribe("/utm",1,&utm_fixCallback);
+  ros::Subscriber sub7 = n.subscribe("/imu/data",10,&imuCallback);
+
   ros::Publisher car_control_pub1 = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
   ros::Publisher car_control_pub2 = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
   ros::Publisher target_id_pub    = n.advertise<std_msgs::Int16>("target_id",2);
   ros::Publisher target_pos_pub   = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
   
   ros::Publisher waypoint_guide_line_pub = n.advertise<nav_msgs::Path>("/waypoint_guide_line",1, true);
+  ros::Publisher cmd_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);/////////////////////////////////////////
 
    
   ros::Rate loop_rate(5);  // 10 
@@ -348,7 +439,7 @@ int main(int argc, char **argv)
   last_time = ros::Time::now();
 
 
-  
+
   geometry_msgs::Pose2D pose_goal;  
     
   
@@ -357,7 +448,7 @@ int main(int argc, char **argv)
   initial_utm_pose.x = datum_lat;  //gps datum 처리 
   initial_utm_pose.y = datum_lon;  //gps datum 처리
 
-  
+
   int vision_id = -1;
   int vision_speed_id = -1;
   int waypoint_id = 0;
@@ -380,10 +471,10 @@ int main(int argc, char **argv)
   {
 	start_x = my_pose.x;   start_y = my_pose.y;
 	start_x = 0;   start_y = 0;
-  }  
+  } 
  
   
-  if(use_utm_absolute_mode == true)
+  if(use_utm_absolute_mode == true)	// if use gps two
      {
 	     ROS_INFO(" ");
 	     ROS_INFO(" ");
@@ -420,7 +511,7 @@ int main(int argc, char **argv)
     gps_init_pose2d_data.x     = my_waypoints_list[0].x;
     gps_init_pose2d_data.y     = my_waypoints_list[0].y;
     gps_init_pose2d_data.theta =  0;
-        
+    
    
     
     if(waypoint_id!= -1)
@@ -483,7 +574,6 @@ int main(int argc, char **argv)
 	    pose_goal.theta = DEG2RAD(0);
 	    ROS_INFO("[%3d]WayPoint goal X : %6.3lf  goal Y : %6.3lf ",wp_go_id, my_target_pose_goal.x, my_target_pose_goal.y);  
 	    
-	    
 	    waypoint_tf();
 	    base_link_tf_utm();
 	    
@@ -516,9 +606,9 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			
+			c_speed.data = 10;
 		}
-		c_speed.data = 10;
+		
 		
 	    if(wp_go_id >= wp_finish_id) 
 	    {
@@ -531,11 +621,20 @@ int main(int argc, char **argv)
 	// publish topics	
 	target_id_pub.publish(ros_waypoint_id);
 	ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
+	/////////////////////////////////////////////////////////////////////////////
+	
+	f_s_angle = s_angle.data;
+	f_c_speed = c_speed.data;
+	control_vel.linear.x = f_c_speed;
+	control_vel.angular.z = f_s_angle;
+	
+/////////////////////////////////////////////////////////////////////////////
 	if(count>=2)
 	{
 	    car_control_pub1.publish(s_angle);
 	    car_control_pub2.publish(c_speed);
-	}	
+		cmd_pub.publish(control_vel); ////////////////////////////////////////////
+	}
 	 
 	loop_rate.sleep();
     ros::spinOnce();
