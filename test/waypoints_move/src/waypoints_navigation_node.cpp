@@ -37,19 +37,12 @@ double pos_x = 0.0;
 double pos_y = 0.0;
 
 int vision_steering_angle = 0;
-int waypoint_steering_angle = 0;
 int car_speed = 0;
 int no_waypoints = WayPoints_NO;
 int obs = 0;
-bool topic_gps_datum_rcv = false;
 bool use_utm_absolute_mode = true;
-double gps_heading_angle = 0.0;
 double waypoint_line_angle = 0.0;
-double datum_lat;
-double datum_lon;
-double datum_yaw;
-double f_s_angle;
-double f_c_speed;
+
 float imu_offset = 35; ////////////////////////
 
 
@@ -87,7 +80,6 @@ geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::Pose2D my_pose_utm_waypoint;    // coordinate,  current waypoint to goal waypoint
 geometry_msgs::Pose2D initial_utm_pose;
 geometry_msgs::PoseStamped utm_fix;
-geometry_msgs::Twist control_vel;
 
 
 struct Rect_Region Vision_Region[V_Region_NO];
@@ -125,16 +117,6 @@ void utm_fixCallback(const geometry_msgs::PoseStamped::ConstPtr& msgs)
 /////////////////////////////////////////
 
 
-void gps_datum_Callback(const geometry_msgs::Vector3::ConstPtr& msg)
-{
-	
-	printf("GPS Datum RCV!\n");
-	topic_gps_datum_rcv = true;
-    datum_lat = msg->x;               
-    datum_lon = msg->y;
-    datum_yaw = msg->z;  
-	
-}
 void waypointstartIDCallback(const std_msgs::Int16& msg)
 {	
 	wp_go_id  = msg.data; 
@@ -145,10 +127,7 @@ void waypointfinishIDCallback(const std_msgs::Int16& msg)
 	wp_finish_id  = msg.data; 
 }
 
-void GPSHeadingAngleCallback(const std_msgs::Float32& msg)
-{
-	gps_heading_angle = msg.data;   // radian 으로 받을 것
-}
+
 /*//////////////////////////////////////////////////////////////
 void odomCallback(const nav_msgs::Odometry& msg)
 {
@@ -274,15 +253,6 @@ void init_waypoint(void)
 
 }
 
-void WaySteerControlCallback(const std_msgs::Int16& angle)
-{
-  waypoint_steering_angle = (int)(angle.data) ;
- 
-  if(waypoint_steering_angle >= MAX_R_STEER)  waypoint_steering_angle = MAX_R_STEER;
-  if(waypoint_steering_angle <= MAX_L_STEER)  waypoint_steering_angle = MAX_L_STEER;  
-}
-
-
 void obs_detect_Callback(const std_msgs::Int8& msg)
 {
 	obs = msg.data;
@@ -384,39 +354,25 @@ int main(int argc, char **argv)
 
   ros::NodeHandle n;
   
-  std_msgs::Int16 s_angle;
-  std_msgs::Int16 c_speed;
-  std_msgs::Int16 ros_waypoint_id;
   std_msgs::String slam_reset;
- // std_msgs::Float64 f_s_angle;//////////////////////////////////////////////
- // std_msgs::Float64 f_c_speed;/////////////////////////////////////////////
   
   geometry_msgs::Pose2D gps_init_pose2d_data;
 
   slam_reset.data = "reset";
   
-  datum_lat = datum_lon =  datum_yaw = 0.0; 
    
-  ros::Subscriber sub1 = n.subscribe("/Car_Control_cmd/W_SteerAngle_Int16",10, &WaySteerControlCallback);
   //ros::Subscriber sub2 = n.subscribe("/gps/ublox_fix",10, &gps_utm_poseCallback); //
 
   //ros::param::get("~use_utm_absolute_mode", use_utm_absolute_mode);        //2개의 GPS를 사용할 경우 yaw값은 2개의 GPS로 부터 계산함   
   
   
-  ros::Subscriber sub_gps_datum = n.subscribe("/gps/datum",1,&gps_datum_Callback);  // front gps      
   ros::Subscriber sub3 = n.subscribe("/start_waypoint_id_no",1, &waypointstartIDCallback);
   ros::Subscriber sub4 = n.subscribe("/finish_waypoint_id_no",1, &waypointfinishIDCallback);
-  ros::Subscriber sub5 = n.subscribe("/gps_heading_angle",1,&GPSHeadingAngleCallback);
   ros::Subscriber sub6 = n.subscribe("/utm",1,&utm_fixCallback);
   ros::Subscriber sub7 = n.subscribe("/imu/data",10,&imuCallback);
 
-  ros::Publisher car_control_pub1 = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
-  ros::Publisher car_control_pub2 = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
-  ros::Publisher target_id_pub    = n.advertise<std_msgs::Int16>("target_id",2);
   ros::Publisher target_pos_pub   = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
   
-  ros::Publisher waypoint_guide_line_pub = n.advertise<nav_msgs::Path>("/waypoint_guide_line",1, true);
-  ros::Publisher cmd_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 10);/////////////////////////////////////////
 
    
   ros::Rate loop_rate(5);  // 10 
@@ -445,8 +401,7 @@ int main(int argc, char **argv)
   
   init_waypoint(); 
   
-  initial_utm_pose.x = datum_lat;  //gps datum 처리 
-  initial_utm_pose.y = datum_lon;  //gps datum 처리
+
 
 
   int vision_id = -1;
@@ -491,14 +446,7 @@ int main(int argc, char **argv)
 	     ROS_INFO("\n\n\n\nutm relative mode\n\n\n\n");  
 	     ROS_INFO(" ");
 	     ROS_INFO(" ");
-	     printf("topic_gps_datum_mode  : %d\n", topic_gps_datum_rcv );
-	     /*
-	     while(topic_gps_datum_rcv == false)
-	     {
-			 ROS_WARN_STREAM("utm relative mode now: waiting topic GPS Datum");
-			 
-		 }
-	     */
+
 	     ros::Duration(3.0).sleep() ;
     }
    
@@ -579,7 +527,6 @@ int main(int argc, char **argv)
 	    
 	    
 	    target_pos_pub.publish(pose_goal);
-	    ros_waypoint_id.data  = wp_go_id;
 	    
 	    
 
@@ -598,44 +545,16 @@ int main(int argc, char **argv)
 	     }
 	      
 	    
-	    s_angle.data = waypoint_steering_angle;
-	    
-	    if(obs == 1)
-	    {
-			c_speed.data =0;
-		}
-		else
-		{
-			c_speed.data = 10;
-		}
-		
-		
+	
 	    if(wp_go_id >= wp_finish_id) 
 	    {
-			 c_speed.data = 0;
 			 wp_go_id = wp_finish_id;
 			 ROS_INFO("WP Mission Completed");	
 				 }
 	}	
 	
 	// publish topics	
-	target_id_pub.publish(ros_waypoint_id);
-	ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
-	/////////////////////////////////////////////////////////////////////////////
-	
-	f_s_angle = s_angle.data;
-	f_c_speed = c_speed.data;
-	control_vel.linear.x = f_c_speed;
-	control_vel.angular.z = f_s_angle;
-	
-/////////////////////////////////////////////////////////////////////////////
-	if(count>=2)
-	{
-	    car_control_pub1.publish(s_angle);
-	    car_control_pub2.publish(c_speed);
-		cmd_pub.publish(control_vel); ////////////////////////////////////////////
-	}
-	 
+
 	loop_rate.sleep();
     ros::spinOnce();
     ++count;
