@@ -11,7 +11,7 @@
 #include "nav_msgs/Odometry.h"
 #include "nav_msgs/Path.h"
 #include "sensor_msgs/Imu.h" ///////////////////////////
-
+#include "std_msgs/Bool.h" /////////////
 
 #include <math.h>
 
@@ -50,9 +50,10 @@ double datum_lon;
 double datum_yaw;
 double f_s_angle;
 double f_c_speed;
-float imu_offset = 35; ////////////////////////
+float imu_offset = -48; ////////////////////////
 double car_angle;
-
+int set_delivery_id = 0; //////////////////////
+bool Received_product = false; ////////////
 
 //init_flag
 int init_flag = 0;
@@ -161,49 +162,31 @@ void GPSHeadingAngleCallback(const std_msgs::Float32& msg)
  
 void init_waypoint(void)
 {
-	/*
-        my_waypoints_list[0].x = 315717.454331;   
-        my_waypoints_list[0].y = 4071242.991651;
 	
-	    my_waypoints_list[1].x = 315719.193040;   
-        my_waypoints_list[1].y = 4071240.880626;
-  
-        my_waypoints_list[2].x = 315720.931749;   
-        my_waypoints_list[2].y = 4071238.769601;  		*/
- 
-        my_waypoints_list[0].x = 315722.670459;   
-        my_waypoints_list[0].y = 4071236.658576; 
 
-/*
-		my_waypoints_list[4].x = 315724.409168;   
-        my_waypoints_list[4].y = 4071234.547552; 
+        my_waypoints_list[0].x = 315719.17;   
+        my_waypoints_list[0].y = 4071241.43; 
 
-		my_waypoints_list[5].x = 315726.147878;   
-        my_waypoints_list[5].y = 4071232.436528; 
+	my_waypoints_list[1].x = 315727;   
+        my_waypoints_list[1].y = 4071228; 
 
-		my_waypoints_list[6].x = 315727.597220;   
-        my_waypoints_list[6].y = 4071230.351730; 
 
-		my_waypoints_list[7].x = 315729.046562;   
-        my_waypoints_list[7].y = 4071228.266931;          */
-
-		my_waypoints_list[1].x = 315730.495905;   
-        my_waypoints_list[1].y = 4071226.182133; 
-/*
-		my_waypoints_list[9].x = 315730.293538;    
-        my_waypoints_list[9].y = 4071223.011866; 
-
-		my_waypoints_list[10].x = 315728.437577;   
-        my_waypoints_list[10].y = 4071221.815598;            */
-
-		my_waypoints_list[2].x = 315725.517577;   
-        my_waypoints_list[2].y = 4071218.815598; 
+	my_waypoints_list[2].x = 315732;   
+        my_waypoints_list[2].y = 4071219; 
         
-        no_waypoints = 3;						// 
-        wp_finish_id = no_waypoints;
+	my_waypoints_list[3].x = 315734;   
+        my_waypoints_list[3].y = 4071221; 
+
+	my_waypoints_list[4].x = 315729;   
+        my_waypoints_list[4].y = 4071230; 
+
+	my_waypoints_list[5].x = 315721;   
+        my_waypoints_list[5].y = 4071243; 
+
+        set_delivery_id = 3;
+        no_waypoints = 3;
+        wp_finish_id = 6;
 	
-
-
 
 }
 
@@ -290,6 +273,12 @@ void check_inside_waypoint(int waypoint_id)
 
 }
 
+void Receive_Product_Callback(const std_msgs::Bool::ConstPtr& msg)
+{
+    Received_product = msg->data;
+
+}
+
 
 
 int main(int argc, char **argv)
@@ -325,6 +314,7 @@ int main(int argc, char **argv)
   ros::Subscriber sub5 = n.subscribe("/gps_heading_angle",1,&GPSHeadingAngleCallback);
   ros::Subscriber sub6 = n.subscribe("/utm",1,&utm_fixCallback);
   ros::Subscriber sub7 = n.subscribe("/imu/data",10,&imuCallback);
+  ros::Subscriber sub8 = n.subscribe("/receive_product",10,&Receive_Product_Callback);
 
   ros::Publisher car_control_pub1 = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
   ros::Publisher car_control_pub2 = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
@@ -493,29 +483,33 @@ int main(int argc, char **argv)
 
 	    //printf("d_x %6.3lf d_y %6.3lf \n", delta_x,delta_y);
 	    //printf("waypoint_distance  %6.3lf \n", waypoint_distance);
-	  
-	     if( (count>=0) && (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )  )
+
+            c_speed.data = 70;
+	    s_angle.data = car_angle;//waypoint_steering_angle;
+
+	     //if( (count>=0) && (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )  )
+             if( (count>=0) && (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )  ) 
         {           
 	       printf("----------------------------\n"); 
            printf("Arrvied at My WayPoint[%3d] !\n",wp_go_id); 
            printf("----------------------------\n"); 
            
-           ros::Duration(4.0).sleep() ;      
+           //ros::Duration(4.0).sleep() ;      
 	       count = -3;
-	       wp_go_id++;
+	       
+               if(wp_go_id == set_delivery_id){
+	           if(Received_product == false) { c_speed.data = s_angle.data = 0; }
+                   else {
+                       c_speed.data = 70;
+                       s_angle.data = car_angle;
+                       wp_go_id++;
+                   }             
+               }
+               else if(wp_go_id != set_delivery_id) { wp_go_id++; } 
+
 	     }
 	      
-	    
-	    s_angle.data = car_angle;//waypoint_steering_angle;
-	    
-	    if(obs == 1)
-	    {
-			c_speed.data =0;
-		}
-		else
-		{
-			c_speed.data = 10;
-		}
+	   
 		
 		
 	    if(wp_go_id >= wp_finish_id) 
