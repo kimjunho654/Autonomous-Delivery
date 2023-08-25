@@ -14,7 +14,7 @@ ros::Publisher detect_pub;
 
 void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
 
-    for(int i = -30; i <= 30; i++){
+    for(int i = -300; i <= 300; i++){
         size = msg->ranges.size();
         INDEX = i + size/2;
         if(msg->ranges[INDEX] <= 1.5) {detect_count ++;}
