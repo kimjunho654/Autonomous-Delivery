@@ -207,9 +207,12 @@ void control_callback()
   sensorValue = analogRead(Steering_Sensor);
   // map it to the range of the analog out:
   Steer_Angle_Measure = map(sensorValue, 0.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
-  Steering_Angle = NEURAL_ANGLE + steer_angle;
-
+  
   if(lidar_detect == true) { Steering_Angle = 0; }
+  else {
+    Steering_Angle = NEURAL_ANGLE + steer_angle;
+  }
+  
   steering_control();
   
 }
@@ -308,8 +311,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  f_speed = r_speed = velocity;
+  //f_speed = r_speed = velocity;
   if(lidar_detect == true) { f_speed = r_speed = 0; }
+  else {
+    f_speed = r_speed = velocity;
+  }
   
   motor_control(r_speed, r_speed);
   control_callback();
@@ -317,8 +323,7 @@ void loop() {
   encoder_data.data = encoder0Pos;
   encoder_pub.publish(&encoder_data);
 
-  //steering_angle.data = Steer_Angle_Measure;
-  steering_angle.data = sensorValue;
+  steering_angle.data = Steer_Angle_Measure;
   steerAngle_pub.publish(&steering_angle);
 
   nh.spinOnce();
