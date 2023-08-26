@@ -6,7 +6,9 @@
 
 sensor_msgs::LaserScan scan_msg;
 std_msgs::Bool detect_msg;
+std_msgs::Bool avoid_function_msg;
 std_msgs::Float64MultiArray avoid_heading_angle_msg;
+ros::Time detection_start_time;
 
 int INDEX;
 int size;
@@ -18,6 +20,7 @@ double object_left_angle;
 
 ros::Publisher detect_pub;
 ros::Publisher avoid_heading_angle_pub;
+ros::Publisher avoid_function_start_pub;
 
 long map(long x, long in_min, long in_max,long out_min, long out_max)
 {
@@ -46,12 +49,28 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
             detect_msg.data = false;
             detect_pub.publish(detect_msg);
         }
+        
 
-        ROS_INFO("detect_count : %d", detect_count);
+
+        //ROS_INFO("detect_count : %d", detect_count);
         ROS_INFO("detect_msg : %d", detect_msg.data);
         //ROS_INFO("range : %f", msg->ranges[INDEX]);
     }
     
+    // avoid_function
+    if( detect_msg.data == true && detection_start_time.isZero() ) { detection_start_time = ros::Time::now(); }
+    if( detect_msg.data == false ) { detection_start_time = ros::Time(0); }
+
+    if(detect_msg.data && (ros::Time::now() - detection_start_time).toSec() >= 5.0 ) {
+            
+        avoid_function_msg.data = true;
+        avoid_function_start_pub.publish(avoid_function_msg);
+    }
+    else if(!detect_msg.data || (ros::Time::now() - detection_start_time).toSec() <= 5.0 ) { 
+         
+       avoid_function_msg.data = false; 
+       avoid_function_start_pub.publish(avoid_function_msg);
+    }
 
     // aboid angle calculate
     object_right_angle = map(object_right_angle_index, 0, size-1, 0, 360) - 180;
@@ -61,8 +80,8 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     avoid_heading_angle_msg.data[1] = object_left_angle;  // [1]
     avoid_heading_angle_pub.publish(avoid_heading_angle_msg);
 
-    ROS_INFO("object_right_angle : %f", object_right_angle);
-    ROS_INFO("object_left_angle : %f", object_left_angle);
+    //ROS_INFO("object_right_angle : %f", object_right_angle);
+    //ROS_INFO("object_left_angle : %f", object_left_angle);
 
     detect_msg.data = false;
     detect_count = 0;
@@ -73,10 +92,12 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
 
     detect_msg.data = false;
+    avoid_function_msg.data = false;
     detect_count = 0;
     avoid_heading_angle_msg.data.resize(2);
 
     detect_pub = nh.advertise<std_msgs::Bool>("lidar_object_detect", 10);
+    avoid_function_start_pub = nh.advertise<std_msgs::Bool>("avoid_function_start", 10);
     avoid_heading_angle_pub = nh.advertise<std_msgs::Float64MultiArray>("avoid_heading_angle", 10);
     ros::Subscriber scan_sub = nh.subscribe("/scan", 10, scan_Callback);
 
