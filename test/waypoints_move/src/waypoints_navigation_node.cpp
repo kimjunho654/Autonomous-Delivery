@@ -49,7 +49,7 @@ double datum_lon;
 double datum_yaw;
 double f_s_angle;
 double f_c_speed;
-float imu_offset = -22; //-48; ////////////////////////
+float imu_offset = -23;
 double car_angle;
 int set_delivery_id = 0; //////////////////////
 bool Received_product = false; ////////////
@@ -548,7 +548,8 @@ int main(int argc, char **argv)
 	    if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) )
             {
                 c_speed.data = 120;
-                s_angle.data = avoid_heading_angle + 10;
+                s_angle.data = avoid_heading_angle + 30;
+                if(avoid_heading_angle )
 	        car_control_pub1.publish(s_angle);
 	        car_control_pub2.publish(c_speed);
                 avoid_function_start = false;
