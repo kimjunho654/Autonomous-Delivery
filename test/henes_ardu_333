@@ -18,7 +18,7 @@ double dummy = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   dummy = msg.linear.x;       
-  steer_angle = 20*msg.angular.z;   
+  steer_angle = 10*msg.angular.z;   
 
   if(dummy > 0){
     velocity  = 80;  
@@ -26,6 +26,7 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   else if (dummy < 0){
     velocity = -80; 
   }
+  else { velocity = 0; }
 
 }
 
@@ -115,8 +116,8 @@ void motor_control(int front_speed, int rear_speed)
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
 #define Steering_Sensor A8  // Analog input pin that the potentiometer is attached to
 #define NEURAL_ANGLE 0
-#define LEFT_STEER_ANGLE  -17.0
-#define RIGHT_STEER_ANGLE  17.0
+#define LEFT_STEER_ANGLE  -20.0
+#define RIGHT_STEER_ANGLE  20.0
 #define MOTOR2_PWM 14
 #define MOTOR2_DIR 15
 #define MOTOR2_BRK 16
@@ -195,7 +196,7 @@ void control_callback()
   // read the analog in value:
   sensorValue = analogRead(Steering_Sensor);
   // map it to the range of the analog out:
-  Steer_Angle_Measure = map(sensorValue, 0.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+  Steer_Angle_Measure = map(sensorValue, 72.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
   Steering_Angle = NEURAL_ANGLE + steer_angle;
   steering_control();
   
