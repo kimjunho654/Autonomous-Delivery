@@ -55,7 +55,8 @@ int set_delivery_id = 0; //////////////////////
 bool Received_product = false; ////////////
 bool lidar_object_detect = false; ////////////
 bool avoid_function_start = false; ////////////
-double avoid_heading_angle = 0; //////////////
+double avoid_heading_angle_left = 0; //////////////
+double avoid_heading_angle_right = 0; //////////////
 
 //init_flag
 int init_flag = 0;
@@ -306,7 +307,8 @@ void avoid_function_start_Callback(const std_msgs::Bool::ConstPtr& msg)
 
 void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
-    avoid_heading_angle = msg->data[1];
+    avoid_heading_angle_right = msg->data[0];
+    avoid_heading_angle_left = msg->data[1];
     
 }
 
@@ -447,7 +449,7 @@ int main(int argc, char **argv)
     gps_init_pose2d_data.y     = my_waypoints_list[0].y;
     gps_init_pose2d_data.theta =  0;
     
-    c_speed.data = 120;
+    c_speed.data = 100;
     s_angle.data = car_angle;//waypoint_steering_angle;
 
 
@@ -535,7 +537,7 @@ int main(int argc, char **argv)
                        s_angle.data = 0; 
                    }
                    else if(Received_product == true){
-                       c_speed.data = 120;
+                       c_speed.data = 100;
                        s_angle.data = car_angle;
                        wp_go_id++;
                    }             
@@ -547,9 +549,12 @@ int main(int argc, char **argv)
             // avoid function
 	    if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) )
             {
-                c_speed.data = 120;
-                s_angle.data = avoid_heading_angle + 30;
-                if(avoid_heading_angle )
+                c_speed.data = 100;
+                s_angle.data = avoid_heading_angle_left + 30;
+
+                if( (avoid_heading_angle_left > 10) && (avoid_heading_angle_right > 10)) {
+                    s_angle.data = car_angle - 5;
+                }
 	        car_control_pub1.publish(s_angle);
 	        car_control_pub2.publish(c_speed);
                 avoid_function_start = false;
