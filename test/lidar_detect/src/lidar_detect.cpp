@@ -72,7 +72,7 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
        avoid_function_start_pub.publish(avoid_function_msg);
     }
 
-    // aboid angle calculate
+    // avoid angle calculate
     object_right_angle = map(object_right_angle_index, 0, size-1, 0, 360) - 180;
     object_left_angle = map(object_left_angle_index, 0, size-1, 0, 360) - 180;
 
@@ -80,8 +80,8 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     avoid_heading_angle_msg.data[1] = object_left_angle;  // [1]
     avoid_heading_angle_pub.publish(avoid_heading_angle_msg);
 
-    //ROS_INFO("object_right_angle : %f", object_right_angle);
-    //ROS_INFO("object_left_angle : %f", object_left_angle);
+    ROS_INFO("object_right_angle : %f", object_right_angle);
+    ROS_INFO("object_left_angle : %f", object_left_angle);
 
     detect_msg.data = false;
     detect_count = 0;
