@@ -70,7 +70,7 @@ void setup()
 
   initJointStates();
 
-  prev_update_time = millis();
+  prev_update_time = micros();
 
   pinMode(LED_WORKING_CHECK, OUTPUT);
 
@@ -334,14 +334,14 @@ void publishBatteryStateMsg(void)
 *******************************************************************************/
 void publishDriveInformation(void)
 {
-  unsigned long time_now = millis();
+  unsigned long time_now = micros();
   unsigned long step_time = time_now - prev_update_time;
 
   prev_update_time = time_now;
   ros::Time stamp_now = rosNow();
 
   // calculate odometry
-  calcOdometry((double)(step_time * 0.001));
+  calcOdometry((double)(step_time * 0.000001));
 
   // odometry
   updateOdometry();
