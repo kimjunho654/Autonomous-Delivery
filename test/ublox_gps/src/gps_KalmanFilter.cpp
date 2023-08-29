@@ -48,21 +48,6 @@ public:
         double filtered_latitude = kalman_filter_lat_.filter(msg->latitude, msg->position_covariance[0]);
         double filtered_longitude = kalman_filter_lon_.filter(msg->longitude, msg->position_covariance[4]);
 
-        // Preserve previous values if position_covariance is large
-        if (msg->position_covariance[0] > threshold_covariance_) {
-            filtered_latitude = prev_latitude_;
-        }
-        if (msg->position_covariance[4] > threshold_covariance_) {
-            filtered_longitude = prev_longitude_;
-        }
-
-
-        if (msg->position_covariance[0] < threshold_covariance_) {
-            prev_latitude_ = filtered_latitude;
-        }
-        if (msg->position_covariance[4] < threshold_covariance_) {
-            prev_longitude_ = filtered_longitude;
-        }
 
         // Update previous values
         //prev_latitude_ = filtered_latitude;
