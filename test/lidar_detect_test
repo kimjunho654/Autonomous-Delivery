@@ -19,10 +19,38 @@ double object_right_angle;
 int object_left_angle_index;
 double object_left_angle;
 
+double object_right_distance;
+double object_left_distance;
+int dummy;
+std::vector<int> find_gap;
+std::vector<int> consecutiveLengths;
+
 ros::Publisher detect_pub;
 ros::Publisher avoid_heading_angle_pub;
 ros::Publisher avoid_function_start_pub;
 ros::Publisher object_distance_pub;
+
+bool checkConsecutiveGroups(const std::vector<int>& nums, std::vector<int>& consecutiveLengths) {
+    if (nums.empty()) {
+        return false;
+    }
+
+    consecutiveLengths.clear();
+    int currentLength = 0;
+
+    for (size_t i = 0; i < nums.size(); ++i) {
+        if (nums[i] == nums[i - 1] + 1) {
+            currentLength++;
+        } else {
+            consecutiveLengths.push_back(currentLength);
+            currentLength = 0;
+        }
+    }
+
+    consecutiveLengths.push_back(currentLength);
+
+    return true;
+}
 
 long map(long x, long in_min, long in_max,long out_min, long out_max)
 {
@@ -32,17 +60,31 @@ long map(long x, long in_min, long in_max,long out_min, long out_max)
 
 void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     
-    // object_detect
+
     for(int i = -330; i <= 330; i++){
         size = msg->ranges.size();
         INDEX = i + size/2;
 
-
+        // object_detect
         if(msg->ranges[INDEX] <= 2.3) {
-            if(detect_count == 0) { object_right_angle_index = INDEX; }
-            else if (detect_count != 0) { object_left_angle_index = INDEX; }
+            if(detect_count == 0) { 
+                object_right_angle_index = INDEX;
+                object_right_distance = msg->ranges[INDEX]; 
+
+            }
+            else if (detect_count != 0) { 
+                object_left_angle_index = INDEX;
+                object_left_distance = msg->ranges[INDEX]; 
+            }
             detect_count ++;
         }
+        // find gap
+        else if( msg->ranges[INDEX] > 2.3 ) {
+
+            find_gap.push_back(INDEX);
+        }
+
+
         if(detect_count >= 1) {
             detect_msg.data = true;
             detect_pub.publish(detect_msg);
@@ -51,14 +93,26 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
             detect_msg.data = false;
             detect_pub.publish(detect_msg);
         }
-        
 
-
-        //ROS_INFO("detect_count : %d", detect_count);
-        ROS_INFO("detect_msg : %d", detect_msg.data);
-        //ROS_INFO("range : %f", msg->ranges[INDEX]);
     }
     
+    //ROS_INFO("detect_count : %d", detect_count);
+    ROS_INFO("detect_msg : %d", detect_msg.data);
+    //ROS_INFO("range : %f", msg->ranges[INDEX]);
+/*
+    if (checkConsecutiveGroups(find_gap, consecutiveLengths)) {
+        for (int length : consecutiveLengths) {
+            if(!length) {dummy = length;}
+            else if(length > dummy) { dummy = length; }
+            ROS_INFO("Consecutive group length: %d", length);
+        }
+    } 
+    else {
+        ROS_WARN("Input vector is empty.");
+    }
+    ROS_INFO("dummy: %d", dummy);
+*/
+
     // avoid_function
     if( detect_msg.data == true && detection_start_time.isZero() ) { detection_start_time = ros::Time::now(); }
     if( detect_msg.data == false ) { detection_start_time = ros::Time(0); }
@@ -82,8 +136,8 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     avoid_heading_angle_msg.data[1] = object_left_angle;  // [1]
     avoid_heading_angle_pub.publish(avoid_heading_angle_msg);
 
-    object_distance_msg.data[0] = msg->ranges[object_right_angle_index];
-    object_distance_msg.data[1] = msg->ranges[object_left_angle_index];
+    object_distance_msg.data[0] = object_right_distance;
+    object_distance_msg.data[1] = object_left_distance; 
     object_distance_pub.publish(object_distance_msg);
 
     ROS_INFO("object_right_angle : %f", object_right_angle);
@@ -101,6 +155,7 @@ int main(int argc, char** argv){
     avoid_function_msg.data = false;
     detect_count = 0;
     avoid_heading_angle_msg.data.resize(2);
+    object_distance_msg.data.resize(2);
 
     detect_pub = nh.advertise<std_msgs::Bool>("lidar_object_detect", 1);
     avoid_function_start_pub = nh.advertise<std_msgs::Bool>("avoid_function_start", 10);
