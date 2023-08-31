@@ -32,7 +32,7 @@ void setup()
 
   // Initialize ROS node handle, advertise and subscribe the topics
   nh.initNode();
-  nh.getHardware()->setBaud(115200);
+  nh.getHardware()->setBaud(256000);
 
 
    
