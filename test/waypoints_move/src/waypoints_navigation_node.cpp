@@ -41,13 +41,6 @@ double roll,pitch,yaw;
 
 
 
-struct WayPoints
-{
-	double x;
-	double y;	
-};
-
-
 
 geometry_msgs::Pose2D my_pose;
 geometry_msgs::Pose2D my_target_pose_goal;
@@ -55,12 +48,23 @@ geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::PoseStamped utm_fix;
 
 
+
+
+struct WayPoints
+{
+	double x;
+	double y;	
+};
+
 struct WayPoints my_waypoints_list[WayPoints_NO];
+
+
+
+
 
 //GPS의경우 UTM 좌표를 따라서 XY가 다름
 
-////////////////////////////////////////////////////////////
-void utm_fixCallback(const geometry_msgs::PoseStamped::ConstPtr& msgs) 
+void utm_Callback(const geometry_msgs::PoseStamped::ConstPtr& msgs) 
 {	
 	utm_fix.header = msgs->header;
 	utm_fix.pose.position.x     =  msgs->pose.position.x ;
@@ -69,9 +73,8 @@ void utm_fixCallback(const geometry_msgs::PoseStamped::ConstPtr& msgs)
 	my_pose.x     =  utm_fix.pose.position.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
 	my_pose.y     =  utm_fix.pose.position.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
 }
-////////////////////////////////////////////////////////////
 
-void imuCallback(const sensor_msgs::Imu::ConstPtr& msg) 
+void imu_Callback(const sensor_msgs::Imu::ConstPtr& msg) 
 {      
 	tf2::Quaternion q(
         msg->orientation.x,
@@ -87,12 +90,7 @@ void imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
         my_pose.theta = yaw;
         //printf("%6.3lf(rad)  %6.3lf \n",yaw, yaw*180/3.14159);   
 }
-///////////////////////////////////////////////////////
 
-
-
-
- 
 void init_waypoint(void)
 {	
         my_waypoints_list[0].x = 315719.89;   
@@ -166,8 +164,6 @@ void base_link_tf_utm(void)
 	    
 }
 
-
-
 void Receive_Product_Callback(const std_msgs::Bool::ConstPtr& msg)
 {
     Received_product = msg->data;
@@ -190,9 +186,12 @@ void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& m
     
 }
 
+
+
+
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "cleanbot_race_waypoints_manager_utm");
+    ros::init(argc, argv, "Outdoor_Navigation_Drive");
     ros::NodeHandle n;
   
     std_msgs::Int16 s_angle;
@@ -201,17 +200,17 @@ int main(int argc, char **argv)
   
     //ros::Subscriber sub2 = n.subscribe("/gps/ublox_fix",10, &gps_utm_poseCallback); //
 
-    ros::Subscriber utm_sub = n.subscribe("/utm",1,&utm_fixCallback);
-    ros::Subscriber imu_sub = n.subscribe("/imu/data",10,&imuCallback);
-    ros::Subscriber receive_product_sub = n.subscribe("/receive_product",10,&Receive_Product_Callback);
-    ros::Subscriber lidar_object_detect_sub = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
+    ros::Subscriber utm_sub                  = n.subscribe("/utm",1,&utm_Callback);
+    ros::Subscriber imu_sub                  = n.subscribe("/imu/data",10,&imu_Callback);
+    ros::Subscriber receive_product_sub      = n.subscribe("/receive_product",10,&Receive_Product_Callback);
+    ros::Subscriber lidar_object_detect_sub  = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
     ros::Subscriber avoid_function_start_sub = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
-    ros::Subscriber avoid_heading_angle_sub = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
+    ros::Subscriber avoid_heading_angle_sub  = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
 
-    ros::Publisher SteerAngle_pub = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
-    ros::Publisher car_speed_pub = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
-    ros::Publisher target_id_pub    = n.advertise<std_msgs::Int16>("target_id",2);
-    ros::Publisher target_pos_pub   = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
+    ros::Publisher SteerAngle_pub            = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
+    ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
+    ros::Publisher target_id_pub             = n.advertise<std_msgs::Int16>("target_id",2);
+    ros::Publisher target_pos_pub            = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
   
     ros::Rate loop_rate(5);  // 10 
 
