@@ -1,25 +1,24 @@
+#include <math.h>
 #include "ros/ros.h"
+#include "nav_msgs/Odometry.h"
+#include "nav_msgs/Path.h"
+#include "geometry_msgs/Twist.h"
+#include "geometry_msgs/PoseStamped.h"
+#include "geometry_msgs/Pose2D.h"   
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Int16.h"
 #include "std_msgs/Int8.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/Float32.h"
-#include "geometry_msgs/Twist.h"
-#include "geometry_msgs/PoseStamped.h"
-#include "geometry_msgs/Pose2D.h"   
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
-#include "nav_msgs/Odometry.h"
-#include "nav_msgs/Path.h"
 #include "sensor_msgs/Imu.h" ///////////////////////////
 #include "std_msgs/Bool.h" /////////////
 #include <std_msgs/Float64MultiArray.h> /////////////////
-#include <math.h>
 
 
 
 #define RAD2DEG(x) ((x)*180./M_PI)
 #define DEG2RAD(x) ((x)/180.*M_PI)
-
 #define WayPoints_NO 42
 #define WayPoint_X_Tor 0.3
 #define WayPoint_Y_Tor 0.5
@@ -36,11 +35,8 @@ bool lidar_object_detect = false; ////////////
 bool avoid_function_start = false; ////////////
 double avoid_heading_angle_left = 0; //////////////
 double avoid_heading_angle_right = 0; //////////////
-
-//init_flag
 int wp_go_id = 0;
 int wp_finish_id = 0;
-
 double roll,pitch,yaw;
 
 
@@ -205,15 +201,15 @@ int main(int argc, char **argv)
   
     //ros::Subscriber sub2 = n.subscribe("/gps/ublox_fix",10, &gps_utm_poseCallback); //
 
-    ros::Subscriber sub6 = n.subscribe("/utm",1,&utm_fixCallback);
-    ros::Subscriber sub7 = n.subscribe("/imu/data",10,&imuCallback);
-    ros::Subscriber sub8 = n.subscribe("/receive_product",10,&Receive_Product_Callback);
-    ros::Subscriber sub9 = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
-    ros::Subscriber sub10 = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
-    ros::Subscriber sub11 = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
+    ros::Subscriber utm_sub = n.subscribe("/utm",1,&utm_fixCallback);
+    ros::Subscriber imu_sub = n.subscribe("/imu/data",10,&imuCallback);
+    ros::Subscriber receive_product_sub = n.subscribe("/receive_product",10,&Receive_Product_Callback);
+    ros::Subscriber lidar_object_detect_sub = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
+    ros::Subscriber avoid_function_start_sub = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
+    ros::Subscriber avoid_heading_angle_sub = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
 
-    ros::Publisher car_control_pub1 = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
-    ros::Publisher car_control_pub2 = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
+    ros::Publisher SteerAngle_pub = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
+    ros::Publisher car_speed_pub = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
     ros::Publisher target_id_pub    = n.advertise<std_msgs::Int16>("target_id",2);
     ros::Publisher target_pos_pub   = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
   
@@ -321,16 +317,16 @@ int main(int argc, char **argv)
                 if( (avoid_heading_angle_left > 10) && (avoid_heading_angle_right > 10)) {
                     s_angle.data = car_angle - 5;
                 }
-	        car_control_pub1.publish(s_angle);
-	        car_control_pub2.publish(c_speed);
+	        SteerAngle_pub.publish(s_angle);
+	        car_speed_pub.publish(c_speed);
                 avoid_function_start = false;
 	       
                 printf("----------------------------\n"); 
                 printf("Avoid function\n"); 
                 printf("----------------------------\n"); 
 	        ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);\
-	        car_control_pub1.publish(s_angle);
-	        car_control_pub2.publish(c_speed);
+	        SteerAngle_pub.publish(s_angle);
+	        car_speed_pub.publish(c_speed);
                 ros::Duration(0.5).sleep();      
             }
 	    
@@ -348,8 +344,8 @@ int main(int argc, char **argv)
 	ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
 
 	if(count>=2) {
-	    car_control_pub1.publish(s_angle);
-	    car_control_pub2.publish(c_speed);
+	    SteerAngle_pub.publish(s_angle);
+	    car_speed_pub.publish(c_speed);
 	}
 
 	avoid_function_start = false; //////////
