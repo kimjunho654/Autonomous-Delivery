@@ -21,7 +21,13 @@ double object_left_angle;
 
 double object_right_distance;
 double object_left_distance;
-int dummy;
+int max_gap = 0;
+int max_gap_dummy = 0;;
+int first_gap_index = 0;
+int end_gap_index = 0;
+int first_gap_dummy = 0;
+int end_gap_dummy = 0;
+bool gap_start = true;
 std::vector<int> find_gap;
 std::vector<int> consecutiveLengths;
 
@@ -41,13 +47,36 @@ bool checkConsecutiveGroups(const std::vector<int>& nums, std::vector<int>& cons
     for (size_t i = 0; i < nums.size(); ++i) {
         if (nums[i] == nums[i - 1] + 1) {
             currentLength++;
-        } else {
+            if(first_gap_index == 0){ first_gap_index = nums[i - 1]; }
+            else if (first_gap_index != 0 && gap_start == true){ 
+                first_gap_dummy = nums[i - 1]; 
+                gap_start = false;
+            }
+
+        } 
+        else {
             consecutiveLengths.push_back(currentLength);
+            
+            if(max_gap == 0) { max_gap = currentLength; }
+            else if(max_gap != 0) { max_gap_dummy = currentLength; }
+
+            if(end_gap_index == 0  && gap_start == false ) { end_gap_index = nums[i -1]; }
+            else if (end_gap_index != 0){ end_gap_dummy = nums[i - 1]; }
+
+            if(max_gap_dummy >= max_gap) {
+                first_gap_index = first_gap_dummy;
+                end_gap_index = end_gap_dummy;
+            }
+            gap_start = true;
             currentLength = 0;
         }
     }
 
+    if(end_gap_index == 0) { end_gap_index = nums[nums.size()-1]; }
     consecutiveLengths.push_back(currentLength);
+
+    currentLength = 0;
+    gap_start = true;
 
     return true;
 }
@@ -66,7 +95,7 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
         INDEX = i + size/2;
 
         // object_detect
-        if(msg->ranges[INDEX] <= 2.3) {
+        if(msg->ranges[INDEX] <= 0.3) {
             if(detect_count == 0) { 
                 object_right_angle_index = INDEX;
                 object_right_distance = msg->ranges[INDEX]; 
@@ -79,7 +108,7 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
             detect_count ++;
         }
         // find gap
-        else if( msg->ranges[INDEX] > 2.3 ) {
+        else if( msg->ranges[INDEX] > 0.3 ) {
 
             find_gap.push_back(INDEX);
         }
@@ -99,19 +128,10 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     //ROS_INFO("detect_count : %d", detect_count);
     ROS_INFO("detect_msg : %d", detect_msg.data);
     //ROS_INFO("range : %f", msg->ranges[INDEX]);
-/*
-    if (checkConsecutiveGroups(find_gap, consecutiveLengths)) {
-        for (int length : consecutiveLengths) {
-            if(!length) {dummy = length;}
-            else if(length > dummy) { dummy = length; }
-            ROS_INFO("Consecutive group length: %d", length);
-        }
-    } 
-    else {
-        ROS_WARN("Input vector is empty.");
-    }
-    ROS_INFO("dummy: %d", dummy);
-*/
+
+    checkConsecutiveGroups(find_gap, consecutiveLengths);
+
+    find_gap.clear();
 
     // avoid_function
     if( detect_msg.data == true && detection_start_time.isZero() ) { detection_start_time = ros::Time::now(); }
@@ -140,11 +160,18 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     object_distance_msg.data[1] = object_left_distance; 
     object_distance_pub.publish(object_distance_msg);
 
-    ROS_INFO("object_right_angle : %f", object_right_angle);
-    ROS_INFO("object_left_angle : %f", object_left_angle);
+    ROS_INFO("object_right_angle : %d", object_right_angle_index);
+    ROS_INFO("object_left_angle : %d", object_left_angle_index);
+
+    ROS_INFO("first_gap_index : %d", first_gap_index);
+    ROS_INFO("end_gap_index : %d", end_gap_index);
 
     detect_msg.data = false;
     detect_count = 0;
+    max_gap = 0;
+    max_gap_dummy = 0;
+    first_gap_index = 0;
+    end_gap_index = 0;
 }
 
 int main(int argc, char** argv){
