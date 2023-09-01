@@ -21,10 +21,10 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   steer_angle = 10*msg.angular.z;   
 
   if(dummy > 0){
-    velocity  = 80;  
+    velocity  = 50;  
   }
   else if (dummy < 0){
-    velocity = -80; 
+    velocity = -50; 
   }
   else { velocity = 0; }
 
@@ -46,7 +46,7 @@ void speed_callback(const std_msgs::Int16& msg) {
 
 }
 
-ros::Subscriber<std_msgs::Int16> heading_angle_sub("Car_Control_cmd/SteerAngle_Int16", heading_angle_callback);
+ros::Subscriber<std_msgs::Int16> heading_angle_sub("heading_angle", heading_angle_callback);
 ros::Subscriber<std_msgs::Int16> speed_sub("PID_car_speed", speed_callback); //Car_Control_cmd/Speed_Int16
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
 ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
