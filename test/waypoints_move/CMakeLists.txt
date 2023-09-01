@@ -9,7 +9,6 @@ project(waypoints_move)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
-  rospy
   std_msgs
   visualization_msgs
   tf2_geometry_msgs
@@ -18,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES waypoints_move
-  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs visualization_msgs tf2_geometry_msgs 
+  CATKIN_DEPENDS geometry_msgs   std_msgs  
   DEPENDS system_lib
 )
 
@@ -38,4 +37,3 @@ target_link_libraries(waypoints_move_node ${catkin_LIBRARIES} )
 add_executable(angle_segmentation src/angle_segmentation.cpp)
 add_dependencies(angle_segmentation ${waypoints_move_node_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(angle_segmentation ${catkin_LIBRARIES} )
-
