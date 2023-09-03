@@ -1,5 +1,6 @@
 import rospy
 from std_msgs.msg import String
+from std_msgs.msg import Float64
 
 import argparse
 import time
@@ -83,7 +84,8 @@ def detect(save_img=False):
 
     while(True):
        rospy.init_node('detect_publisher')
-       pub = rospy.Publisher('/depth', String, queue_size=10)
+       depth_pub = rospy.Publisher('/depth', Float64, queue_size=10)
+       detect_name_pub = rospy.Publisher('/detect_name', String, queue_size=10)
 
        frames = pipeline.wait_for_frames()
 
@@ -159,8 +161,12 @@ def detect(save_img=False):
                        x_center = (xyxy[0] + xyxy[2]) / 2
                        y_center = (xyxy[1] + xyxy[3]) / 2
                        depth_value = depth_frame.get_distance(int(x_center), int(y_center))
-                       msg = f'{label}:  Z: {depth_value}'
-                       pub.publish(msg)
+                       depth_msg = depth_value
+                       depth_pub.publish(depth_msg)
+
+                       detect_name_msg = label
+                       detect_name_pub.publish(detect_name_msg)
+
 
                    plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
                    plot_one_box(xyxy, depth_colormap, label=label, color=colors[int(cls)], line_thickness=2)
@@ -205,4 +211,3 @@ if __name__ == '__main__':
                 strip_optimizer(opt.weights)
         else:
             detect()
-
