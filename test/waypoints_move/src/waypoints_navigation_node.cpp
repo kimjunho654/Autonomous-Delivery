@@ -40,7 +40,7 @@ int wp_finish_id = 0;
 double roll,pitch,yaw;
 bool start_command = false; ////////////emergency_stop
 bool emergency_stop = false; ////////////
-
+double depth; /////////////
 
 
 
@@ -50,6 +50,7 @@ geometry_msgs::Pose2D my_target_pose_goal;
 geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::PoseStamped utm_fix;
 std::string destination_data;
+std::string detect_name;
 
 
 
@@ -279,7 +280,17 @@ void destination_Callback(const std_msgs::String::ConstPtr& msg)
     
 }
 
+void detect_name_Callback(const std_msgs::String::ConstPtr& msg)
+{
+    detect_name = msg->data;
 
+}
+
+void depth_Callback(const std_msgs::Float64::ConstPtr& msg)
+{
+    depth = msg->data;
+
+}
 
 int main(int argc, char **argv)
 {
@@ -301,6 +312,8 @@ int main(int argc, char **argv)
     ros::Subscriber avoid_function_start_sub = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
     ros::Subscriber avoid_heading_angle_sub  = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
     ros::Subscriber destination_sub  = n.subscribe("/destination",10,&destination_Callback);
+    ros::Subscriber detect_name_sub  = n.subscribe("/detect_name",10,&detect_name_Callback);
+    ros::Subscriber depth_sub  = n.subscribe("/depth",10,&depth_Callback);
 
     ros::Publisher SteerAngle_pub            = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
     ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
@@ -433,7 +446,7 @@ int main(int argc, char **argv)
                 printf("----------------------------\n"); 
                 ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
 
-                if(emergency_stop == true){
+                if(emergency_stop == true || ((detect_name.c_str() == "person") && (depth < 2.3)) ){
                     c_speed.data = 0;
                     s_angle.data = 0;
                 }
