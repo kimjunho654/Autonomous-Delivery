@@ -27,7 +27,7 @@
 
 int no_waypoints = WayPoints_NO;
 double waypoint_line_angle = 0.0;
-float imu_offset = -23;
+float imu_offset = -53;
 double car_angle;
 int set_delivery_id = 0; //////////////////////
 bool Received_product = false; ////////////
@@ -38,6 +38,9 @@ double avoid_heading_angle_right = 0; //////////////
 int wp_go_id = 0;
 int wp_finish_id = 0;
 double roll,pitch,yaw;
+bool start_command = false; ////////////emergency_stop
+bool emergency_stop = false; ////////////
+
 
 
 
@@ -46,7 +49,7 @@ geometry_msgs::Pose2D my_pose;
 geometry_msgs::Pose2D my_target_pose_goal;
 geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::PoseStamped utm_fix;
-
+std::string destination_data;
 
 
 
@@ -96,14 +99,14 @@ void init_waypoint(void)
         my_waypoints_list[0].x = 315719.89;   
         my_waypoints_list[0].y = 4071242.41; 
 
-	my_waypoints_list[1].x = 315725.57;   
-        my_waypoints_list[1].y = 4071231.31; 
+	my_waypoints_list[1].x = 315723.16;   
+        my_waypoints_list[1].y = 4071239.60; 
 
-	my_waypoints_list[2].x = 315728.16;   
-        my_waypoints_list[2].y = 4071226.10; 
+	my_waypoints_list[2].x = 315727.92;   
+        my_waypoints_list[2].y = 4071232.56; 
         
-	my_waypoints_list[3].x = 315727.20;   
-        my_waypoints_list[3].y = 4071222.29; 
+	my_waypoints_list[3].x = 315730.07;   
+        my_waypoints_list[3].y = 4071225.90; 
 
 	my_waypoints_list[4].x = 315723.32;   
         my_waypoints_list[4].y = 4071219.55; 
@@ -135,6 +138,80 @@ void init_waypoint(void)
         set_delivery_id = 6;
         no_waypoints = 3;
         wp_finish_id = 6;
+}
+
+void Unitophia(void)
+{	
+        //my_waypoints_list[0].x = 315719.89;
+        //my_waypoints_list[0].y = 4071242.41;
+
+        //set_delivery_id = 6;
+        //no_waypoints = 3;
+       // wp_finish_id = 6;
+}
+
+void Hak_Ye_Gwan(void)
+{
+
+}
+
+void BRIX_Gwan(void)
+{
+
+}
+
+void San_Hak_Hyeop_Ryeok_Gwan(void)
+{
+
+}
+
+void Gong_Hak_Gwan(void)
+{
+
+}
+
+void Library(void)
+{
+
+}
+
+void Antire_preneur_Gwan(void)
+{
+
+}
+
+void Han_maru(void)
+{
+
+}
+
+void Medical_Science_Gwan(void)
+{
+
+}
+
+void Naturel_Science_Gwan(void)
+{
+
+}
+
+void Humanities_Social_Science_Gwan(void)
+{
+
+}
+
+void Main_University(void)
+{
+
+}
+
+void Media_Laps_Gwan(void)
+{
+
+}
+
+void Global_Village(void)
+{
 
 }
 
@@ -164,6 +241,16 @@ void base_link_tf_utm(void)
 	    
 }
 
+void emergency_stop_Callback(const std_msgs::Bool::ConstPtr& msg)
+{
+    emergency_stop = msg->data;
+}
+
+void start_command_Callback(const std_msgs::Bool::ConstPtr& msg)
+{
+    Received_product = msg->data;
+}
+
 void Receive_Product_Callback(const std_msgs::Bool::ConstPtr& msg)
 {
     Received_product = msg->data;
@@ -186,6 +273,11 @@ void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& m
     
 }
 
+void destination_Callback(const std_msgs::String::ConstPtr& msg)
+{
+    destination_data = msg->data;
+    
+}
 
 
 
@@ -203,9 +295,12 @@ int main(int argc, char **argv)
     ros::Subscriber utm_sub                  = n.subscribe("/utm",1,&utm_Callback);
     ros::Subscriber imu_sub                  = n.subscribe("/imu/data",10,&imu_Callback);
     ros::Subscriber receive_product_sub      = n.subscribe("/receive_product",10,&Receive_Product_Callback);
+    ros::Subscriber start_command_sub      = n.subscribe("/start_command",10,&start_command_Callback);
+    ros::Subscriber emergency_stop_sub      = n.subscribe("/emergency_stop",10,&emergency_stop_Callback);
     ros::Subscriber lidar_object_detect_sub  = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
     ros::Subscriber avoid_function_start_sub = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
     ros::Subscriber avoid_heading_angle_sub  = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
+    ros::Subscriber destination_sub  = n.subscribe("/destination",10,&destination_Callback);
 
     ros::Publisher SteerAngle_pub            = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
     ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
@@ -223,9 +318,10 @@ int main(int argc, char **argv)
 
     geometry_msgs::Pose2D pose_goal;  
     
-  
-    init_waypoint(); ////////////////////////////////////////////////////////////////////////////////
-  
+    if(destination_data.c_str() == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
+    else if( destination_data.c_str() == "unitophia" ) { Unitophia(); }
+    else { init_waypoint(); }
+    
     int waypoint_id = 0;
  
     double delta_x, delta_y ;
@@ -236,11 +332,24 @@ int main(int argc, char **argv)
     pose_goal.y = my_waypoints_list[wp_go_id].y;
     pose_goal.theta = DEG2RAD(0);
     target_pos_pub.publish(pose_goal);
-  
-    while (ros::ok()) {	
     
-        c_speed.data = 100;
-        s_angle.data = car_angle;
+    while (ros::ok()) {
+
+        if(emergency_stop == false){
+            if(start_command == true){
+                c_speed.data = 100;
+                s_angle.data = car_angle;
+            }
+            else if(start_command == false){
+                c_speed.data = 0;
+                s_angle.data = 0;
+            }
+        }
+        else if(emergency_stop == true){
+            c_speed.data = 0;
+            s_angle.data = 0;
+        }
+
 
         if(waypoint_id!= -1) {	
 	    
@@ -309,27 +418,33 @@ int main(int argc, char **argv)
             }
 	     
             // avoid function
-	    if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) ) {
+            if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) && (start_command == true) ){
                 c_speed.data = 60;
                 s_angle.data = avoid_heading_angle_left + 30;
 
-                if( (avoid_heading_angle_left > 10) && (avoid_heading_angle_right > 10)) {
+                if( (avoid_heading_angle_left > 5) && (avoid_heading_angle_right > 5)) {
                     s_angle.data = car_angle - 5;
                 }
-	        SteerAngle_pub.publish(s_angle);
-	        car_speed_pub.publish(c_speed);
+
                 avoid_function_start = false;
 	       
                 printf("----------------------------\n"); 
                 printf("Avoid function\n"); 
                 printf("----------------------------\n"); 
-	        ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);\
+                ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
+
+                if(emergency_stop == true){
+                    c_speed.data = 0;
+                    s_angle.data = 0;
+                }
+
 	        SteerAngle_pub.publish(s_angle);
 	        car_speed_pub.publish(c_speed);
                 ros::Duration(0.5).sleep();      
             }
 	    
 	    if(wp_go_id >= wp_finish_id) {
+                         start_command = false;
 			 c_speed.data = 0;
                          s_angle.data = 0;
 			 wp_go_id = wp_finish_id;
@@ -343,6 +458,10 @@ int main(int argc, char **argv)
 	ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
 
 	if(count>=2) {
+            if(emergency_stop == true){
+                c_speed.data = 0;
+                s_angle.data = 0;
+            }
 	    SteerAngle_pub.publish(s_angle);
 	    car_speed_pub.publish(c_speed);
 	}
@@ -352,6 +471,7 @@ int main(int argc, char **argv)
 	loop_rate.sleep();
     ros::spinOnce();
     ++count;
+
   }
     return 0;
 }
