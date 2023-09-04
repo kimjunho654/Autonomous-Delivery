@@ -219,7 +219,7 @@ void Unitophia(void)
         my_waypoints_list[24].y = 4071256.631508;
 
 	my_waypoints_list[25].x = 315680.609426;
-        my_waypoints_list[26].y = 4071278.219467;
+        my_waypoints_list[25].y = 4071278.219467;
 
 	my_waypoints_list[26].x = 315680.455721;
         my_waypoints_list[26].y = 4071271.098725;
@@ -240,16 +240,299 @@ void Unitophia(void)
 
 void Hak_Ye_Gwan(void)
 {
+        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].y = 4017316.728305;
 
+        my_waypoints_list[1].x = 315458.201930;
+        my_waypoints_list[1].y = 4071252.597692;
+
+        my_waypoints_list[2].x = 315502.84127;
+        my_waypoints_list[2].y = 4071269.81511;
+
+        my_waypoints_list[3].x = 315504.004636;
+        my_waypoints_list[3].y = 4071274.474232;
+
+        my_waypoints_list[4].x = 315503.395912;
+        my_waypoints_list[4].y = 4071273.703714;
+
+        my_waypoints_list[5].x = 315503.395912;
+        my_waypoints_list[5].y = 4071273.703714;
+
+        my_waypoints_list[6].x = 315476.865139;
+        my_waypoints_list[6].y = 4071317.429893;
+
+        my_waypoints_list[7].x = 315479.466137;
+        my_waypoints_list[7].y = 4071324.933992;
+
+        my_waypoints_list[8].x = 315479.750606;
+        my_waypoints_list[8].y = 4071322.807718;
+
+        my_waypoints_list[9].x = 315481.969678;
+        my_waypoints_list[9].y = 4071329.664052;
+
+        my_waypoints_list[10].x = 315482.972224;
+        my_waypoints_list[10].y = 4071331.013255;
+
+        my_waypoints_list[11].x = 315496.080166;
+        my_waypoints_list[11].y = 4071317.136784;
+
+        my_waypoints_list[12].x = 315517.165063;
+        my_waypoints_list[12].y = 4071300.511648;
+	
+        my_waypoints_list[13].x = 315520.395969;
+        my_waypoints_list[13].y = 4071297.905463;
+	
+        my_waypoints_list[14].x = 315532.530903;
+        my_waypoints_list[14].y = 4071300.783531;
+	
+        my_waypoints_list[15].x = 315572.913426;
+        my_waypoints_list[15].y = 4071313.854113;
+	
+        my_waypoints_list[16].x = 315576.133565;
+        my_waypoints_list[16].y = 4071312.361526;
+
+        my_waypoints_list[17].x = 315580.085779;
+        my_waypoints_list[17].y = 4071310.239292;
+	
+        my_waypoints_list[18].x = 315582.94788;
+        my_waypoints_list[18].y = 4071307.012831;
+	
+        my_waypoints_list[19].x = 315606.159708;
+        my_waypoints_list[19].y = 4071303.890809;
+	
+        my_waypoints_list[20].x = 315584.108858;
+        my_waypoints_list[20].y = 4071320.246864;
+	
+        my_waypoints_list[21].x = 315604.634973;
+        my_waypoints_list[21].y = 4071301.641548;
+	
+        my_waypoints_list[22].x = 315621.971242;
+        my_waypoints_list[22].y = 4071262.85076;
+	
+        my_waypoints_list[23].x = 315624.4353775;
+        my_waypoints_list[23].y = 4071259.741134;
+	
+        my_waypoints_list[24].x = 315626.899513;
+        my_waypoints_list[24].y = 4071256.631508;
+
+	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[25].y = 4071278.219467;
+
+	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].y = 4071271.098725;
+/////////////// 31->27,  42->38 /////////////////////// 
+	my_waypoints_list[27].x = 315692.039925;
+        my_waypoints_list[27].y = 4071283.589401;
+
+	my_waypoints_list[28].x = 315684.329337;
+        my_waypoints_list[28].y = 4071286.308861;
+
+	my_waypoints_list[29].x = 315677.949829;
+        my_waypoints_list[29].y = 4071292.773638;
+
+	my_waypoints_list[30].x = 315677.992938;
+        my_waypoints_list[30].y = 4071294.77073;
+
+	my_waypoints_list[31].x = 315679.036425;
+        my_waypoints_list[31].y = 4071301.741283;
+
+	my_waypoints_list[32].x = 315676.715655;
+        my_waypoints_list[32].y = 4071301.79138;
+
+	my_waypoints_list[33].x = 315671.282103;
+        my_waypoints_list[33].y = 4071306.570724;
+
+        my_waypoints_list[34].x = 315663.823673;
+        my_waypoints_list[34].y = 4071316.832846;
+
+        my_waypoints_list[35].x = 315656.197448;
+        my_waypoints_list[35].y = 4071335.867699;
+
+        my_waypoints_list[36].x = 315649.478991;
+        my_waypoints_list[36].y = 4071334.902733;
+
+        my_waypoints_list[37].x = 315645.105248;
+        my_waypoints_list[37].y = 4071334.997162;
+
+        my_waypoints_list[38].x = 315659.253361;
+        my_waypoints_list[38].y = 4071324.368595;
+
+        set_delivery_id = 38;
+        no_waypoints = 39;
+        wp_finish_id = 38;
 }
 
 void BRIX_Gwan(void)
 {
+        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].y = 4017316.728305;
 
+        my_waypoints_list[1].x = 315458.201930;
+        my_waypoints_list[1].y = 4071252.597692;
+
+        my_waypoints_list[2].x = 315502.84127;
+        my_waypoints_list[2].y = 4071269.81511;
+
+        my_waypoints_list[3].x = 315504.004636;
+        my_waypoints_list[3].y = 4071274.474232;
+
+        my_waypoints_list[4].x = 315503.395912;
+        my_waypoints_list[4].y = 4071273.703714;
+
+        my_waypoints_list[5].x = 315503.395912;
+        my_waypoints_list[5].y = 4071273.703714;
+
+        my_waypoints_list[6].x = 315476.865139;
+        my_waypoints_list[6].y = 4071317.429893;
+
+        my_waypoints_list[7].x = 315479.466137;
+        my_waypoints_list[7].y = 4071324.933992;
+
+        my_waypoints_list[8].x = 315479.750606;
+        my_waypoints_list[8].y = 4071322.807718;
+
+        my_waypoints_list[9].x = 315481.969678;
+        my_waypoints_list[9].y = 4071329.664052;
+
+        my_waypoints_list[10].x = 315482.972224;
+        my_waypoints_list[10].y = 4071331.013255;
+
+        my_waypoints_list[11].x = 315496.080166;
+        my_waypoints_list[11].y = 4071317.136784;
+
+        my_waypoints_list[12].x = 315517.165063;
+        my_waypoints_list[12].y = 4071300.511648;
+	
+        my_waypoints_list[13].x = 315520.395969;
+        my_waypoints_list[13].y = 4071297.905463;
+	
+        my_waypoints_list[14].x = 315532.530903;
+        my_waypoints_list[14].y = 4071300.783531;
+	
+        my_waypoints_list[15].x = 315572.913426;
+        my_waypoints_list[15].y = 4071313.854113;
+	
+        my_waypoints_list[16].x = 315576.133565;
+        my_waypoints_list[16].y = 4071312.361526;
+
+        my_waypoints_list[17].x = 315580.085779;
+        my_waypoints_list[17].y = 4071310.239292;
+	
+        my_waypoints_list[18].x = 315582.94788;
+        my_waypoints_list[18].y = 4071307.012831;
+	
+        my_waypoints_list[19].x = 315606.159708;
+        my_waypoints_list[19].y = 4071303.890809;
+	
+        my_waypoints_list[20].x = 315584.108858;
+        my_waypoints_list[20].y = 4071320.246864;
+	
+        my_waypoints_list[21].x = 315604.634973;
+        my_waypoints_list[21].y = 4071301.641548;
+	
+        my_waypoints_list[22].x = 315621.971242;
+        my_waypoints_list[22].y = 4071262.85076;
+	
+        my_waypoints_list[23].x = 315624.4353775;
+        my_waypoints_list[23].y = 4071259.741134;
+	
+        my_waypoints_list[24].x = 315626.899513;
+        my_waypoints_list[24].y = 4071256.631508;
+
+	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[25].y = 4071278.219467;
+
+	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].y = 4071271.098725;
+/////////////// 31->27,  40->36 /////////////////////// 
+	my_waypoints_list[27].x = 315692.039925;
+        my_waypoints_list[27].y = 4071283.589401;
+
+	my_waypoints_list[28].x = 315684.329337;
+        my_waypoints_list[28].y = 4071286.308861;
+
+	my_waypoints_list[29].x = 315677.949829;
+        my_waypoints_list[29].y = 4071292.773638;
+
+	my_waypoints_list[30].x = 315677.992938;
+        my_waypoints_list[30].y = 4071294.77073;
+
+	my_waypoints_list[31].x = 315679.036425;
+        my_waypoints_list[31].y = 4071301.741283;
+
+	my_waypoints_list[32].x = 315676.715655;
+        my_waypoints_list[32].y = 4071301.79138;
+
+	my_waypoints_list[33].x = 315671.282103;
+        my_waypoints_list[33].y = 4071306.570724;
+
+        my_waypoints_list[34].x = 315663.823673;
+        my_waypoints_list[34].y = 4071316.832846;
+
+        my_waypoints_list[35].x = 315656.197448;
+        my_waypoints_list[35].y = 4071335.867699;
+
+        my_waypoints_list[36].x = 315649.478991;
+        my_waypoints_list[36].y = 4071334.902733;
+/////////////// 43->37,  44->38 /////////////////////// 
+        my_waypoints_list[37].x = 315653.551419;
+        my_waypoints_list[37].y = 4071333.260794;
+
+        my_waypoints_list[38].x = 315641.241744;
+        my_waypoints_list[38].y = 4071358.723849;
+
+	set_delivery_id = 38;
+        no_waypoints = 39;
+        wp_finish_id = 38;
 }
 
 void San_Hak_Hyeop_Ryeok_Gwan(void)
 {
+        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].y = 4017316.728305;
+
+        my_waypoints_list[1].x = 315458.201930;
+        my_waypoints_list[1].y = 4071252.597692;
+
+        my_waypoints_list[2].x = 315502.84127;
+        my_waypoints_list[2].y = 4071269.81511;
+
+        my_waypoints_list[3].x = 315504.004636;
+        my_waypoints_list[3].y = 4071274.474232;
+
+        my_waypoints_list[4].x = 315503.395912;
+        my_waypoints_list[4].y = 4071273.703714;
+
+        my_waypoints_list[5].x = 315503.395912;
+        my_waypoints_list[5].y = 4071273.703714;
+
+        my_waypoints_list[6].x = 315476.865139;
+        my_waypoints_list[6].y = 4071317.429893;
+
+        my_waypoints_list[7].x = 315479.466137;
+        my_waypoints_list[7].y = 4071324.933992;
+
+        my_waypoints_list[8].x = 315479.750606;
+        my_waypoints_list[8].y = 4071322.807718;
+
+        my_waypoints_list[9].x = 315481.969678;
+        my_waypoints_list[9].y = 4071329.664052;
+
+        my_waypoints_list[10].x = 315482.972224;
+        my_waypoints_list[10].y = 4071331.013255;
+/////////////// 45->11,  47->13 /////////////////////// 
+        my_waypoints_list[11].x = 315504.947753;
+        my_waypoints_list[11].y = 4071337.136333;
+
+	my_waypoints_list[12].x = 315510.733444;
+        my_waypoints_list[12].y = 4071332.127265;
+
+	my_waypoints_list[13].x = 315509.790502;
+        my_waypoints_list[13].y = 4071329.816609;
+
+	set_delivery_id = 13;
+        no_waypoints = 14;
+        wp_finish_id = 13;
 
 }
 
@@ -260,7 +543,66 @@ void Gong_Hak_Gwan(void)
 
 void Library(void)
 {
+        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].y = 4017316.728305;
 
+        my_waypoints_list[1].x = 315458.201930;
+        my_waypoints_list[1].y = 4071252.597692;
+
+        my_waypoints_list[2].x = 315502.84127;
+        my_waypoints_list[2].y = 4071269.81511;
+
+        my_waypoints_list[3].x = 315504.004636;
+        my_waypoints_list[3].y = 4071274.474232;
+
+        my_waypoints_list[4].x = 315503.395912;
+        my_waypoints_list[4].y = 4071273.703714;
+
+        my_waypoints_list[5].x = 315503.395912;
+        my_waypoints_list[5].y = 4071273.703714;
+
+        my_waypoints_list[6].x = 315476.865139;
+        my_waypoints_list[6].y = 4071317.429893;
+/////////////// 48->7,  59->18 /////////////////////// 
+	my_waypoints_list[7].x = 315474.399013;
+        my_waypoints_list[7].y = 4071320.258221;
+
+	my_waypoints_list[8].x = 315467.684765;
+        my_waypoints_list[8].y = 4071323.62236;
+
+	my_waypoints_list[9].x = 315465.390374;
+        my_waypoints_list[9].y = 4071324.89296;
+
+	my_waypoints_list[10].x = 315389.545466;
+        my_waypoints_list[10].y = 4071269.921647;
+
+	my_waypoints_list[11].x = 315385.193781;
+        my_waypoints_list[11].y = 4071266.907689;
+
+	my_waypoints_list[12].x = 315370.986907;
+        my_waypoints_list[12].y = 4071266.548847;
+
+	my_waypoints_list[13].x = 315352.184048;
+        my_waypoints_list[13].y = 4071268.398439;
+
+	my_waypoints_list[14].x = 315344.637662;
+        my_waypoints_list[14].y = 4071270.448651;
+
+	my_waypoints_list[15].x = 315331.613737;
+        my_waypoints_list[15].y = 4071262.849195;
+
+	my_waypoints_list[16].x = 315324.247793;
+        my_waypoints_list[16].y = 4071269.113581;
+
+	my_waypoints_list[17].x = 315318.015854;
+        my_waypoints_list[17].y = 4071274.13243;
+
+	my_waypoints_list[18].x = 315297.922494;
+        my_waypoints_list[18].y = 4071253.476743;
+
+	set_delivery_id = 18;
+        no_waypoints = 19;
+        wp_finish_id = 18;
 }
 
 void Antire_preneur_Gwan(void)
