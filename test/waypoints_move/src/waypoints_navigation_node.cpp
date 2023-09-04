@@ -143,45 +143,99 @@ void init_waypoint(void)
 
 void Unitophia(void)
 {	
-        my_waypoints_list[0].x = 315430.02;
-        my_waypoints_list[0].y = 4071223.10;
+        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].y = 4017316.728305;
 
-        my_waypoints_list[1].x = 315433.70;
-        my_waypoints_list[1].y = 4071225.60;
+        my_waypoints_list[1].x = 315458.201930;
+        my_waypoints_list[1].y = 4071252.597692;
 
-        my_waypoints_list[2].x = 315437.41;
-        my_waypoints_list[2].y = 4071227.86;
+        my_waypoints_list[2].x = 315502.84127;
+        my_waypoints_list[2].y = 4071269.81511;
 
-        my_waypoints_list[3].x = 315441.48;
-        my_waypoints_list[3].y = 4071229.93;
+        my_waypoints_list[3].x = 315504.004636;
+        my_waypoints_list[3].y = 4071274.474232;
 
-        my_waypoints_list[4].x = 315445.73;
-        my_waypoints_list[4].y = 4071232.85
+        my_waypoints_list[4].x = 315503.395912;
+        my_waypoints_list[4].y = 4071273.703714;
 
-        my_waypoints_list[5].x = 315449.23;
-        my_waypoints_list[5].y = 4071235.14;
+        my_waypoints_list[5].x = 315503.395912;
+        my_waypoints_list[5].y = 4071273.703714;
 
-        my_waypoints_list[6].x = 315453.18;
-        my_waypoints_list[6].y = 4071238.04;
+        my_waypoints_list[6].x = 315476.865139;
+        my_waypoints_list[6].y = 4071317.429893;
 
-        my_waypoints_list[7].x = 315457.60;
-        my_waypoints_list[7].y = 4071240.55;
+        my_waypoints_list[7].x = 315479.466137;
+        my_waypoints_list[7].y = 4071324.933992;
 
-        my_waypoints_list[8].x = 315462.17;
-        my_waypoints_list[8].y = 4071242.75;
+        my_waypoints_list[8].x = 315479.750606;
+        my_waypoints_list[8].y = 4071322.807718;
 
-        my_waypoints_list[9].x = 315466.18;
-        my_waypoints_list[9].y = 4071245.43;
+        my_waypoints_list[9].x = 315481.969678;
+        my_waypoints_list[9].y = 4071329.664052;
 
-        my_waypoints_list[5].x = 315449.23;
-        my_waypoints_list[5].y = 4071235.14;
+        my_waypoints_list[10].x = 315482.972224;
+        my_waypoints_list[10].y = 4071331.013255;
 
-        my_waypoints_list[5].x = 315449.23;
-        my_waypoints_list[5].y = 4071235.14;
+        my_waypoints_list[11].x = 315496.080166;
+        my_waypoints_list[11].y = 4071317.136784;
 
-        //set_delivery_id = 7;
-        //no_waypoints = 3;
-       // wp_finish_id = 6;
+        my_waypoints_list[12].x = 315517.165063;
+        my_waypoints_list[12].y = 4071300.511648;
+	
+        my_waypoints_list[13].x = 315520.395969;
+        my_waypoints_list[13].y = 4071297.905463;
+	
+        my_waypoints_list[14].x = 315532.530903;
+        my_waypoints_list[14].y = 4071300.783531;
+	
+        my_waypoints_list[15].x = 315572.913426;
+        my_waypoints_list[15].y = 4071313.854113;
+	
+        my_waypoints_list[16].x = 315576.133565;
+        my_waypoints_list[16].y = 4071312.361526;
+
+        my_waypoints_list[17].x = 315580.085779;
+        my_waypoints_list[17].y = 4071310.239292;
+	
+        my_waypoints_list[18].x = 315582.94788;
+        my_waypoints_list[18].y = 4071307.012831;
+	
+        my_waypoints_list[19].x = 315606.159708;
+        my_waypoints_list[19].y = 4071303.890809;
+	
+        my_waypoints_list[20].x = 315584.108858;
+        my_waypoints_list[20].y = 4071320.246864;
+	
+        my_waypoints_list[21].x = 315604.634973;
+        my_waypoints_list[21].y = 4071301.641548;
+	
+        my_waypoints_list[22].x = 315621.971242;
+        my_waypoints_list[22].y = 4071262.85076;
+	
+        my_waypoints_list[23].x = 315624.4353775;
+        my_waypoints_list[23].y = 4071259.741134;
+	
+        my_waypoints_list[24].x = 315626.899513;
+        my_waypoints_list[24].y = 4071256.631508;
+
+	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[26].y = 4071278.219467;
+
+	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].y = 4071271.098725;
+
+	my_waypoints_list[27].x = 315690.573353;
+        my_waypoints_list[27].y = 4071270.256509;
+
+	my_waypoints_list[28].x = 315716.951680;
+        my_waypoints_list[28].y = 4071269.951680;
+
+	my_waypoints_list[29].x = 315713.744796;
+        my_waypoints_list[29].y = 4071257.768267;
+	
+        set_delivery_id = 29;
+        no_waypoints = 30;
+        wp_finish_id = 29;
 }
 
 void Hak_Ye_Gwan(void)
