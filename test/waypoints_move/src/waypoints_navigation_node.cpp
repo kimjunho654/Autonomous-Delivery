@@ -143,10 +143,43 @@ void init_waypoint(void)
 
 void Unitophia(void)
 {	
-        //my_waypoints_list[0].x = 315719.89;
-        //my_waypoints_list[0].y = 4071242.41;
+        my_waypoints_list[0].x = 315430.02;
+        my_waypoints_list[0].y = 4071223.10;
 
-        //set_delivery_id = 6;
+        my_waypoints_list[1].x = 315433.70;
+        my_waypoints_list[1].y = 4071225.60;
+
+        my_waypoints_list[2].x = 315437.41;
+        my_waypoints_list[2].y = 4071227.86;
+
+        my_waypoints_list[3].x = 315441.48;
+        my_waypoints_list[3].y = 4071229.93;
+
+        my_waypoints_list[4].x = 315445.73;
+        my_waypoints_list[4].y = 4071232.85
+
+        my_waypoints_list[5].x = 315449.23;
+        my_waypoints_list[5].y = 4071235.14;
+
+        my_waypoints_list[6].x = 315453.18;
+        my_waypoints_list[6].y = 4071238.04;
+
+        my_waypoints_list[7].x = 315457.60;
+        my_waypoints_list[7].y = 4071240.55;
+
+        my_waypoints_list[8].x = 315462.17;
+        my_waypoints_list[8].y = 4071242.75;
+
+        my_waypoints_list[9].x = 315466.18;
+        my_waypoints_list[9].y = 4071245.43;
+
+        my_waypoints_list[5].x = 315449.23;
+        my_waypoints_list[5].y = 4071235.14;
+
+        my_waypoints_list[5].x = 315449.23;
+        my_waypoints_list[5].y = 4071235.14;
+
+        //set_delivery_id = 7;
         //no_waypoints = 3;
        // wp_finish_id = 6;
 }
