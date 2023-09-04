@@ -4,7 +4,7 @@
 #include "nav_msgs/Path.h"
 #include "geometry_msgs/Twist.h"
 #include "geometry_msgs/PoseStamped.h"
-#include "geometry_msgs/Pose2D.h"   
+#include "geometry_msgs/Pose2D.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Int16.h"
@@ -56,8 +56,8 @@ std::string detect_name;
 
 struct WayPoints
 {
-	double x;
-	double y;	
+        double x;
+        double y;
 };
 
 struct WayPoints my_waypoints_list[WayPoints_NO];
@@ -68,72 +68,72 @@ struct WayPoints my_waypoints_list[WayPoints_NO];
 
 //GPS의경우 UTM 좌표를 따라서 XY가 다름
 
-void utm_Callback(const geometry_msgs::PoseStamped::ConstPtr& msgs) 
-{	
-	utm_fix.header = msgs->header;
-	utm_fix.pose.position.x     =  msgs->pose.position.x ;
-	utm_fix.pose.position.y     =  msgs->pose.position.y ;
+void utm_Callback(const geometry_msgs::PoseStamped::ConstPtr& msgs)
+{
+        utm_fix.header = msgs->header;
+        utm_fix.pose.position.x     =  msgs->pose.position.x ;
+        utm_fix.pose.position.y     =  msgs->pose.position.y ;
 
-	my_pose.x     =  utm_fix.pose.position.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
-	my_pose.y     =  utm_fix.pose.position.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+        my_pose.x     =  utm_fix.pose.position.x;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
+        my_pose.y     =  utm_fix.pose.position.y;      //UTM 좌표의 경우 X,Y 좌표가 90도 회전되어 있음
 }
 
-void imu_Callback(const sensor_msgs::Imu::ConstPtr& msg) 
-{      
-	tf2::Quaternion q(
+void imu_Callback(const sensor_msgs::Imu::ConstPtr& msg)
+{
+        tf2::Quaternion q(
         msg->orientation.x,
         msg->orientation.y,
         msg->orientation.z,
         msg->orientation.w);
-        
-	tf2::Matrix3x3 m(q);      
- 
+
+        tf2::Matrix3x3 m(q);
+
         m.getRPY(roll, pitch, yaw);
-     
+
         yaw = yaw+ DEG2RAD(imu_offset);
         my_pose.theta = yaw;
-        //printf("%6.3lf(rad)  %6.3lf \n",yaw, yaw*180/3.14159);   
+        //printf("%6.3lf(rad)  %6.3lf \n",yaw, yaw*180/3.14159);
 }
 
 void init_waypoint(void)
-{	
-        my_waypoints_list[0].x = 315719.89;   
-        my_waypoints_list[0].y = 4071242.41; 
+{
+        my_waypoints_list[0].x = 315719.89;
+        my_waypoints_list[0].y = 4071242.41;
 
-	my_waypoints_list[1].x = 315723.16;   
-        my_waypoints_list[1].y = 4071239.60; 
+        my_waypoints_list[1].x = 315723.16;
+        my_waypoints_list[1].y = 4071239.60;
 
-	my_waypoints_list[2].x = 315727.92;   
-        my_waypoints_list[2].y = 4071232.56; 
-        
-	my_waypoints_list[3].x = 315730.07;   
-        my_waypoints_list[3].y = 4071225.90; 
+        my_waypoints_list[2].x = 315727.92;
+        my_waypoints_list[2].y = 4071232.56;
 
-	my_waypoints_list[4].x = 315723.32;   
-        my_waypoints_list[4].y = 4071219.55; 
+        my_waypoints_list[3].x = 315730.07;
+        my_waypoints_list[3].y = 4071225.90;
 
-	my_waypoints_list[5].x = 315719.06;   
-        my_waypoints_list[5].y = 4071217.23; 
+        my_waypoints_list[4].x = 315723.32;
+        my_waypoints_list[4].y = 4071219.55;
 
-	my_waypoints_list[6].x = 315718.17;   
+        my_waypoints_list[5].x = 315719.06;
+        my_waypoints_list[5].y = 4071217.23;
+
+        my_waypoints_list[6].x = 315718.17;
         my_waypoints_list[6].y = 4071215.08;
 
-	my_waypoints_list[7].x = 315720.44;   
+        my_waypoints_list[7].x = 315720.44;
         my_waypoints_list[7].y = 4071215.01;
 
-	my_waypoints_list[8].x = 315724.41;   
+        my_waypoints_list[8].x = 315724.41;
         my_waypoints_list[8].y = 4071216.97;
 
-	my_waypoints_list[9].x = 315729.18;   
+        my_waypoints_list[9].x = 315729.18;
         my_waypoints_list[9].y = 4071220.21;
 
-	my_waypoints_list[10].x = 315730.79;   
+        my_waypoints_list[10].x = 315730.79;
         my_waypoints_list[10].y = 4071227.73;
 
-	my_waypoints_list[11].x = 315727.98;   
+        my_waypoints_list[11].x = 315727.98;
         my_waypoints_list[11].y = 4071232.84;
 
-	my_waypoints_list[12].x = 315721.12;   
+        my_waypoints_list[12].x = 315721.12;
         my_waypoints_list[12].y = 4071244.21;
 
         set_delivery_id = 6;
@@ -142,8 +142,8 @@ void init_waypoint(void)
 }
 
 void Unitophia(void)
-{	
-        my_waypoints_list[0].x = 315439.887872
+{
+        my_waypoints_list[0].x = 315439.887872;
         my_waypoints_list[0].y = 4017316.728305;
 
         my_waypoints_list[1].x = 315458.201930;
@@ -181,58 +181,58 @@ void Unitophia(void)
 
         my_waypoints_list[12].x = 315517.165063;
         my_waypoints_list[12].y = 4071300.511648;
-	
+
         my_waypoints_list[13].x = 315520.395969;
         my_waypoints_list[13].y = 4071297.905463;
-	
+
         my_waypoints_list[14].x = 315532.530903;
         my_waypoints_list[14].y = 4071300.783531;
-	
+
         my_waypoints_list[15].x = 315572.913426;
         my_waypoints_list[15].y = 4071313.854113;
-	
+
         my_waypoints_list[16].x = 315576.133565;
         my_waypoints_list[16].y = 4071312.361526;
 
         my_waypoints_list[17].x = 315580.085779;
         my_waypoints_list[17].y = 4071310.239292;
-	
+
         my_waypoints_list[18].x = 315582.94788;
         my_waypoints_list[18].y = 4071307.012831;
-	
+
         my_waypoints_list[19].x = 315606.159708;
         my_waypoints_list[19].y = 4071303.890809;
-	
+
         my_waypoints_list[20].x = 315584.108858;
         my_waypoints_list[20].y = 4071320.246864;
-	
+
         my_waypoints_list[21].x = 315604.634973;
         my_waypoints_list[21].y = 4071301.641548;
-	
+
         my_waypoints_list[22].x = 315621.971242;
         my_waypoints_list[22].y = 4071262.85076;
-	
+
         my_waypoints_list[23].x = 315624.4353775;
         my_waypoints_list[23].y = 4071259.741134;
-	
+
         my_waypoints_list[24].x = 315626.899513;
         my_waypoints_list[24].y = 4071256.631508;
 
-	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[25].x = 315680.609426;
         my_waypoints_list[25].y = 4071278.219467;
 
-	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].x = 315680.455721;
         my_waypoints_list[26].y = 4071271.098725;
 
-	my_waypoints_list[27].x = 315690.573353;
+        my_waypoints_list[27].x = 315690.573353;
         my_waypoints_list[27].y = 4071270.256509;
 
-	my_waypoints_list[28].x = 315716.951680;
+        my_waypoints_list[28].x = 315716.951680;
         my_waypoints_list[28].y = 4071269.951680;
 
-	my_waypoints_list[29].x = 315713.744796;
+        my_waypoints_list[29].x = 315713.744796;
         my_waypoints_list[29].y = 4071257.768267;
-	
+
         set_delivery_id = 29;
         no_waypoints = 30;
         wp_finish_id = 29;
@@ -240,7 +240,7 @@ void Unitophia(void)
 
 void Hak_Ye_Gwan(void)
 {
-        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].x = 315439.887872;
         my_waypoints_list[0].y = 4017316.728305;
 
         my_waypoints_list[1].x = 315458.201930;
@@ -278,68 +278,68 @@ void Hak_Ye_Gwan(void)
 
         my_waypoints_list[12].x = 315517.165063;
         my_waypoints_list[12].y = 4071300.511648;
-	
+
         my_waypoints_list[13].x = 315520.395969;
         my_waypoints_list[13].y = 4071297.905463;
-	
+
         my_waypoints_list[14].x = 315532.530903;
         my_waypoints_list[14].y = 4071300.783531;
-	
+
         my_waypoints_list[15].x = 315572.913426;
         my_waypoints_list[15].y = 4071313.854113;
-	
+
         my_waypoints_list[16].x = 315576.133565;
         my_waypoints_list[16].y = 4071312.361526;
 
         my_waypoints_list[17].x = 315580.085779;
         my_waypoints_list[17].y = 4071310.239292;
-	
+
         my_waypoints_list[18].x = 315582.94788;
         my_waypoints_list[18].y = 4071307.012831;
-	
+
         my_waypoints_list[19].x = 315606.159708;
         my_waypoints_list[19].y = 4071303.890809;
-	
+
         my_waypoints_list[20].x = 315584.108858;
         my_waypoints_list[20].y = 4071320.246864;
-	
+
         my_waypoints_list[21].x = 315604.634973;
         my_waypoints_list[21].y = 4071301.641548;
-	
+
         my_waypoints_list[22].x = 315621.971242;
         my_waypoints_list[22].y = 4071262.85076;
-	
+
         my_waypoints_list[23].x = 315624.4353775;
         my_waypoints_list[23].y = 4071259.741134;
-	
+
         my_waypoints_list[24].x = 315626.899513;
         my_waypoints_list[24].y = 4071256.631508;
 
-	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[25].x = 315680.609426;
         my_waypoints_list[25].y = 4071278.219467;
 
-	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].x = 315680.455721;
         my_waypoints_list[26].y = 4071271.098725;
-/////////////// 31->27,  42->38 /////////////////////// 
-	my_waypoints_list[27].x = 315692.039925;
+/////////////// 31->27,  42->38 ///////////////////////
+        my_waypoints_list[27].x = 315692.039925;
         my_waypoints_list[27].y = 4071283.589401;
 
-	my_waypoints_list[28].x = 315684.329337;
+        my_waypoints_list[28].x = 315684.329337;
         my_waypoints_list[28].y = 4071286.308861;
 
-	my_waypoints_list[29].x = 315677.949829;
+        my_waypoints_list[29].x = 315677.949829;
         my_waypoints_list[29].y = 4071292.773638;
 
-	my_waypoints_list[30].x = 315677.992938;
+        my_waypoints_list[30].x = 315677.992938;
         my_waypoints_list[30].y = 4071294.77073;
 
-	my_waypoints_list[31].x = 315679.036425;
+        my_waypoints_list[31].x = 315679.036425;
         my_waypoints_list[31].y = 4071301.741283;
 
-	my_waypoints_list[32].x = 315676.715655;
+        my_waypoints_list[32].x = 315676.715655;
         my_waypoints_list[32].y = 4071301.79138;
 
-	my_waypoints_list[33].x = 315671.282103;
+        my_waypoints_list[33].x = 315671.282103;
         my_waypoints_list[33].y = 4071306.570724;
 
         my_waypoints_list[34].x = 315663.823673;
@@ -364,7 +364,7 @@ void Hak_Ye_Gwan(void)
 
 void BRIX_Gwan(void)
 {
-        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].x = 315439.887872;
         my_waypoints_list[0].y = 4017316.728305;
 
         my_waypoints_list[1].x = 315458.201930;
@@ -402,68 +402,68 @@ void BRIX_Gwan(void)
 
         my_waypoints_list[12].x = 315517.165063;
         my_waypoints_list[12].y = 4071300.511648;
-	
+
         my_waypoints_list[13].x = 315520.395969;
         my_waypoints_list[13].y = 4071297.905463;
-	
+
         my_waypoints_list[14].x = 315532.530903;
         my_waypoints_list[14].y = 4071300.783531;
-	
+
         my_waypoints_list[15].x = 315572.913426;
         my_waypoints_list[15].y = 4071313.854113;
-	
+
         my_waypoints_list[16].x = 315576.133565;
         my_waypoints_list[16].y = 4071312.361526;
 
         my_waypoints_list[17].x = 315580.085779;
         my_waypoints_list[17].y = 4071310.239292;
-	
+
         my_waypoints_list[18].x = 315582.94788;
         my_waypoints_list[18].y = 4071307.012831;
-	
+
         my_waypoints_list[19].x = 315606.159708;
         my_waypoints_list[19].y = 4071303.890809;
-	
+
         my_waypoints_list[20].x = 315584.108858;
         my_waypoints_list[20].y = 4071320.246864;
-	
+
         my_waypoints_list[21].x = 315604.634973;
         my_waypoints_list[21].y = 4071301.641548;
-	
+
         my_waypoints_list[22].x = 315621.971242;
         my_waypoints_list[22].y = 4071262.85076;
-	
+
         my_waypoints_list[23].x = 315624.4353775;
         my_waypoints_list[23].y = 4071259.741134;
-	
+
         my_waypoints_list[24].x = 315626.899513;
         my_waypoints_list[24].y = 4071256.631508;
 
-	my_waypoints_list[25].x = 315680.609426;
+        my_waypoints_list[25].x = 315680.609426;
         my_waypoints_list[25].y = 4071278.219467;
 
-	my_waypoints_list[26].x = 315680.455721;
+        my_waypoints_list[26].x = 315680.455721;
         my_waypoints_list[26].y = 4071271.098725;
-/////////////// 31->27,  40->36 /////////////////////// 
-	my_waypoints_list[27].x = 315692.039925;
+/////////////// 31->27,  40->36 ///////////////////////
+        my_waypoints_list[27].x = 315692.039925;
         my_waypoints_list[27].y = 4071283.589401;
 
-	my_waypoints_list[28].x = 315684.329337;
+        my_waypoints_list[28].x = 315684.329337;
         my_waypoints_list[28].y = 4071286.308861;
 
-	my_waypoints_list[29].x = 315677.949829;
+        my_waypoints_list[29].x = 315677.949829;
         my_waypoints_list[29].y = 4071292.773638;
 
-	my_waypoints_list[30].x = 315677.992938;
+        my_waypoints_list[30].x = 315677.992938;
         my_waypoints_list[30].y = 4071294.77073;
 
-	my_waypoints_list[31].x = 315679.036425;
+        my_waypoints_list[31].x = 315679.036425;
         my_waypoints_list[31].y = 4071301.741283;
 
-	my_waypoints_list[32].x = 315676.715655;
+        my_waypoints_list[32].x = 315676.715655;
         my_waypoints_list[32].y = 4071301.79138;
 
-	my_waypoints_list[33].x = 315671.282103;
+        my_waypoints_list[33].x = 315671.282103;
         my_waypoints_list[33].y = 4071306.570724;
 
         my_waypoints_list[34].x = 315663.823673;
@@ -474,21 +474,21 @@ void BRIX_Gwan(void)
 
         my_waypoints_list[36].x = 315649.478991;
         my_waypoints_list[36].y = 4071334.902733;
-/////////////// 43->37,  44->38 /////////////////////// 
+/////////////// 43->37,  44->38 ///////////////////////
         my_waypoints_list[37].x = 315653.551419;
         my_waypoints_list[37].y = 4071333.260794;
 
         my_waypoints_list[38].x = 315641.241744;
         my_waypoints_list[38].y = 4071358.723849;
 
-	set_delivery_id = 38;
+        set_delivery_id = 38;
         no_waypoints = 39;
         wp_finish_id = 38;
 }
 
 void San_Hak_Hyeop_Ryeok_Gwan(void)
 {
-        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].x = 315439.887872;
         my_waypoints_list[0].y = 4017316.728305;
 
         my_waypoints_list[1].x = 315458.201930;
@@ -520,17 +520,17 @@ void San_Hak_Hyeop_Ryeok_Gwan(void)
 
         my_waypoints_list[10].x = 315482.972224;
         my_waypoints_list[10].y = 4071331.013255;
-/////////////// 45->11,  47->13 /////////////////////// 
+/////////////// 45->11,  47->13 ///////////////////////
         my_waypoints_list[11].x = 315504.947753;
         my_waypoints_list[11].y = 4071337.136333;
 
-	my_waypoints_list[12].x = 315510.733444;
+        my_waypoints_list[12].x = 315510.733444;
         my_waypoints_list[12].y = 4071332.127265;
 
-	my_waypoints_list[13].x = 315509.790502;
+        my_waypoints_list[13].x = 315509.790502;
         my_waypoints_list[13].y = 4071329.816609;
 
-	set_delivery_id = 13;
+        set_delivery_id = 13;
         no_waypoints = 14;
         wp_finish_id = 13;
 
@@ -543,7 +543,7 @@ void Gong_Hak_Gwan(void)
 
 void Library(void)
 {
-        my_waypoints_list[0].x = 315439.887872
+        my_waypoints_list[0].x = 315439.887872;
         my_waypoints_list[0].y = 4017316.728305;
 
         my_waypoints_list[1].x = 315458.201930;
@@ -563,44 +563,44 @@ void Library(void)
 
         my_waypoints_list[6].x = 315476.865139;
         my_waypoints_list[6].y = 4071317.429893;
-/////////////// 48->7,  59->18 /////////////////////// 
-	my_waypoints_list[7].x = 315474.399013;
+/////////////// 48->7,  59->18 ///////////////////////
+        my_waypoints_list[7].x = 315474.399013;
         my_waypoints_list[7].y = 4071320.258221;
 
-	my_waypoints_list[8].x = 315467.684765;
+        my_waypoints_list[8].x = 315467.684765;
         my_waypoints_list[8].y = 4071323.62236;
 
-	my_waypoints_list[9].x = 315465.390374;
+        my_waypoints_list[9].x = 315465.390374;
         my_waypoints_list[9].y = 4071324.89296;
 
-	my_waypoints_list[10].x = 315389.545466;
+        my_waypoints_list[10].x = 315389.545466;
         my_waypoints_list[10].y = 4071269.921647;
 
-	my_waypoints_list[11].x = 315385.193781;
+        my_waypoints_list[11].x = 315385.193781;
         my_waypoints_list[11].y = 4071266.907689;
 
-	my_waypoints_list[12].x = 315370.986907;
+        my_waypoints_list[12].x = 315370.986907;
         my_waypoints_list[12].y = 4071266.548847;
 
-	my_waypoints_list[13].x = 315352.184048;
+        my_waypoints_list[13].x = 315352.184048;
         my_waypoints_list[13].y = 4071268.398439;
 
-	my_waypoints_list[14].x = 315344.637662;
+        my_waypoints_list[14].x = 315344.637662;
         my_waypoints_list[14].y = 4071270.448651;
 
-	my_waypoints_list[15].x = 315331.613737;
+        my_waypoints_list[15].x = 315331.613737;
         my_waypoints_list[15].y = 4071262.849195;
 
-	my_waypoints_list[16].x = 315324.247793;
+        my_waypoints_list[16].x = 315324.247793;
         my_waypoints_list[16].y = 4071269.113581;
 
-	my_waypoints_list[17].x = 315318.015854;
+        my_waypoints_list[17].x = 315318.015854;
         my_waypoints_list[17].y = 4071274.13243;
 
-	my_waypoints_list[18].x = 315297.922494;
+        my_waypoints_list[18].x = 315297.922494;
         my_waypoints_list[18].y = 4071253.476743;
 
-	set_delivery_id = 18;
+        set_delivery_id = 18;
         no_waypoints = 19;
         wp_finish_id = 18;
 }
@@ -645,30 +645,30 @@ void Global_Village(void)
 
 }
 
-void base_link_tf_utm(void) 
-{	
+void base_link_tf_utm(void)
+{
         double waypoint_pos_base_link_x     = 0.0;
-	double waypoint_pos_base_link_y     = 0.0; 
-	double waypoint_pos_base_link_theta = 0.0; 
-	double tf_base_map_x,tf_base_map_y; 
-	double waypoint_angle, waypoint_distance;	 
-	///////////////////////////////////////////////////
-	tf_base_map_x = -my_pose.x;   //상대좌표로 변환  no translation
-	tf_base_map_y = -my_pose.y;
-	
-	tf_base_map_x += my_target_pose_goal.x;   //상대좌표로 변환  no translation
-	tf_base_map_y += my_target_pose_goal.y;     
-    
-	waypoint_pos_base_link_x = tf_base_map_x * cos(my_pose.theta)  + tf_base_map_y * sin(my_pose.theta);   // rotation_matrix
-	waypoint_pos_base_link_y = -tf_base_map_x * sin(my_pose.theta) + tf_base_map_y * cos(my_pose.theta);   	
-	
-	waypoint_angle = atan2(waypoint_pos_base_link_y ,waypoint_pos_base_link_x);	
-	waypoint_distance = sqrt(waypoint_pos_base_link_x*waypoint_pos_base_link_x  + waypoint_pos_base_link_y*waypoint_pos_base_link_y);
+        double waypoint_pos_base_link_y     = 0.0;
+        double waypoint_pos_base_link_theta = 0.0;
+        double tf_base_map_x,tf_base_map_y;
+        double waypoint_angle, waypoint_distance;
+        ///////////////////////////////////////////////////
+        tf_base_map_x = -my_pose.x;   //상대좌표로 변환  no translation
+        tf_base_map_y = -my_pose.y;
+
+        tf_base_map_x += my_target_pose_goal.x;   //상대좌표로 변환  no translation
+        tf_base_map_y += my_target_pose_goal.y;
+
+        waypoint_pos_base_link_x = tf_base_map_x * cos(my_pose.theta)  + tf_base_map_y * sin(my_pose.theta);   // rotation_matrix
+        waypoint_pos_base_link_y = -tf_base_map_x * sin(my_pose.theta) + tf_base_map_y * cos(my_pose.theta);
+
+        waypoint_angle = atan2(waypoint_pos_base_link_y ,waypoint_pos_base_link_x);
+        waypoint_distance = sqrt(waypoint_pos_base_link_x*waypoint_pos_base_link_x  + waypoint_pos_base_link_y*waypoint_pos_base_link_y);
         car_angle = RAD2DEG(waypoint_angle);
-        
-	ROS_INFO(" X : %6.3lf   Y : %6.3lf  Yaw : %6.3lf ", my_pose.x, my_pose.y, RAD2DEG(my_pose.theta)); 
-        ROS_INFO(" b_x : %6.3lf  b_y : %6.3lf",waypoint_pos_base_link_x,waypoint_pos_base_link_y);  
-	    
+
+        ROS_INFO(" X : %6.3lf   Y : %6.3lf  Yaw : %6.3lf ", my_pose.x, my_pose.y, RAD2DEG(my_pose.theta));
+        ROS_INFO(" b_x : %6.3lf  b_y : %6.3lf",waypoint_pos_base_link_x,waypoint_pos_base_link_y);
+
 }
 
 void emergency_stop_Callback(const std_msgs::Bool::ConstPtr& msg)
@@ -700,13 +700,13 @@ void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& m
 {
     avoid_heading_angle_right = msg->data[0];
     avoid_heading_angle_left = msg->data[1];
-    
+
 }
 
 void destination_Callback(const std_msgs::String::ConstPtr& msg)
 {
     destination_data = msg->data;
-    
+
 }
 
 void detect_name_Callback(const std_msgs::String::ConstPtr& msg)
@@ -725,11 +725,11 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "Outdoor_Navigation_Drive");
     ros::NodeHandle n;
-  
+
     std_msgs::Int16 s_angle;
     std_msgs::Int16 c_speed;
     std_msgs::Int16 ros_waypoint_id;
-  
+
     //ros::Subscriber sub2 = n.subscribe("/gps/ublox_fix",10, &gps_utm_poseCallback); //
 
     ros::Subscriber utm_sub                  = n.subscribe("/utm",1,&utm_Callback);
@@ -748,8 +748,8 @@ int main(int argc, char **argv)
     ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
     ros::Publisher target_id_pub             = n.advertise<std_msgs::Int16>("target_id",2);
     ros::Publisher target_pos_pub            = n.advertise<geometry_msgs::Pose2D>("/pose_goal", 10);
-  
-    ros::Rate loop_rate(5);  // 10 
+
+    ros::Rate loop_rate(5);  // 10
 
     long count = 0;
     double pos_error_x = 0.0;
@@ -758,23 +758,23 @@ int main(int argc, char **argv)
     double waypoint_distance = 0.0;
     double waypoint_gap_distance = 0.0;
 
-    geometry_msgs::Pose2D pose_goal;  
-    
+    geometry_msgs::Pose2D pose_goal;
+
     if(destination_data.c_str() == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
     else if( destination_data.c_str() == "unitophia" ) { Unitophia(); }
     else { init_waypoint(); }
-    
+
     int waypoint_id = 0;
- 
+
     double delta_x, delta_y ;
     delta_x = delta_y = 0.0;
-  
-   
+
+
     pose_goal.x = my_waypoints_list[wp_go_id].x;
     pose_goal.y = my_waypoints_list[wp_go_id].y;
     pose_goal.theta = DEG2RAD(0);
     target_pos_pub.publish(pose_goal);
-    
+
     while (ros::ok()) {
 
         if(emergency_stop == false){
@@ -793,72 +793,72 @@ int main(int argc, char **argv)
         }
 
 
-        if(waypoint_id!= -1) {	
-	    
-            my_target_pose_goal.x = my_waypoints_list[wp_go_id].x; 
-	    my_target_pose_goal.y = my_waypoints_list[wp_go_id].y; 
-	        
-	        if(wp_go_id == 0) {
-	            delta_x = my_waypoints_list[1].x - my_waypoints_list[0].x;
-	            delta_y = my_waypoints_list[1].y - my_waypoints_list[0].y;
-	        
-		    my_target_pose_goal_prev.x = my_waypoints_list[0].x - delta_x;
-	            my_target_pose_goal_prev.y = my_waypoints_list[0].y - delta_y;
-	        
-	            delta_x = my_target_pose_goal.x - my_target_pose_goal_prev.x;
-	            delta_y = my_target_pose_goal.y - my_target_pose_goal_prev.y;
-	            waypoint_line_angle = atan2(delta_y, delta_x);
-	        }
-	        else { 		  
-	            my_target_pose_goal_prev.x = my_waypoints_list[wp_go_id-1].x;
-	            my_target_pose_goal_prev.y = my_waypoints_list[wp_go_id-1].y;
-	        
-	            delta_x = my_target_pose_goal.x - my_target_pose_goal_prev.x;
-	            delta_y = my_target_pose_goal.y - my_target_pose_goal_prev.y;
-	            waypoint_line_angle = atan2(delta_y, delta_x);
-	        }
-	      
-            waypoint_distance = sqrt(delta_x*delta_x + delta_y*delta_y);		
-            waypoint_gap_distance = sqrt(delta_x*delta_x + delta_y*delta_y) - WayPoint_X_Tor;				
-	    
-	    printf("1: angle %lf\n", RAD2DEG(waypoint_line_angle)); 	
-	    
-	    pos_error_x = abs(my_pose.x - my_waypoints_list[wp_go_id].x);
-	    pos_error_y = abs(my_pose.y - my_waypoints_list[wp_go_id].y); 
-	   	     
-	    pose_goal.x =  my_waypoints_list[wp_go_id].x; // umt coordinate ////////////////
-	    pose_goal.y =  my_waypoints_list[wp_go_id].y;  // umt coordinate /////////////////
-	    
-	    
-	    pose_goal.theta = DEG2RAD(0);
-	    ROS_INFO("[%3d]WayPoint goal X : %6.3lf  goal Y : %6.3lf ",wp_go_id, my_target_pose_goal.x, my_target_pose_goal.y);  
-	    
+        if(waypoint_id!= -1) {
+
+            my_target_pose_goal.x = my_waypoints_list[wp_go_id].x;
+            my_target_pose_goal.y = my_waypoints_list[wp_go_id].y;
+
+                if(wp_go_id == 0) {
+                    delta_x = my_waypoints_list[1].x - my_waypoints_list[0].x;
+                    delta_y = my_waypoints_list[1].y - my_waypoints_list[0].y;
+
+                    my_target_pose_goal_prev.x = my_waypoints_list[0].x - delta_x;
+                    my_target_pose_goal_prev.y = my_waypoints_list[0].y - delta_y;
+
+                    delta_x = my_target_pose_goal.x - my_target_pose_goal_prev.x;
+                    delta_y = my_target_pose_goal.y - my_target_pose_goal_prev.y;
+                    waypoint_line_angle = atan2(delta_y, delta_x);
+                }
+                else {
+                    my_target_pose_goal_prev.x = my_waypoints_list[wp_go_id-1].x;
+                    my_target_pose_goal_prev.y = my_waypoints_list[wp_go_id-1].y;
+
+                    delta_x = my_target_pose_goal.x - my_target_pose_goal_prev.x;
+                    delta_y = my_target_pose_goal.y - my_target_pose_goal_prev.y;
+                    waypoint_line_angle = atan2(delta_y, delta_x);
+                }
+
+            waypoint_distance = sqrt(delta_x*delta_x + delta_y*delta_y);
+            waypoint_gap_distance = sqrt(delta_x*delta_x + delta_y*delta_y) - WayPoint_X_Tor;
+
+            printf("1: angle %lf\n", RAD2DEG(waypoint_line_angle));
+
+            pos_error_x = abs(my_pose.x - my_waypoints_list[wp_go_id].x);
+            pos_error_y = abs(my_pose.y - my_waypoints_list[wp_go_id].y);
+
+            pose_goal.x =  my_waypoints_list[wp_go_id].x; // umt coordinate ////////////////
+            pose_goal.y =  my_waypoints_list[wp_go_id].y;  // umt coordinate /////////////////
+
+
+            pose_goal.theta = DEG2RAD(0);
+            ROS_INFO("[%3d]WayPoint goal X : %6.3lf  goal Y : %6.3lf ",wp_go_id, my_target_pose_goal.x, my_target_pose_goal.y);
+
             base_link_tf_utm();
-	    
+
             target_pos_pub.publish(pose_goal);
             ros_waypoint_id.data  = wp_go_id;
 
 
             //if( (count>=0) && (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )  )
-            if( (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )) {           
-                printf("----------------------------\n"); 
-                printf("Arrvied at My WayPoint[%3d] !\n",wp_go_id); 
-                printf("----------------------------\n"); 
-           
+            if( (pos_error_x <= WayPoint_X_Tor) && (pos_error_y <= WayPoint_Y_Tor )) {
+                printf("----------------------------\n");
+                printf("Arrvied at My WayPoint[%3d] !\n",wp_go_id);
+                printf("----------------------------\n");
+
                     if(wp_go_id == set_delivery_id) {
-	                if(Received_product == false) { 
-                            c_speed.data = 0; 
-                            s_angle.data = 0; 
+                        if(Received_product == false) {
+                            c_speed.data = 0;
+                            s_angle.data = 0;
                         }
                         else if(Received_product == true) {
                             c_speed.data = 100;
                             s_angle.data = car_angle;
                             wp_go_id++;
-                        }             
+                        }
                     }
-                    else if(wp_go_id != set_delivery_id) { wp_go_id++; } 
+                    else if(wp_go_id != set_delivery_id) { wp_go_id++; }
             }
-	     
+
             // avoid function
             if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) && (start_command == true) ){
                 c_speed.data = 60;
@@ -869,10 +869,10 @@ int main(int argc, char **argv)
                 }
 
                 avoid_function_start = false;
-	       
-                printf("----------------------------\n"); 
-                printf("Avoid function\n"); 
-                printf("----------------------------\n"); 
+
+                printf("----------------------------\n");
+                printf("Avoid function\n");
+                printf("----------------------------\n");
                 ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
 
                 if(emergency_stop == true || ((detect_name.c_str() == "person") && (depth < 2.3)) ){
@@ -880,37 +880,37 @@ int main(int argc, char **argv)
                     s_angle.data = 0;
                 }
 
-	        SteerAngle_pub.publish(s_angle);
-	        car_speed_pub.publish(c_speed);
-                ros::Duration(0.5).sleep();      
+                SteerAngle_pub.publish(s_angle);
+                car_speed_pub.publish(c_speed);
+                ros::Duration(0.5).sleep();
             }
-	    
-	    if(wp_go_id >= wp_finish_id) {
+
+            if(wp_go_id >= wp_finish_id) {
                          start_command = false;
-			 c_speed.data = 0;
+                         c_speed.data = 0;
                          s_angle.data = 0;
-			 wp_go_id = wp_finish_id;
-			 ROS_INFO("WP Mission Completed");	
-	    }
+                         wp_go_id = wp_finish_id;
+                         ROS_INFO("WP Mission Completed");
+            }
 
-	}	
-	
-	// publish topics
-	target_id_pub.publish(ros_waypoint_id);
-	ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
+        }
 
-	if(count>=2) {
+        // publish topics
+        target_id_pub.publish(ros_waypoint_id);
+        ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
+
+        if(count>=2) {
             if(emergency_stop == true){
                 c_speed.data = 0;
                 s_angle.data = 0;
             }
-	    SteerAngle_pub.publish(s_angle);
-	    car_speed_pub.publish(c_speed);
-	}
+            SteerAngle_pub.publish(s_angle);
+            car_speed_pub.publish(c_speed);
+        }
 
-	avoid_function_start = false; //////////
+        avoid_function_start = false; //////////
 
-	loop_rate.sleep();
+        loop_rate.sleep();
     ros::spinOnce();
     ++count;
 
