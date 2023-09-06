@@ -103,9 +103,7 @@ void init_waypoint(void)
         no_waypoints = 3;
         wp_finish_id = 6;
 }
-//////////////////////////////////////////////////////////
-        my_waypoints_list[].x = ; 
-        my_waypoints_list[].y = ;
+
 
 void Unitophia_Gwan(void)
 {
@@ -520,43 +518,43 @@ void Hak_Ye_Gwan(void)
 
         my_waypoints_list[40].x = 315678.093682;
         my_waypoints_list[40].y = 4071281.052089;  // 49
-////////////////// 62 -> ,  ->  ////////////////////////////
-        my_waypoints_list[62].x = 315680.273118; 
-        my_waypoints_list[62].y = 4071283.632151;
+////////////////// 62 -> 41, 72 ->  ////////////////////////////
+        my_waypoints_list[41].x = 315680.273118; 
+        my_waypoints_list[41].y = 4071283.632151;
 
-        my_waypoints_list[63].x = 315680.479080; 
-        my_waypoints_list[63].y = 4071287.503762;
+        my_waypoints_list[42].x = 315680.479080; 
+        my_waypoints_list[42].y = 4071287.503762;
 
-        my_waypoints_list[64].x = 315679.666955; 
-        my_waypoints_list[64].y = 4071290.521449;
+        my_waypoints_list[43].x = 315679.666955; 
+        my_waypoints_list[43].y = 4071290.521449;
 
-        my_waypoints_list[65].x = 315678.365380; 
-        my_waypoints_list[65].y = 4071294.049485;
+        my_waypoints_list[44].x = 315678.365380; 
+        my_waypoints_list[44].y = 4071294.049485;
 
-        my_waypoints_list[66].x = 315677.433506; 
-        my_waypoints_list[66].y = 4071297.319734;
+        my_waypoints_list[45].x = 315677.433506; 
+        my_waypoints_list[45].y = 4071297.319734;
 
-        my_waypoints_list[67].x = 315676.384493; 
-        my_waypoints_list[67].y = 4071300.967521;
+        my_waypoints_list[46].x = 315676.384493; 
+        my_waypoints_list[46].y = 4071300.967521;
 
-        my_waypoints_list[68].x = 315675.353768; 
-        my_waypoints_list[68].y = 4071305.490132;
+        my_waypoints_list[47].x = 315675.353768; 
+        my_waypoints_list[47].y = 4071305.490132;
 
-        my_waypoints_list[69].x = 315673.041944; 
-        my_waypoints_list[69].y = 4071308.539169;
+        my_waypoints_list[48].x = 315673.041944; 
+        my_waypoints_list[48].y = 4071308.539169;
 
-        my_waypoints_list[70].x = 315667.868758; 
-        my_waypoints_list[70].y = 4071312.273168;
+        my_waypoints_list[49].x = 315667.868758; 
+        my_waypoints_list[49].y = 4071312.273168;
 
-        my_waypoints_list[71].x = 315664.166533; 
-        my_waypoints_list[71].y = 4071314.601092;
+        my_waypoints_list[50].x = 315664.166533; 
+        my_waypoints_list[50].y = 4071314.601092;
 
-        my_waypoints_list[72].x = 315655.476611; 
-        my_waypoints_list[72].y = 4071329.536240;
+        my_waypoints_list[51].x = 315655.476611; 
+        my_waypoints_list[51].y = 4071329.536240;
 
-        set_delivery_id = 38;
-        no_waypoints = 39;
-        wp_finish_id = 38;
+        set_delivery_id = 51;
+        no_waypoints = 52;
+        wp_finish_id = 51;
 }
 
 void BRIX_Gwan(void)
@@ -623,7 +621,57 @@ void San_Hak_Hyeop_Ryeok_Gwan(void)
 
 void Gong_Hak_Gwan(void)
 {
+        my_waypoints_list[0].x = 315435.697968;
+        my_waypoints_list[0].y = 4071228.980568;
 
+        my_waypoints_list[1].x = 315459.264668;
+        my_waypoints_list[1].y = 4071243.866586;
+
+        my_waypoints_list[2].x = 315501.151300;
+        my_waypoints_list[2].y = 4071267.871898;
+
+        my_waypoints_list[3].x = 315502.573051;
+        my_waypoints_list[3].y = 4071270.092712;
+
+        my_waypoints_list[4].x = 315502.627913;
+        my_waypoints_list[4].y = 4071272.717188;
+
+        my_waypoints_list[5].x = 315501.813174;
+        my_waypoints_list[5].y = 4071275.609902;
+
+        my_waypoints_list[6].x = 315488.512653;
+        my_waypoints_list[6].y = 4071297.268012;
+
+        my_waypoints_list[7].x = 315477.446009;
+        my_waypoints_list[7].y = 4071318.129249;
+////////////////// 115 -> 8, 122 -> 15 ////////////////////////////
+        my_waypoints_list[8].x = 315472.283268; 
+        my_waypoints_list[8].y = 4071322.363152;  // 115
+
+        my_waypoints_list[9].x = 315469.932254; 
+        my_waypoints_list[9].y = 4071323.537566;
+
+        my_waypoints_list[10].x = 315466.466914; 
+        my_waypoints_list[10].y = 4071325.235392;
+
+        my_waypoints_list[11].x = 315462.840025; 
+        my_waypoints_list[11].y = 4071325.186180;
+
+        my_waypoints_list[12].x = 315459.179172; 
+        my_waypoints_list[12].y = 4071323.512291;
+
+        my_waypoints_list[13].x = 315451.690691; 
+        my_waypoints_list[13].y = 4071318.167525;
+
+        my_waypoints_list[14].x = 315442.678997; 
+        my_waypoints_list[14].y = 4071311.729333;
+
+        my_waypoints_list[15].x = 315432.274289; 
+        my_waypoints_list[15].y = 4071304.445053;  // 122
+
+        set_delivery_id = 15;
+        no_waypoints = 16;
+        wp_finish_id = 15;
 }
 
 void Library(void)
@@ -651,11 +699,94 @@ void Library(void)
 
         my_waypoints_list[7].x = 315477.446009;
         my_waypoints_list[7].y = 4071318.129249;
-//////////////////  -> ,  ->  ////////////////////////////
+////////////////// 115 -> 8, 142 -> 35 ////////////////////////////
+        my_waypoints_list[8].x = 315472.283268; 
+        my_waypoints_list[8].y = 4071322.363152;  // 115
 
-        set_delivery_id = 18;
-        no_waypoints = 19;
-        wp_finish_id = 18;
+        my_waypoints_list[9].x = 315469.932254; 
+        my_waypoints_list[9].y = 4071323.537566;
+
+        my_waypoints_list[10].x = 315466.466914; 
+        my_waypoints_list[10].y = 4071325.235392;
+
+        my_waypoints_list[11].x = 315462.840025; 
+        my_waypoints_list[11].y = 4071325.186180;
+
+        my_waypoints_list[12].x = 315459.179172; 
+        my_waypoints_list[12].y = 4071323.512291;
+
+        my_waypoints_list[13].x = 315451.690691; 
+        my_waypoints_list[13].y = 4071318.167525;
+
+        my_waypoints_list[14].x = 315442.678997; 
+        my_waypoints_list[14].y = 4071311.729333;
+
+        my_waypoints_list[15].x = 315432.274289; 
+        my_waypoints_list[15].y = 4071304.445053;
+
+        my_waypoints_list[16].x = 315426.561584; 
+        my_waypoints_list[16].y = 4071300.313462;
+
+        my_waypoints_list[17].x = 315420.468729; 
+        my_waypoints_list[17].y = 4071295.939758;
+
+        my_waypoints_list[18].x = 315420.213554; 
+        my_waypoints_list[18].y = 4071295.695032;
+
+        my_waypoints_list[19].x = 315410.701959; 
+        my_waypoints_list[19].y = 4071289.267288;
+
+        my_waypoints_list[20].x = 315401.807401; 
+        my_waypoints_list[20].y = 4071282.451556;
+
+        my_waypoints_list[21].x = 315393.811181; 
+        my_waypoints_list[21].y = 4071276.742312;
+
+        my_waypoints_list[22].x = 315386.960638; 
+        my_waypoints_list[22].y = 4071272.009357;  // 129
+
+        my_waypoints_list[23].x = 315382.539484; 
+        my_waypoints_list[23].y = 4071269.851241;
+
+        my_waypoints_list[24].x = 315378.904755; 
+        my_waypoints_list[24].y = 4071269.427103;
+
+        my_waypoints_list[25].x = 315374.405650; 
+        my_waypoints_list[25].y = 4071269.521152;
+
+        my_waypoints_list[26].x = 315365.662616; 
+        my_waypoints_list[26].y = 4071269.953976;
+
+        my_waypoints_list[27].x = 315353.545252; 
+        my_waypoints_list[27].y = 4071270.457337;
+
+        my_waypoints_list[28].x = 315342.805227; 
+        my_waypoints_list[28].y = 4071271.056936;
+
+        my_waypoints_list[29].x = 315335.046317; 
+        my_waypoints_list[29].y = 4071270.719009;
+
+        my_waypoints_list[30].x = 315327.802983; 
+        my_waypoints_list[30].y = 4071271.120483;
+
+        my_waypoints_list[31].x = 315321.442312; 
+        my_waypoints_list[31].y = 4071271.878596;
+
+        my_waypoints_list[32].x = 315316.682806; 
+        my_waypoints_list[32].y = 4071271.477970;
+
+        my_waypoints_list[33].x = 315311.027574; 
+        my_waypoints_list[33].y = 4071270.095829;
+
+        my_waypoints_list[34].x = 315303.854352; 
+        my_waypoints_list[34].y = 4071267.870212;
+
+        my_waypoints_list[35].x = 315295.795854; 
+        my_waypoints_list[35].y = 4071265.162982; // 142
+
+        set_delivery_id = 35;
+        no_waypoints = 36;
+        wp_finish_id = 35;
 }
 
 void Antire_preneur_Gwan(void)
@@ -692,7 +823,7 @@ void Antire_preneur_Gwan(void)
 
         my_waypoints_list[10].x = 315483.127787;
         my_waypoints_list[10].y = 4071326.762554;
-////////////////// 15 -> , 36 -> 32 ////////////////////////////
+////////////////// 15 -> 11, 36 -> 32 ////////////////////////////
         my_waypoints_list[11].x = 315490.235691;
         my_waypoints_list[11].y = 4071325.863791;
 
@@ -837,25 +968,798 @@ void Medical_Science_Gwan(void)
 
 void Naturel_Science_Gwan(void)
 {
+        my_waypoints_list[0].x = 315435.697968;
+        my_waypoints_list[0].y = 4071228.980568;
 
-        
+        my_waypoints_list[1].x = 315459.264668;
+        my_waypoints_list[1].y = 4071243.866586;
 
+        my_waypoints_list[2].x = 315501.151300;
+        my_waypoints_list[2].y = 4071267.871898;
+
+        my_waypoints_list[3].x = 315502.573051;
+        my_waypoints_list[3].y = 4071270.092712;
+
+        my_waypoints_list[4].x = 315502.627913;
+        my_waypoints_list[4].y = 4071272.717188;
+
+        my_waypoints_list[5].x = 315501.813174;
+        my_waypoints_list[5].y = 4071275.609902;
+
+        my_waypoints_list[6].x = 315488.512653;
+        my_waypoints_list[6].y = 4071297.268012;
+
+        my_waypoints_list[7].x = 315477.446009;
+        my_waypoints_list[7].y = 4071318.129249;
+////////////////// 115 -> 8, 156 -> 49 ////////////////////////////
+        my_waypoints_list[8].x = 315472.283268; 
+        my_waypoints_list[8].y = 4071322.363152;  // 115
+
+        my_waypoints_list[9].x = 315469.932254; 
+        my_waypoints_list[9].y = 4071323.537566;
+
+        my_waypoints_list[10].x = 315466.466914; 
+        my_waypoints_list[10].y = 4071325.235392;
+
+        my_waypoints_list[11].x = 315462.840025; 
+        my_waypoints_list[11].y = 4071325.186180;
+
+        my_waypoints_list[12].x = 315459.179172; 
+        my_waypoints_list[12].y = 4071323.512291;
+
+        my_waypoints_list[13].x = 315451.690691; 
+        my_waypoints_list[13].y = 4071318.167525;
+
+        my_waypoints_list[14].x = 315442.678997; 
+        my_waypoints_list[14].y = 4071311.729333;
+
+        my_waypoints_list[15].x = 315432.274289; 
+        my_waypoints_list[15].y = 4071304.445053;
+
+        my_waypoints_list[16].x = 315426.561584; 
+        my_waypoints_list[16].y = 4071300.313462;
+
+        my_waypoints_list[17].x = 315420.468729; 
+        my_waypoints_list[17].y = 4071295.939758;
+
+        my_waypoints_list[18].x = 315420.213554; 
+        my_waypoints_list[18].y = 4071295.695032;
+
+        my_waypoints_list[19].x = 315410.701959; 
+        my_waypoints_list[19].y = 4071289.267288;
+
+        my_waypoints_list[20].x = 315401.807401; 
+        my_waypoints_list[20].y = 4071282.451556;
+
+        my_waypoints_list[21].x = 315393.811181; 
+        my_waypoints_list[21].y = 4071276.742312;
+
+        my_waypoints_list[22].x = 315386.960638; 
+        my_waypoints_list[22].y = 4071272.009357;  // 129
+
+        my_waypoints_list[23].x = 315382.539484; 
+        my_waypoints_list[23].y = 4071269.851241;
+
+        my_waypoints_list[24].x = 315378.904755; 
+        my_waypoints_list[24].y = 4071269.427103;
+
+        my_waypoints_list[25].x = 315374.405650; 
+        my_waypoints_list[25].y = 4071269.521152;
+
+        my_waypoints_list[26].x = 315365.662616; 
+        my_waypoints_list[26].y = 4071269.953976;
+
+        my_waypoints_list[27].x = 315353.545252; 
+        my_waypoints_list[27].y = 4071270.457337;
+
+        my_waypoints_list[28].x = 315342.805227; 
+        my_waypoints_list[28].y = 4071271.056936;
+
+        my_waypoints_list[29].x = 315335.046317; 
+        my_waypoints_list[29].y = 4071270.719009;
+
+        my_waypoints_list[30].x = 315327.802983; 
+        my_waypoints_list[30].y = 4071271.120483;
+
+        my_waypoints_list[31].x = 315321.442312; 
+        my_waypoints_list[31].y = 4071271.878596;
+
+        my_waypoints_list[32].x = 315316.682806; 
+        my_waypoints_list[32].y = 4071271.477970;
+
+        my_waypoints_list[33].x = 315311.027574; 
+        my_waypoints_list[33].y = 4071270.095829;
+
+        my_waypoints_list[34].x = 315303.854352; 
+        my_waypoints_list[34].y = 4071267.870212;
+
+        my_waypoints_list[35].x = 315295.795854; 
+        my_waypoints_list[35].y = 4071265.162982;
+
+        my_waypoints_list[36].x = 315283.946300; 
+        my_waypoints_list[36].y = 4071260.534523;
+
+        my_waypoints_list[37].x = 315272.609709; 
+        my_waypoints_list[37].y = 4071256.520490;
+
+        my_waypoints_list[38].x = 315261.023167; 
+        my_waypoints_list[38].y = 4071252.511681;
+
+        my_waypoints_list[39].x = 315240.500686; 
+        my_waypoints_list[39].y = 4071245.688952;
+
+        my_waypoints_list[40].x = 315225.646500; 
+        my_waypoints_list[40].y = 4071240.873240;
+
+        my_waypoints_list[41].x = 315211.560451; 
+        my_waypoints_list[41].y = 4071236.916678;
+
+        my_waypoints_list[42].x = 315200.367120; 
+        my_waypoints_list[42].y = 4071233.774857;
+
+        my_waypoints_list[43].x = 315191.811330; 
+        my_waypoints_list[43].y = 4071231.203049;
+
+        my_waypoints_list[44].x = 315185.393181; 
+        my_waypoints_list[44].y = 4071229.211706;
+
+        my_waypoints_list[45].x = 315179.222370; 
+        my_waypoints_list[45].y = 4071227.090162;
+
+        my_waypoints_list[46].x = 315174.293474; 
+        my_waypoints_list[46].y = 4071224.567568;
+
+        my_waypoints_list[47].x = 315161.485489; 
+        my_waypoints_list[47].y = 4071215.958183;
+
+        my_waypoints_list[48].x = 315151.979110; 
+        my_waypoints_list[48].y = 4071209.780379;
+
+        my_waypoints_list[49].x = 315143.881420; 
+        my_waypoints_list[49].y = 4071205.198516;  // 156
+////////////////// 157 -> 50, 166 -> 59 ////////////////////////////
+        my_waypoints_list[50].x = 315139.189412; 
+        my_waypoints_list[50].y = 4071202.045820;
+
+        my_waypoints_list[51].x = 315131.838961; 
+        my_waypoints_list[51].y = 4071197.323306;
+
+        my_waypoints_list[52].x = 315125.626350; 
+        my_waypoints_list[52].y = 4071193.202157;
+
+        my_waypoints_list[53].x = 315120.168815; 
+        my_waypoints_list[53].y = 4071189.315283;
+
+        my_waypoints_list[54].x = 315116.028956; 
+        my_waypoints_list[54].y = 4071188.651642;
+
+        my_waypoints_list[55].x = 315111.673109; 
+        my_waypoints_list[55].y = 4071189.617904;
+
+        my_waypoints_list[56].x = 315108.703945; 
+        my_waypoints_list[56].y = 4071191.555239;
+
+        my_waypoints_list[57].x = 315106.757696; 
+        my_waypoints_list[57].y = 4071193.721611;
+
+        my_waypoints_list[58].x = 315102.756296; 
+        my_waypoints_list[58].y = 4071199.681660;
+
+        my_waypoints_list[59].x = 315095.708888; 
+        my_waypoints_list[59].y = 4071209.456279;  // 166
+////////////////// 174 -> 60, 193 -> 79 ////////////////////////////
+        my_waypoints_list[60].x = 315093.514617; 
+        my_waypoints_list[60].y = 4071218.129211;  // 174
+
+        my_waypoints_list[61].x = 315095.194157; 
+        my_waypoints_list[61].y = 4071220.719730;
+
+        my_waypoints_list[62].x = 315096.738273; 
+        my_waypoints_list[62].y = 4071222.812960;
+
+        my_waypoints_list[63].x = 315099.532141; 
+        my_waypoints_list[63].y = 4071224.880066;
+
+        my_waypoints_list[64].x = 315104.599076; 
+        my_waypoints_list[64].y = 4071228.024925;
+
+        my_waypoints_list[65].x = 315108.905710; 
+        my_waypoints_list[65].y = 4071230.685557;
+
+        my_waypoints_list[66].x = 315115.115710; 
+        my_waypoints_list[66].y = 4071234.681731;
+
+        my_waypoints_list[67].x = 315121.448072; 
+        my_waypoints_list[67].y = 4071238.550316;
+
+        my_waypoints_list[68].x = 315129.683801; 
+        my_waypoints_list[68].y = 4071243.754442;
+
+        my_waypoints_list[69].x = 315138.049730; 
+        my_waypoints_list[69].y = 4071249.205906;
+
+        my_waypoints_list[70].x = 315145.910533; 
+        my_waypoints_list[70].y = 4071254.417869;
+
+        my_waypoints_list[71].x = 315152.883446; 
+        my_waypoints_list[71].y = 4071259.023243;
+
+        my_waypoints_list[72].x = 315159.989172; 
+        my_waypoints_list[72].y = 4071264.000929;
+
+        my_waypoints_list[73].x = 315166.712134; 
+        my_waypoints_list[73].y = 4071268.611527;
+
+        my_waypoints_list[74].x = 315172.682633; 
+        my_waypoints_list[74].y = 4071273.112824;
+
+        my_waypoints_list[75].x = 315180.795998; 
+        my_waypoints_list[75].y = 4071278.444536;
+
+        my_waypoints_list[76].x = 315189.417101; 
+        my_waypoints_list[76].y = 4071284.140723;
+
+        my_waypoints_list[77].x = 315192.046806; 
+        my_waypoints_list[77].y = 4071284.335811;
+
+        my_waypoints_list[78].x = 315194.140035; 
+        my_waypoints_list[78].y = 4071282.791696;
+
+        my_waypoints_list[79].x = 315197.763892; 
+        my_waypoints_list[79].y = 4071276.714510; // 193
+
+        set_delivery_id = 79;
+        no_waypoints = 80;
+        wp_finish_id = 79;
 }
 
 void Humanities_Social_Science_Gwan(void)
 {
+        my_waypoints_list[0].x = 315435.697968;
+        my_waypoints_list[0].y = 4071228.980568;
 
+        my_waypoints_list[1].x = 315459.264668;
+        my_waypoints_list[1].y = 4071243.866586;
+
+        my_waypoints_list[2].x = 315501.151300;
+        my_waypoints_list[2].y = 4071267.871898;
+
+        my_waypoints_list[3].x = 315502.573051;
+        my_waypoints_list[3].y = 4071270.092712;
+
+        my_waypoints_list[4].x = 315502.627913;
+        my_waypoints_list[4].y = 4071272.717188;
+
+        my_waypoints_list[5].x = 315501.813174;
+        my_waypoints_list[5].y = 4071275.609902;
+
+        my_waypoints_list[6].x = 315488.512653;
+        my_waypoints_list[6].y = 4071297.268012;
+
+        my_waypoints_list[7].x = 315477.446009;
+        my_waypoints_list[7].y = 4071318.129249;
+////////////////// 115 -> 8, 156 -> 49 ////////////////////////////
+        my_waypoints_list[8].x = 315472.283268; 
+        my_waypoints_list[8].y = 4071322.363152;  // 115
+
+        my_waypoints_list[9].x = 315469.932254; 
+        my_waypoints_list[9].y = 4071323.537566;
+
+        my_waypoints_list[10].x = 315466.466914; 
+        my_waypoints_list[10].y = 4071325.235392;
+
+        my_waypoints_list[11].x = 315462.840025; 
+        my_waypoints_list[11].y = 4071325.186180;
+
+        my_waypoints_list[12].x = 315459.179172; 
+        my_waypoints_list[12].y = 4071323.512291;
+
+        my_waypoints_list[13].x = 315451.690691; 
+        my_waypoints_list[13].y = 4071318.167525;
+
+        my_waypoints_list[14].x = 315442.678997; 
+        my_waypoints_list[14].y = 4071311.729333;
+
+        my_waypoints_list[15].x = 315432.274289; 
+        my_waypoints_list[15].y = 4071304.445053;
+
+        my_waypoints_list[16].x = 315426.561584; 
+        my_waypoints_list[16].y = 4071300.313462;
+
+        my_waypoints_list[17].x = 315420.468729; 
+        my_waypoints_list[17].y = 4071295.939758;
+
+        my_waypoints_list[18].x = 315420.213554; 
+        my_waypoints_list[18].y = 4071295.695032;
+
+        my_waypoints_list[19].x = 315410.701959; 
+        my_waypoints_list[19].y = 4071289.267288;
+
+        my_waypoints_list[20].x = 315401.807401; 
+        my_waypoints_list[20].y = 4071282.451556;
+
+        my_waypoints_list[21].x = 315393.811181; 
+        my_waypoints_list[21].y = 4071276.742312;
+
+        my_waypoints_list[22].x = 315386.960638; 
+        my_waypoints_list[22].y = 4071272.009357;  // 129
+
+        my_waypoints_list[23].x = 315382.539484; 
+        my_waypoints_list[23].y = 4071269.851241;
+
+        my_waypoints_list[24].x = 315378.904755; 
+        my_waypoints_list[24].y = 4071269.427103;
+
+        my_waypoints_list[25].x = 315374.405650; 
+        my_waypoints_list[25].y = 4071269.521152;
+
+        my_waypoints_list[26].x = 315365.662616; 
+        my_waypoints_list[26].y = 4071269.953976;
+
+        my_waypoints_list[27].x = 315353.545252; 
+        my_waypoints_list[27].y = 4071270.457337;
+
+        my_waypoints_list[28].x = 315342.805227; 
+        my_waypoints_list[28].y = 4071271.056936;
+
+        my_waypoints_list[29].x = 315335.046317; 
+        my_waypoints_list[29].y = 4071270.719009;
+
+        my_waypoints_list[30].x = 315327.802983; 
+        my_waypoints_list[30].y = 4071271.120483;
+
+        my_waypoints_list[31].x = 315321.442312; 
+        my_waypoints_list[31].y = 4071271.878596;
+
+        my_waypoints_list[32].x = 315316.682806; 
+        my_waypoints_list[32].y = 4071271.477970;
+
+        my_waypoints_list[33].x = 315311.027574; 
+        my_waypoints_list[33].y = 4071270.095829;
+
+        my_waypoints_list[34].x = 315303.854352; 
+        my_waypoints_list[34].y = 4071267.870212;
+
+        my_waypoints_list[35].x = 315295.795854; 
+        my_waypoints_list[35].y = 4071265.162982;
+
+        my_waypoints_list[36].x = 315283.946300; 
+        my_waypoints_list[36].y = 4071260.534523;
+
+        my_waypoints_list[37].x = 315272.609709; 
+        my_waypoints_list[37].y = 4071256.520490;
+
+        my_waypoints_list[38].x = 315261.023167; 
+        my_waypoints_list[38].y = 4071252.511681;
+
+        my_waypoints_list[39].x = 315240.500686; 
+        my_waypoints_list[39].y = 4071245.688952;
+
+        my_waypoints_list[40].x = 315225.646500; 
+        my_waypoints_list[40].y = 4071240.873240;
+
+        my_waypoints_list[41].x = 315211.560451; 
+        my_waypoints_list[41].y = 4071236.916678;
+
+        my_waypoints_list[42].x = 315200.367120; 
+        my_waypoints_list[42].y = 4071233.774857;
+
+        my_waypoints_list[43].x = 315191.811330; 
+        my_waypoints_list[43].y = 4071231.203049;
+
+        my_waypoints_list[44].x = 315185.393181; 
+        my_waypoints_list[44].y = 4071229.211706;
+
+        my_waypoints_list[45].x = 315179.222370; 
+        my_waypoints_list[45].y = 4071227.090162;
+
+        my_waypoints_list[46].x = 315174.293474; 
+        my_waypoints_list[46].y = 4071224.567568;
+
+        my_waypoints_list[47].x = 315161.485489; 
+        my_waypoints_list[47].y = 4071215.958183;
+
+        my_waypoints_list[48].x = 315151.979110; 
+        my_waypoints_list[48].y = 4071209.780379;
+
+        my_waypoints_list[49].x = 315143.881420; 
+        my_waypoints_list[49].y = 4071205.198516;  // 156
+////////////////// 157 -> 50, 173 -> 66 ////////////////////////////
+        my_waypoints_list[50].x = 315139.189412; 
+        my_waypoints_list[50].y = 4071202.045820;
+
+        my_waypoints_list[51].x = 315131.838961; 
+        my_waypoints_list[51].y = 4071197.323306;
+
+        my_waypoints_list[52].x = 315125.626350; 
+        my_waypoints_list[52].y = 4071193.202157;
+
+        my_waypoints_list[53].x = 315120.168815; 
+        my_waypoints_list[53].y = 4071189.315283;
+
+        my_waypoints_list[54].x = 315116.028956; 
+        my_waypoints_list[54].y = 4071188.651642;
+
+        my_waypoints_list[55].x = 315111.673109; 
+        my_waypoints_list[55].y = 4071189.617904;
+
+        my_waypoints_list[56].x = 315108.703945; 
+        my_waypoints_list[56].y = 4071191.555239;
+
+        my_waypoints_list[57].x = 315106.757696; 
+        my_waypoints_list[57].y = 4071193.721611;
+
+        my_waypoints_list[58].x = 315102.756296; 
+        my_waypoints_list[58].y = 4071199.681660;
+
+        my_waypoints_list[59].x = 315095.708888; 
+        my_waypoints_list[59].y = 4071209.456279;  // 166
+
+        my_waypoints_list[60].x = 315093.238119; 
+        my_waypoints_list[60].y = 4071210.883256;
+
+        my_waypoints_list[61].x = 315090.121575; 
+        my_waypoints_list[61].y = 4071211.323493;
+
+        my_waypoints_list[62].x = 315085.632914; 
+        my_waypoints_list[62].y = 4071211.917443;
+
+        my_waypoints_list[63].x = 315081.141641; 
+        my_waypoints_list[63].y = 4071212.386417;
+
+        my_waypoints_list[64].x = 315073.978862; 
+        my_waypoints_list[64].y = 4071210.660698;
+
+        my_waypoints_list[65].x = 315063.610714; 
+        my_waypoints_list[65].y = 4071205.126055;
+
+        my_waypoints_list[66].x = 315058.171465; 
+        my_waypoints_list[66].y = 4071202.114007;  // 173
+
+        set_delivery_id = 66;
+        no_waypoints = 67;
+        wp_finish_id = 66;
 }
 
 
 void Main_University(void)
 {
+        my_waypoints_list[0].x = 315435.697968;
+        my_waypoints_list[0].y = 4071228.980568;
 
+        my_waypoints_list[1].x = 315459.264668;
+        my_waypoints_list[1].y = 4071243.866586;
+
+        my_waypoints_list[2].x = 315501.151300;
+        my_waypoints_list[2].y = 4071267.871898;
+
+        my_waypoints_list[3].x = 315502.573051;
+        my_waypoints_list[3].y = 4071270.092712;
+
+        my_waypoints_list[4].x = 315502.627913;
+        my_waypoints_list[4].y = 4071272.717188;
+
+        my_waypoints_list[5].x = 315501.813174;
+        my_waypoints_list[5].y = 4071275.609902;
+
+        my_waypoints_list[6].x = 315488.512653;
+        my_waypoints_list[6].y = 4071297.268012;
+
+        my_waypoints_list[7].x = 315477.446009;
+        my_waypoints_list[7].y = 4071318.129249;
+////////////////// 115 -> 8, 156 -> 49 ////////////////////////////
+        my_waypoints_list[8].x = 315472.283268; 
+        my_waypoints_list[8].y = 4071322.363152;
+
+        my_waypoints_list[9].x = 315469.932254; 
+        my_waypoints_list[9].y = 4071323.537566;
+
+        my_waypoints_list[10].x = 315466.466914; 
+        my_waypoints_list[10].y = 4071325.235392;
+
+        my_waypoints_list[11].x = 315462.840025; 
+        my_waypoints_list[11].y = 4071325.186180;
+
+        my_waypoints_list[12].x = 315459.179172; 
+        my_waypoints_list[12].y = 4071323.512291;
+
+        my_waypoints_list[13].x = 315451.690691; 
+        my_waypoints_list[13].y = 4071318.167525;
+
+        my_waypoints_list[14].x = 315442.678997; 
+        my_waypoints_list[14].y = 4071311.729333;
+
+        my_waypoints_list[15].x = 315432.274289; 
+        my_waypoints_list[15].y = 4071304.445053;
+
+        my_waypoints_list[16].x = 315426.561584; 
+        my_waypoints_list[16].y = 4071300.313462;
+
+        my_waypoints_list[17].x = 315420.468729; 
+        my_waypoints_list[17].y = 4071295.939758;
+
+        my_waypoints_list[18].x = 315420.213554; 
+        my_waypoints_list[18].y = 4071295.695032;
+
+        my_waypoints_list[19].x = 315410.701959; 
+        my_waypoints_list[19].y = 4071289.267288;
+
+        my_waypoints_list[20].x = 315401.807401; 
+        my_waypoints_list[20].y = 4071282.451556;
+
+        my_waypoints_list[21].x = 315393.811181; 
+        my_waypoints_list[21].y = 4071276.742312;
+
+        my_waypoints_list[22].x = 315386.960638; 
+        my_waypoints_list[22].y = 4071272.009357;  // 129
+
+        my_waypoints_list[23].x = 315382.539484; 
+        my_waypoints_list[23].y = 4071269.851241;
+
+        my_waypoints_list[24].x = 315378.904755; 
+        my_waypoints_list[24].y = 4071269.427103;
+
+        my_waypoints_list[25].x = 315374.405650; 
+        my_waypoints_list[25].y = 4071269.521152;
+
+        my_waypoints_list[26].x = 315365.662616; 
+        my_waypoints_list[26].y = 4071269.953976;
+
+        my_waypoints_list[27].x = 315353.545252; 
+        my_waypoints_list[27].y = 4071270.457337;
+
+        my_waypoints_list[28].x = 315342.805227; 
+        my_waypoints_list[28].y = 4071271.056936;
+
+        my_waypoints_list[29].x = 315335.046317; 
+        my_waypoints_list[29].y = 4071270.719009;
+
+        my_waypoints_list[30].x = 315327.802983; 
+        my_waypoints_list[30].y = 4071271.120483;
+
+        my_waypoints_list[31].x = 315321.442312; 
+        my_waypoints_list[31].y = 4071271.878596;
+
+        my_waypoints_list[32].x = 315316.682806; 
+        my_waypoints_list[32].y = 4071271.477970;
+
+        my_waypoints_list[33].x = 315311.027574; 
+        my_waypoints_list[33].y = 4071270.095829;
+
+        my_waypoints_list[34].x = 315303.854352; 
+        my_waypoints_list[34].y = 4071267.870212;
+
+        my_waypoints_list[35].x = 315295.795854; 
+        my_waypoints_list[35].y = 4071265.162982;
+
+        my_waypoints_list[36].x = 315283.946300; 
+        my_waypoints_list[36].y = 4071260.534523;
+
+        my_waypoints_list[37].x = 315272.609709; 
+        my_waypoints_list[37].y = 4071256.520490;
+
+        my_waypoints_list[38].x = 315261.023167; 
+        my_waypoints_list[38].y = 4071252.511681;
+
+        my_waypoints_list[39].x = 315240.500686; 
+        my_waypoints_list[39].y = 4071245.688952;
+
+        my_waypoints_list[40].x = 315225.646500; 
+        my_waypoints_list[40].y = 4071240.873240;
+
+        my_waypoints_list[41].x = 315211.560451; 
+        my_waypoints_list[41].y = 4071236.916678;
+
+        my_waypoints_list[42].x = 315200.367120; 
+        my_waypoints_list[42].y = 4071233.774857;
+
+        my_waypoints_list[43].x = 315191.811330; 
+        my_waypoints_list[43].y = 4071231.203049;
+
+        my_waypoints_list[44].x = 315185.393181; 
+        my_waypoints_list[44].y = 4071229.211706;
+
+        my_waypoints_list[45].x = 315179.222370; 
+        my_waypoints_list[45].y = 4071227.090162;
+
+        my_waypoints_list[46].x = 315174.293474; 
+        my_waypoints_list[46].y = 4071224.567568;
+
+        my_waypoints_list[47].x = 315161.485489; 
+        my_waypoints_list[47].y = 4071215.958183;
+
+        my_waypoints_list[48].x = 315151.979110; 
+        my_waypoints_list[48].y = 4071209.780379;
+
+        my_waypoints_list[49].x = 315143.881420; 
+        my_waypoints_list[49].y = 4071205.198516;  // 156
+
+        set_delivery_id = 49;
+        no_waypoints = 50;
+        wp_finish_id = 49;
 }
 
 void Media_Laps(void)
 {
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
 
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
 }
 
 void Global_Village(void)
@@ -1014,79 +1918,79 @@ void Global_Village(void)
 
         my_waypoints_list[50].x = 315657.869369; 
         my_waypoints_list[50].y = 4071144.942548;  // 91
-////////////////// 92 -> ,  ->  ////////////////////////////
-        my_waypoints_list[92].x = 315652.258136; 
-        my_waypoints_list[92].y = 4071139.683570;
+////////////////// 92 -> 51, 114 ->  ////////////////////////////
+        my_waypoints_list[51].x = 315652.258136; 
+        my_waypoints_list[51].y = 4071139.683570;
 
-        my_waypoints_list[93].x = 315647.133741; 
-        my_waypoints_list[93].y = 4071133.789267;
+        my_waypoints_list[52].x = 315647.133741; 
+        my_waypoints_list[52].y = 4071133.789267;
 
-        my_waypoints_list[94].x = 315641.504222; 
-        my_waypoints_list[94].y = 4071127.655463;
+        my_waypoints_list[53].x = 315641.504222; 
+        my_waypoints_list[53].y = 4071127.655463;
 
-        my_waypoints_list[95].x = 315637.033438; 
-        my_waypoints_list[95].y = 4071123.122823;
+        my_waypoints_list[54].x = 315637.033438; 
+        my_waypoints_list[54].y = 4071123.122823;
 
-        my_waypoints_list[96].x = 315631.528894; 
-        my_waypoints_list[96].y = 4071116.986406;
+        my_waypoints_list[55].x = 315631.528894; 
+        my_waypoints_list[55].y = 4071116.986406;
 
-        my_waypoints_list[97].x = 315627.302836; 
-        my_waypoints_list[97].y = 4071112.198590;
+        my_waypoints_list[56].x = 315627.302836; 
+        my_waypoints_list[56].y = 4071112.198590;
 
-        my_waypoints_list[98].x = 315622.295579; 
-        my_waypoints_list[98].y = 4071105.926749;
+        my_waypoints_list[57].x = 315622.295579; 
+        my_waypoints_list[57].y = 4071105.926749;
 
-        my_waypoints_list[99].x = 315619.090220; 
-        my_waypoints_list[99].y = 4071102.117833;
+        my_waypoints_list[58].x = 315619.090220; 
+        my_waypoints_list[58].y = 4071102.117833;
 
-        my_waypoints_list[100].x = 315612.856724; 
-        my_waypoints_list[100].y = 4071096.996890;
+        my_waypoints_list[59].x = 315612.856724; 
+        my_waypoints_list[59].y = 4071096.996890;
 
-        my_waypoints_list[101].x = 315606.365442; 
-        my_waypoints_list[101].y = 4071091.506246;
+        my_waypoints_list[60].x = 315606.365442; 
+        my_waypoints_list[60].y = 4071091.506246;
 
-        my_waypoints_list[102].x = 315599.514909; 
-        my_waypoints_list[102].y = 4071086.773289;
+        my_waypoints_list[61].x = 315599.514909; 
+        my_waypoints_list[61].y = 4071086.773289;
 
-        my_waypoints_list[103].x = 315594.713611; 
-        my_waypoints_list[103].y = 4071084.373059;
+        my_waypoints_list[62].x = 315594.713611; 
+        my_waypoints_list[62].y = 4071084.373059;
 
-        my_waypoints_list[104].x = 315588.839785; 
-        my_waypoints_list[104].y = 4071084.495841;
+        my_waypoints_list[63].x = 315588.839785; 
+        my_waypoints_list[63].y = 4071084.495841;
 
-        my_waypoints_list[105].x = 315584.142982; 
-        my_waypoints_list[105].y = 4071087.094612;
+        my_waypoints_list[64].x = 315584.142982; 
+        my_waypoints_list[64].y = 4071087.094612;
 
-        my_waypoints_list[106].x = 315579.555479; 
-        my_waypoints_list[106].y = 4071088.940920;
+        my_waypoints_list[65].x = 315579.555479; 
+        my_waypoints_list[65].y = 4071088.940920;
 
-        my_waypoints_list[107].x = 315574.931403; 
-        my_waypoints_list[107].y = 4071089.037578;
+        my_waypoints_list[66].x = 315574.931403; 
+        my_waypoints_list[66].y = 4071089.037578;
 
-        my_waypoints_list[108].x = 315569.882767; 
-        my_waypoints_list[108].y = 4071086.767548;
+        my_waypoints_list[67].x = 315569.882767; 
+        my_waypoints_list[67].y = 4071086.767548;
 
-        my_waypoints_list[109].x = 315567.429870; 
-        my_waypoints_list[109].y = 4071083.067932;
+        my_waypoints_list[68].x = 315567.429870; 
+        my_waypoints_list[68].y = 4071083.067932;
 
-        my_waypoints_list[110].x = 315566.216274; 
-        my_waypoints_list[110].y = 4071078.842293;
+        my_waypoints_list[69].x = 315566.216274; 
+        my_waypoints_list[69].y = 4071078.842293;
 
-        my_waypoints_list[111].x = 315567.486504; 
-        my_waypoints_list[111].y = 4071073.814555;
+        my_waypoints_list[70].x = 315567.486504; 
+        my_waypoints_list[70].y = 4071073.814555;
 
-        my_waypoints_list[112].x = 315570.753723; 
-        my_waypoints_list[112].y = 4071068.620045;
+        my_waypoints_list[71].x = 315570.753723; 
+        my_waypoints_list[71].y = 4071068.620045;
 
-        my_waypoints_list[113].x = 315575.211026; 
-        my_waypoints_list[113].y = 4071066.526399;
+        my_waypoints_list[72].x = 315575.211026; 
+        my_waypoints_list[72].y = 4071066.526399;
 
-        my_waypoints_list[114].x = 315582.964702; 
-        my_waypoints_list[114].y = 4071066.614383;
+        my_waypoints_list[73].x = 315582.964702; 
+        my_waypoints_list[73].y = 4071066.614383;
 
-        set_delivery_id = 114;
-        no_waypoints = 115;
-        wp_finish_id = 114;
+        set_delivery_id = 73;
+        no_waypoints = 74;
+        wp_finish_id = 73;
 }
 
 void Hyang_333(void)
@@ -1109,7 +2013,7 @@ void Hyang_333(void)
         my_waypoints_list[5].x = 315501.813174;
         my_waypoints_list[5].y = 4071275.609902;
 
-        my_waypoints_list[6].x = 315488.512653;
+        my_waypoints_list[6].x = 3154884071205.198516.512653;
         my_waypoints_list[6].y = 4071297.268012;
 
         my_waypoints_list[7].x = 315477.446009;
@@ -1254,13 +2158,127 @@ void Hyang_333(void)
 
 void Hyang_222(void)
 {
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
 
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
+
+        my_waypoints_list[].x = ; 
+        my_waypoints_list[].y = ;
 }
 
-void Hyang_111(void)
-{
-
-}
 
 
 void base_link_tf_utm(void)
