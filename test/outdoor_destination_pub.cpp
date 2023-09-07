@@ -191,7 +191,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("글로벌빌리지") != string::npos || target_string.find("글로벌빌리쥐") != string::npos || target_string.find("글로벌빌래지") != string::npos) || target_string.find("글로벌빌레지") != string::npos){
+        else if(target_string.find("글로벌빌리지") != string::npos || target_string.find("글로벌빌리쥐") != string::npos || target_string.find("글로벌빌래지") != string::npos || target_string.find("글로벌빌레지") != string::npos){
           initializeGoal(goal_msg, "Global_Village");
           goal_pub.publish(goal_msg);
       ss << "Global_Village";
@@ -203,7 +203,7 @@ int main(int argc, char** argv) {
 
         else if(target_string.find("향설삼") != string::npos || target_string.find("향설3") != string::npos || target_string.find("향설 삼") != string::npos || target_string.find("향설 3") != string::npos){
           initializeGoal(goal_msg, "Hyang_333");
-          goal_pub.publish(Hyang_333);
+          goal_pub.publish(goal_msg);
       ss << "M116";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
@@ -228,4 +228,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
