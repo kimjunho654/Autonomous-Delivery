@@ -52,158 +52,158 @@ int main(int argc, char** argv) {
 
     std::stringstream ss;
 
-    if(target_string.find("M101") != string::npos || target_string.find("m100일") != string::npos || target_string.find("m101") != string::npos) {
-          initializeGoal(goal_msg, "M101");
+    if(target_string.find("유니토피아") != string::npos || target_string.find("유니토피야") != string::npos || target_string.find("유니토피하") != string::npos || target_string.find("유니토피안") != string::npos) {
+          initializeGoal(goal_msg, "Unitophia_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M101";
+      ss << "Unitophia_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M102") != string::npos || target_string.find("m100이") != string::npos || target_string.find("m102") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("멀티미디어") != string::npos || target_string.find("멀티미디아") != string::npos || target_string.find("머티미디어") != string::npos || target_string.find("머티미디아") != string::npos){
+          initializeGoal(goal_msg, "Multi_Media_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M102" << count;
+      ss << "Multi_Media_Gwan" << count;
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M103") != string::npos || target_string.find("m100삼") != string::npos || target_string.find("m103") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("학예관") != string::npos || target_string.find("하계관") != string::npos || target_string.find("하계광") != string::npos || target_string.find("하게광") != string::npos){
+          initializeGoal(goal_msg, "Hak_Ye_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M103";
+      ss << "Hak_Ye_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M104") != string::npos || target_string.find("m100사") != string::npos || target_string.find("m104") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("브릭스") != string::npos || target_string.find("브릿스") != string::npos || target_string.find("브릭쓰") != string::npos || target_string.find("브릿쓰") != string::npos){
+          initializeGoal(goal_msg, "BRIX_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M104";
+      ss << "BRIX_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M105") != string::npos || target_string.find("m100오") != string::npos || target_string.find("m105") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("지역혁신관") != string::npos || target_string.find("지역혁신과") != string::npos || target_string.find("지역혁신광") != string::npos || target_string.find("지역형신관") != string::npos){
+          initializeGoal(goal_msg, "Regional_Innovation_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M105";
+      ss << "Regional_Innovation_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M106") != string::npos || target_string.find("m100육") != string::npos || target_string.find("m106") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("산학협력관") != string::npos || target_string.find("사낙협력관") != string::npos || target_string.find("사낙협력광") != string::npos || target_string.find("산학협렵관") != string::npos || target_string.find("사낙협렵관") != string::npos){
+          initializeGoal(goal_msg, "San_Hak_Hyeop_Ryeok_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M106";
+      ss << "San_Hak_Hyeop_Ryeok_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M107") != string::npos || target_string.find("m100칠") != string::npos || target_string.find("m107") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("공학관") != string::npos || target_string.find("공항관") != string::npos || target_string.find("공하깐") != string::npos || target_string.find("공학깐") != string::npos){
+          initializeGoal(goal_msg, "Gong_Hak_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M107";
+      ss << "Gong_Hak_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
-        else if(target_string.find("M108") != string::npos || target_string.find("m100팔") != string::npos || target_string.find("m108") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("도서관") != string::npos || target_string.find("도서간") != string::npos || target_string.find("도서강") != string::npos || target_string.find("도서광") != string::npos){
+          initializeGoal(goal_msg, "Library");
           goal_pub.publish(goal_msg);
-      ss << "M108";
-      msg.data = ss.str();
-      ROS_INFO("speech : %s", msg.data.c_str());
-      if (count == 0) sound_pub.publish(msg);
-      count++;
-        }
-
-        else if(target_string.find("M109") != string::npos || target_string.find("m100구") != string::npos || target_string.find("m109") != string::npos){
-          initializeGoal(goal_msg, "M101");
-          goal_pub.publish(goal_msg);
-      ss << "M109";
+      ss << "Library";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M110") != string::npos || target_string.find("m100십") != string::npos || target_string.find("m110") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("앙뜨레프레너") != string::npos || target_string.find("앙뜨래프레너") != string::npos || target_string.find("앙뜨래프래너") != string::npos || target_string.find("앙뜨레프래너") != string::npos){
+          initializeGoal(goal_msg, "Antire_preneur_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M110";
+      ss << "Antire_preneur_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M111") != string::npos || target_string.find("m100십일") != string::npos || target_string.find("m111") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("한마루") != string::npos || target_string.find("한마룩") != string::npos || target_string.find("한마록") != string::npos || target_string.find("한마로") != string::npos){
+          initializeGoal(goal_msg, "Han_maru");
           goal_pub.publish(goal_msg);
-      ss << "M111";
+      ss << "Han_maru";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M112") != string::npos || target_string.find("m100십이") != string::npos || target_string.find("m112") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("자연과학관") != string::npos || target_string.find("자연과학꽌") != string::npos || target_string.find("자연과학깐") != string::npos || target_string.find("자연가학관") != string::npos){
+          initializeGoal(goal_msg, "Naturel_Science_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M112";
+      ss << "Naturel_Science_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M113") != string::npos || target_string.find("m100십삼") != string::npos || target_string.find("m113") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("인문과학관") != string::npos || target_string.find("인문대") != string::npos || target_string.find("인문과학꽌") != string::npos || target_string.find("인문과학깐") != string::npos){
+          initializeGoal(goal_msg, "Humanities_Social_Science_Gwan");
           goal_pub.publish(goal_msg);
-      ss << "M113";
+      ss << "Humanities_Social_Science_Gwan";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M114") != string::npos || target_string.find("m100십사") != string::npos || target_string.find("m114") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("대학본부") != string::npos || target_string.find("대학봉부") != string::npos || target_string.find("대학본부") != string::npos){
+          initializeGoal(goal_msg, "Main_University");
           goal_pub.publish(goal_msg);
-      ss << "M114";
+      ss << "Main_University";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M115") != string::npos || target_string.find("m100십오") != string::npos || target_string.find("m115") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("미디어랩스") != string::npos || target_string.find("미디어랩쓰") != string::npos || target_string.find("미디어렙스") != string::npos || target_string.find("미디어렙쓰") != string::npos){
+          initializeGoal(goal_msg, "Media_Laps");
           goal_pub.publish(goal_msg);
-      ss << "M115";
+      ss << "Media_Laps";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
       if (count == 0) sound_pub.publish(msg);
       count++;
         }
 
-        else if(target_string.find("M116") != string::npos || target_string.find("m100십육") != string::npos || target_string.find("m116") != string::npos){
-          initializeGoal(goal_msg, "M101");
+        else if(target_string.find("글로벌빌리지") != string::npos || target_string.find("글로벌빌리쥐") != string::npos || target_string.find("글로벌빌래지") != string::npos) || target_string.find("글로벌빌레지") != string::npos){
+          initializeGoal(goal_msg, "Global_Village");
           goal_pub.publish(goal_msg);
+      ss << "Global_Village";
+      msg.data = ss.str();
+      ROS_INFO("speech : %s", msg.data.c_str());
+      if (count == 0) sound_pub.publish(msg);
+      count++;
+        }
+
+        else if(target_string.find("향설삼") != string::npos || target_string.find("향설3") != string::npos || target_string.find("향설 삼") != string::npos || target_string.find("향설 3") != string::npos){
+          initializeGoal(goal_msg, "Hyang_333");
+          goal_pub.publish(Hyang_333);
       ss << "M116";
       msg.data = ss.str();
       ROS_INFO("speech : %s", msg.data.c_str());
@@ -211,48 +211,8 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("M117") != string::npos || target_string.find("m100십칠") != string::npos || target_string.find("m117") != string::npos){
-          initializeGoal(goal_msg, "M101");
-          goal_pub.publish(goal_msg);
-      ss << "M117";
-      msg.data = ss.str();
-      ROS_INFO("speech : %s", msg.data.c_str());
-      if (count == 0) sound_pub.publish(msg);
-      count++;
-        }
-
-        else if(target_string.find("M118") != string::npos || target_string.find("m100십팔") != string::npos || target_string.find("m118") != string::npos){
-          initializeGoal(goal_msg, "M101");
-          goal_pub.publish(goal_msg);
-      ss << "M118";
-      msg.data = ss.str();
-      ROS_INFO("speech : %s", msg.data.c_str());
-
-      if (count == 0) sound_pub.publish(msg);
-      count++;
-        }
-        else if(target_string.find("elevator") != string::npos || target_string.find("엘레베이터") != string::npos){
-          initializeGoal(goal_msg, "M101");
-          goal_pub.publish(goal_msg);
-      ss << "elevator";
-      msg.data = ss.str();
-      ROS_INFO("speech : %s", msg.data.c_str());
-      if (count == 0) sound_pub.publish(msg);
-      count++;
-        }
-
-        else if(target_string.find("toilet") != string::npos || target_string.find("화장실") != string::npos){
-          initializeGoal(goal_msg, "M101");
-          goal_pub.publish(goal_msg);
-      ss << "toilet";
-      msg.data = ss.str();
-      ROS_INFO("speech : %s", msg.data.c_str());
-      if (count == 0) sound_pub.publish(msg);
-      count++;
-        }
-
         else {
-          initializeGoal(goal_msg, 0, 0, 0, 0);
+          initializeGoal(goal_msg, "");
           //goal_pub.publish(goal_msg);
       count = 0;
         }
