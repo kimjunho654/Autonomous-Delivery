@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("멀티미디어") != string::npos || target_string.find("멀티미디아") != string::npos || target_string.find("머티미디어") != string::npos || target_string.find("머티미디아") != string::npos){
+        else if(target_string.find("멀티미디어") != string::npos || target_string.find("멀티미디아") != string::npos || target_string.find("머티미디어") != string::npos || target_string.find("머티미디아") != string::npos || target_string.find("멀티 미디어") != string::npos){
           initializeGoal(goal_msg, "Multi_Media_Gwan");
           goal_pub.publish(goal_msg);
       ss << "Multi_Media_Gwan" << count;
