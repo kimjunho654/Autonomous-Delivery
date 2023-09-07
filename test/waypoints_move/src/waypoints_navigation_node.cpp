@@ -2094,24 +2094,24 @@ int main(int argc, char **argv)
 
     geometry_msgs::Pose2D pose_goal;
 
-    if(destination_data == "init") { init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
-    else if( destination_data == "Unitophia_Gwan" ) { Unitophia(); }
-    else if( destination_data == "Multi_Media_Gwan" ) { Multi_Media_Gwan(); }
-    else if( destination_data == "Hak_Ye_Gwan" ) { Hak_Ye_Gwan(); }
-    else if( destination_data == "BRIX_Gwan" ) { BRIX_Gwan(); }
+    if(destination_data == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
+    else if( destination_data == "Unitophia_Gwan" ){ Unitophia(); }
+    else if( destination_data == "Multi_Media_Gwan" ){ Multi_Media_Gwan(); }
+    else if( destination_data == "Hak_Ye_Gwan" ){ Hak_Ye_Gwan(); }
+    else if( destination_data == "BRIX_Gwan" ){ BRIX_Gwan(); }
+    else if( destination_data == "San_Hak_Hyeop_Ryeok_Gwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
+    else if( destination_data == "Gong_Hak_Gwan" ){ Gong_Hak_Gwan(); }
+    else if( destination_data == "Library" ){ Library(); }
+    else if( destination_data == "Antire_preneur_Gwan" ){ Antire_preneur_Gwan(); }
+    else if( destination_data == "Naturel_Science_Gwan" ){ Naturel_Science_Gwan(); }
+    else if( destination_data== "Humanities_Social_Science_Gwan" ){ Humanities_Social_Science_Gwan(); }
+    else if( destination_data == "Main_University" ){ Main_University(); }
+    else if( destination_data == "Global_Village" ){ Global_Village(); }
+    else if( destination_data == "Hyang_333" ){ Hyang_333(); }
     //else if( destination_data == "Regional_Innovation_Gwan" ) { Regional_Innovation_Gwan(); }
-    else if( destination_data == "San_Hak_Hyeop_Ryeok_Gwan" ) { San_Hak_Hyeop_Ryeok_Gwan(); }
-    else if( destination_data == "Gong_Hak_Gwan" ) { Gong_Hak_Gwan(); }
-    else if( destination_data == "Library" ) { Library(); }
-    else if( destination_data == "Antire_preneur_Gwan" ) { Antire_preneur_Gwan(); }
     //else if( destination_data == "Han_maru" ) { Han_maru(); }
-    else if( destination_data == "Naturel_Science_Gwan" ) { Naturel_Science_Gwan(); }
-    else if( destination_data== "Humanities_Social_Science_Gwan" ) { Humanities_Social_Science_Gwan(); }
-    else if( destination_data == "Main_University" ) { Main_University(); }
     //else if( destination_data == "Media_Laps" ) { Media_Laps(); }
-    else if( destination_data == "Global_Village" ) { Global_Village(); }
-    else if( destination_data == "Hyang_333" ) { Hyang_333(); }
-    else { init_waypoint(); }
+    else{ init_waypoint(); }
 
     int waypoint_id = 0;
 
