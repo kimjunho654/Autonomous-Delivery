@@ -14,11 +14,12 @@
 #include "sensor_msgs/Imu.h" ///////////////////////////
 #include "std_msgs/Bool.h" /////////////
 #include <std_msgs/Float64MultiArray.h> /////////////////
-#include <string>
+
 #include <iostream>
+#include <string>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
+
+using namespace std;
 
 #define RAD2DEG(x) ((x)*180./M_PI)
 #define DEG2RAD(x) ((x)/180.*M_PI)
@@ -53,7 +54,7 @@ geometry_msgs::Pose2D my_target_pose_goal;
 geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::PoseStamped utm_fix;
 
-std::string destination_data;
+std_msgs::String destination_data;
 std::string detect_name;
  
 
@@ -120,7 +121,7 @@ void init_waypoint(void)
         my_waypoints_list[5].y = 4071217.23;
 
         my_waypoints_list[6].x = 315718.17;
-        my_waypoints_list[6].y = 4071215.08;
+        my_waypoints_list[6].y = 4071215.08;  // son nim
 
         my_waypoints_list[7].x = 315720.44;
         my_waypoints_list[7].y = 4071215.01;
@@ -2041,11 +2042,16 @@ void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& m
 
 }
 
+
+
+string target_string;
+bool sub_destination = false;
+
 void destination_Callback(const std_msgs::String::ConstPtr& msg)
 {
-
-    destination_data = msg->data;
-
+    sub_destination = true;
+    target_string = msg->data;
+    ROS_INFO("target_string %s", target_string.c_str());
 
 }
 
@@ -2080,7 +2086,7 @@ int main(int argc, char **argv)
     ros::Subscriber lidar_object_detect_sub  = n.subscribe("/lidar_object_detect",10,&lidar_object_detect_Callback);
     ros::Subscriber avoid_function_start_sub = n.subscribe("/avoid_function_start",10,&avoid_function_start_Callback);
     ros::Subscriber avoid_heading_angle_sub  = n.subscribe("/avoid_heading_angle",10,&avoid_heading_angle_Callback);
-    ros::Subscriber destination_sub  = n.subscribe("/destination",10,&destination_Callback);
+    ros::Subscriber destination_sub  = n.subscribe<std_msgs::String>("/destination",10,&destination_Callback);
     ros::Subscriber detect_name_sub  = n.subscribe("/detect_name",10,&detect_name_Callback);
     ros::Subscriber depth_sub  = n.subscribe("/depth",10,&depth_Callback);
 
@@ -2091,6 +2097,16 @@ int main(int argc, char **argv)
 
     ros::Rate loop_rate(5);  // 10
 
+
+    while (ros::ok() && (sub_destination == false) ){
+
+        ROS_INFO("Wati sub Destination");
+
+        ros::spinOnce();
+    }
+
+
+
     long count = 0;
     double pos_error_x = 0.0;
     double pos_error_y = 0.0;
@@ -2100,21 +2116,21 @@ int main(int argc, char **argv)
 
     geometry_msgs::Pose2D pose_goal;
 
-    if(destination_data == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
-    else if( destination_data == "unitophiagwan" ){ Unitophia(); }
-    else if( destination_data == "multimediagwan" ){ Multi_Media_Gwan(); }
-    else if( destination_data == "hakyegwan" ){ Hak_Ye_Gwan(); }
-    else if( destination_data == "brixgwan" ){ BRIX_Gwan(); }
-    else if( destination_data == "sanhakhyeopryeokgGwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
-    else if( destination_data== "gonghakhwan" ){ Gong_Hak_Gwan(); }
-    else if( destination_data == "library" ){ Library(); }
-    else if( destination_data == "antirepreneurgwan" ){ Antire_preneur_Gwan(); }
-    else if( destination_data == "naturelsciencegwan" ){ Naturel_Science_Gwan(); }
-    else if( destination_data == "humanitiessocialsciencegwan" ){ Humanities_Social_Science_Gwan(); }
-    else if( destination_data == "mainuniversity" ){ Main_University(); }
-    else if( destination_data == "globalvillage" ){ Global_Village(); }
-    else if( destination_data == "hyangthree" ){ Hyang_333(); }
-    else{ init_waypoint(); }
+    if(target_string == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
+    else if( target_string == "unitophiagwan" ){ Unitophia(); }
+    else if( target_string == "multimediagwan" ){ Multi_Media_Gwan(); }
+    else if( target_string == "hakyegwan" ){ Hak_Ye_Gwan(); }
+    else if( target_string == "brixgwan" ){ BRIX_Gwan(); }
+    else if( target_string == "sanhakhyeopryeokgGwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
+    else if( target_string == "gonghakhwan" ){ Gong_Hak_Gwan(); }
+    else if( target_string == "library" ){ Library(); }
+    else if( target_string == "antirepreneurgwan" ){ Antire_preneur_Gwan(); }
+    else if( target_string == "naturelsciencegwan" ){ Naturel_Science_Gwan(); }
+    else if( target_string == "humanitiessocialsciencegwan" ){ Humanities_Social_Science_Gwan(); }
+    else if( target_string == "mainuniversity" ){ Main_University(); }
+    else if( target_string == "globalvillage" ){ Global_Village(); }
+    else if( target_string == "hyangthree" ){ Hyang_333(); }
+    //else{ init_waypoint(); }
 
     int waypoint_id = 0;
 
@@ -2198,18 +2214,21 @@ int main(int argc, char **argv)
                 printf("----------------------------\n");
 
                 if(wp_go_id != set_delivery_id) { wp_go_id++; }
+
+                if( (wp_go_id == set_delivery_id) && (received_product == false) ) {
+                    c_speed.data = 0;
+                    s_angle.data = 0;
+	        }
+                else if( (wp_go_id == set_delivery_id) && (received_product == true) ) {
+                    c_speed.data = 100;
+                    s_angle.data = car_angle;
+                    wp_go_id++;
+                }
+
             }
 
 
-            if( (wp_go_id == set_delivery_id) && (received_product == false) ) {
-                c_speed.data = 0;
-                s_angle.data = 0;
-	    }
-            else if( (wp_go_id == set_delivery_id) && (received_product == true) ) {
-                c_speed.data = 100;
-                s_angle.data = car_angle;
-                wp_go_id++;
-            }
+
 
             // avoid function
             if( (wp_go_id < wp_finish_id) && (avoid_function_start == true) && (wp_go_id != set_delivery_id) && (start_command == true) ){
