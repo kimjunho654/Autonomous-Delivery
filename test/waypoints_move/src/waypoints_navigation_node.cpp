@@ -14,8 +14,11 @@
 #include "sensor_msgs/Imu.h" ///////////////////////////
 #include "std_msgs/Bool.h" /////////////
 #include <std_msgs/Float64MultiArray.h> /////////////////
-
-
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define RAD2DEG(x) ((x)*180./M_PI)
 #define DEG2RAD(x) ((x)/180.*M_PI)
@@ -30,7 +33,7 @@ double waypoint_line_angle = 0.0;
 float imu_offset = -53;
 double car_angle;
 int set_delivery_id = 0; //////////////////////
-bool Received_product = false; ////////////
+bool received_product = false; ////////////
 bool lidar_object_detect = false; ////////////
 bool avoid_function_start = false; ////////////
 double avoid_heading_angle_left = 0; //////////////
@@ -49,9 +52,10 @@ geometry_msgs::Pose2D my_pose;
 geometry_msgs::Pose2D my_target_pose_goal;
 geometry_msgs::Pose2D my_target_pose_goal_prev;
 geometry_msgs::PoseStamped utm_fix;
+
 std::string destination_data;
 std::string detect_name;
-
+ 
 
 
 struct WayPoints
@@ -137,8 +141,8 @@ void init_waypoint(void)
         my_waypoints_list[12].y = 4071244.21;
 
         set_delivery_id = 6;
-        no_waypoints = 3;
-        wp_finish_id = 6;
+        no_waypoints = 13;
+        wp_finish_id = 12;
 }
 
 void Unitophia(void)
@@ -2017,7 +2021,7 @@ void start_command_Callback(const std_msgs::Bool::ConstPtr& msg)
 
 void Receive_Product_Callback(const std_msgs::Bool::ConstPtr& msg)
 {
-    Received_product = msg->data;
+    received_product = msg->data;
 }
 
 void lidar_object_detect_Callback(const std_msgs::Bool::ConstPtr& msg)
@@ -2039,7 +2043,9 @@ void avoid_heading_angle_Callback(const std_msgs::Float64MultiArray::ConstPtr& m
 
 void destination_Callback(const std_msgs::String::ConstPtr& msg)
 {
+
     destination_data = msg->data;
+
 
 }
 
@@ -2095,22 +2101,19 @@ int main(int argc, char **argv)
     geometry_msgs::Pose2D pose_goal;
 
     if(destination_data == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
-    else if( destination_data == "Unitophia_Gwan" ){ Unitophia(); }
-    else if( destination_data == "Multi_Media_Gwan" ){ Multi_Media_Gwan(); }
-    else if( destination_data == "Hak_Ye_Gwan" ){ Hak_Ye_Gwan(); }
-    else if( destination_data == "BRIX_Gwan" ){ BRIX_Gwan(); }
-    else if( destination_data == "San_Hak_Hyeop_Ryeok_Gwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
-    else if( destination_data == "Gong_Hak_Gwan" ){ Gong_Hak_Gwan(); }
-    else if( destination_data == "Library" ){ Library(); }
-    else if( destination_data == "Antire_preneur_Gwan" ){ Antire_preneur_Gwan(); }
-    else if( destination_data == "Naturel_Science_Gwan" ){ Naturel_Science_Gwan(); }
-    else if( destination_data== "Humanities_Social_Science_Gwan" ){ Humanities_Social_Science_Gwan(); }
-    else if( destination_data == "Main_University" ){ Main_University(); }
-    else if( destination_data == "Global_Village" ){ Global_Village(); }
-    else if( destination_data == "Hyang_333" ){ Hyang_333(); }
-    //else if( destination_data == "Regional_Innovation_Gwan" ) { Regional_Innovation_Gwan(); }
-    //else if( destination_data == "Han_maru" ) { Han_maru(); }
-    //else if( destination_data == "Media_Laps" ) { Media_Laps(); }
+    else if( destination_data == "unitophiagwan" ){ Unitophia(); }
+    else if( destination_data == "multimediagwan" ){ Multi_Media_Gwan(); }
+    else if( destination_data == "hakyegwan" ){ Hak_Ye_Gwan(); }
+    else if( destination_data == "brixgwan" ){ BRIX_Gwan(); }
+    else if( destination_data == "sanhakhyeopryeokgGwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
+    else if( destination_data== "gonghakhwan" ){ Gong_Hak_Gwan(); }
+    else if( destination_data == "library" ){ Library(); }
+    else if( destination_data == "antirepreneurgwan" ){ Antire_preneur_Gwan(); }
+    else if( destination_data == "naturelsciencegwan" ){ Naturel_Science_Gwan(); }
+    else if( destination_data == "humanitiessocialsciencegwan" ){ Humanities_Social_Science_Gwan(); }
+    else if( destination_data == "mainuniversity" ){ Main_University(); }
+    else if( destination_data == "globalvillage" ){ Global_Village(); }
+    else if( destination_data == "hyangthree" ){ Hyang_333(); }
     else{ init_waypoint(); }
 
     int waypoint_id = 0;
@@ -2194,18 +2197,18 @@ int main(int argc, char **argv)
                 printf("Arrvied at My WayPoint[%3d] !\n",wp_go_id);
                 printf("----------------------------\n");
 
-                    if(wp_go_id == set_delivery_id) {
-                        if(Received_product == false) {
-                            c_speed.data = 0;
-                            s_angle.data = 0;
-                        }
-                        else if(Received_product == true) {
-                            c_speed.data = 100;
-                            s_angle.data = car_angle;
-                            wp_go_id++;
-                        }
-                    }
-                    else if(wp_go_id != set_delivery_id) { wp_go_id++; }
+                if(wp_go_id != set_delivery_id) { wp_go_id++; }
+            }
+
+
+            if( (wp_go_id == set_delivery_id) && (received_product == false) ) {
+                c_speed.data = 0;
+                s_angle.data = 0;
+	    }
+            else if( (wp_go_id == set_delivery_id) && (received_product == true) ) {
+                c_speed.data = 100;
+                s_angle.data = car_angle;
+                wp_go_id++;
             }
 
             // avoid function
@@ -2231,11 +2234,11 @@ int main(int argc, char **argv)
                 //ros::Duration(0.5).sleep();
             }
 
-            if(wp_go_id >= wp_finish_id) {
+            if(wp_go_id > wp_finish_id) {
                          start_command = false;
                          c_speed.data = 0;
                          s_angle.data = 0;
-                         wp_go_id = wp_finish_id;
+                         //wp_go_id = wp_finish_id;
                          ROS_INFO("WP Mission Completed");
             }
 
@@ -2249,7 +2252,7 @@ int main(int argc, char **argv)
         // publish topics
         target_id_pub.publish(ros_waypoint_id);
         ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
-        ROS_INFO("destination_data : %s\n", destination_data.c_str() );
+        //ROS_INFO("destination_data : %s\n", destination_data );
 
         if(count>=2) {
 
