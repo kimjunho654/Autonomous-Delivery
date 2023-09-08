@@ -2067,6 +2067,12 @@ void depth_Callback(const std_msgs::Float64::ConstPtr& msg)
 
 }
 
+void wp_go_id_Callback(const std_msgs::Int16::ConstPtr& msg)
+{
+    wp_go_id = msg->data;
+
+}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "Outdoor_Navigation_Drive");
@@ -2089,6 +2095,7 @@ int main(int argc, char **argv)
     ros::Subscriber destination_sub  = n.subscribe<std_msgs::String>("/destination",10,&destination_Callback);
     ros::Subscriber detect_name_sub  = n.subscribe("/detect_name",10,&detect_name_Callback);
     ros::Subscriber depth_sub  = n.subscribe("/depth",10,&depth_Callback);
+    ros::Subscriber wp_go_id_sub  = n.subscribe("/wp_go_id",10,&wp_go_id_Callback);
 
     ros::Publisher SteerAngle_pub            = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
     ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
@@ -2117,20 +2124,20 @@ int main(int argc, char **argv)
     geometry_msgs::Pose2D pose_goal;
 
     if(target_string == "init"){ init_waypoint(); } ////////////////////////////////////////////////////////////////////////////////
-    else if( target_string == "unitophiagwan" ){ Unitophia(); }
-    else if( target_string == "multimediagwan" ){ Multi_Media_Gwan(); }
-    else if( target_string == "hakyegwan" ){ Hak_Ye_Gwan(); }
-    else if( target_string == "brixgwan" ){ BRIX_Gwan(); }
-    else if( target_string == "sanhakhyeopryeokgGwan" ){ San_Hak_Hyeop_Ryeok_Gwan(); }
-    else if( target_string == "gonghakhwan" ){ Gong_Hak_Gwan(); }
-    else if( target_string == "library" ){ Library(); }
-    else if( target_string == "antirepreneurgwan" ){ Antire_preneur_Gwan(); }
-    else if( target_string == "naturelsciencegwan" ){ Naturel_Science_Gwan(); }
-    else if( target_string == "humanitiessocialsciencegwan" ){ Humanities_Social_Science_Gwan(); }
-    else if( target_string == "mainuniversity" ){ Main_University(); }
-    else if( target_string == "globalvillage" ){ Global_Village(); }
-    else if( target_string == "hyangthree" ){ Hyang_333(); }
-    //else{ init_waypoint(); }
+    else if( target_string == "Unitophia" ){ Unitophia();         ROS_INFO("Unitophia");}
+    else if( target_string == "Multi_Media_Gwan" ){ Multi_Media_Gwan();         ROS_INFO("Multi_Media_Gwan");}
+    else if( target_string == "Hak_Ye_Gwan" ){ Hak_Ye_Gwan();         ROS_INFO("Hak_Ye_Gwan");}
+    else if( target_string == "BRIX_Gwan" ){ BRIX_Gwan();         ROS_INFO("BRIX_Gwan");}
+    else if( target_string == "San_Hak_Hyeop_Ryeok_Gwan" ){ San_Hak_Hyeop_Ryeok_Gwan();         ROS_INFO("San_Hak_Hyeop_Ryeok_Gwan");}
+    else if( target_string == "Gong_Hak_Gwan" ){ Gong_Hak_Gwan();         ROS_INFO("Gong_Hak_Gwan");}
+    else if( target_string == "Library" ){ Library();         ROS_INFO("Library");}
+    else if( target_string == "Antire_preneur_Gwan" ){ Antire_preneur_Gwan();         ROS_INFO("Antire_preneur_Gwan");}
+    else if( target_string == "Naturel_Science_Gwan" ){ Naturel_Science_Gwan();         ROS_INFO("Naturel_Science_Gwan");}
+    else if( target_string == "Humanities_Social_Science_Gwan" ){ Humanities_Social_Science_Gwan();         ROS_INFO("Humanities_Social_Science_Gwan");}
+    else if( target_string == "Main_University" ){ Main_University();         ROS_INFO("Main_University");}
+    else if( target_string == "Global_Village" ){ Global_Village();         ROS_INFO("Global_Village");}
+    else if( target_string == "Hyang_333" ){ Hyang_333();         ROS_INFO("Hyang_333");}
+    else{ Multi_Media_Gwan();         ROS_INFO("Multi_Media_Gwan"); }
 
     int waypoint_id = 0;
 
