@@ -217,7 +217,7 @@ int main(int argc, char** argv) {
         }
 
         // 로그 출력
-        ROS_INFO("Goal published!");
+        //ROS_INFO("Goal published!");
 
         // ROS 콜백 처리
         ros::spinOnce();
