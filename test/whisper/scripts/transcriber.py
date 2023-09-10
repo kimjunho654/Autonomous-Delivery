@@ -31,7 +31,7 @@ def talker():
     pub = rospy.Publisher('chatter', String, queue_size=10)
     rate = rospy.Rate(1)  # 1hz
     r = sr.Recognizer()
-    microphone_timeout = 5
+    microphone_timeout = 1
 
     # 1초마다 `timer_callback` 함수를 호출하여 마이크로폰 상태를 업데이트
     rospy.Timer(rospy.Duration(1), timer_callback)
@@ -66,4 +66,3 @@ if __name__ == '__main__':
         rospy.spin()  # ROS 노드 실행
     except rospy.ROSInterruptException:
         pass
-
