@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("지역혁신관") != string::npos || target_string.find("지역혁신과") != string::npos || target_string.find("지역혁신광") != string::npos || target_string.find("지역형신관") != string::npos){
+        else if(target_string.find("지역혁신관") != string::npos || target_string.find("지역혁신과") != string::npos || target_string.find("지역혁신광") != string::npos || target_string.find("지역형신관") != string::npos || target_string.find("지역 혁신관") != string::npos){
           initializeGoal(goal_msg, "Regional_Innovation_Gwan");
           goal_pub.publish(goal_msg);
       ss << "Regional_Innovation_Gwan";
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("산학협력관") != string::npos || target_string.find("사낙협력관") != string::npos || target_string.find("사낙협력광") != string::npos || target_string.find("산학협렵관") != string::npos || target_string.find("사낙협렵관") != string::npos){
+        else if(target_string.find("산학협력관") != string::npos || target_string.find("사낙협력관") != string::npos || target_string.find("사낙협력광") != string::npos || target_string.find("산학협렵관") != string::npos || target_string.find("사낙협렵관") != string::npos || target_string.find("산학 협력관") != string::npos){
           initializeGoal(goal_msg, "San_Hak_Hyeop_Ryeok_Gwan");
           goal_pub.publish(goal_msg);
       ss << "San_Hak_Hyeop_Ryeok_Gwan";
@@ -131,7 +131,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("앙뜨레프레너") != string::npos || target_string.find("앙뜨래프레너") != string::npos || target_string.find("앙뜨래프래너") != string::npos || target_string.find("앙뜨레프래너") != string::npos){
+        else if(target_string.find("앙뜨레프레너") != string::npos || target_string.find("앙뜨래프레너") != string::npos || target_string.find("앙뜨래프래너") != string::npos || target_string.find("앙뜨레프래너") != string::npos  || target_string.find("앙뜨레 프래너") != string::npos){
           initializeGoal(goal_msg, "Antire_preneur_Gwan");
           goal_pub.publish(goal_msg);
       ss << "Antire_preneur_Gwan";
@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("자연과학관") != string::npos || target_string.find("자연과학꽌") != string::npos || target_string.find("자연과학깐") != string::npos || target_string.find("자연가학관") != string::npos){
+        else if(target_string.find("자연과학관") != string::npos || target_string.find("자연과학꽌") != string::npos || target_string.find("자연과학깐") != string::npos || target_string.find("자연가학관") != string::npos  || target_string.find("자연 과학관") != string::npos){
           initializeGoal(goal_msg, "Naturel_Science_Gwan");
           goal_pub.publish(goal_msg);
       ss << "Naturel_Science_Gwan";
@@ -161,7 +161,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("인문과학관") != string::npos || target_string.find("인문대") != string::npos || target_string.find("인문과학꽌") != string::npos || target_string.find("인문과학깐") != string::npos){
+        else if(target_string.find("인문과학관") != string::npos || target_string.find("인문대") != string::npos || target_string.find("인문과학꽌") != string::npos || target_string.find("인문과학깐") != string::npos  || target_string.find("인문 과학관") != string::npos){
           initializeGoal(goal_msg, "Humanities_Social_Science_Gwan");
           goal_pub.publish(goal_msg);
       ss << "Humanities_Social_Science_Gwan";
@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("대학본부") != string::npos || target_string.find("대학봉부") != string::npos || target_string.find("대학본부") != string::npos){
+        else if(target_string.find("대학본부") != string::npos || target_string.find("대학봉부") != string::npos || target_string.find("대학본부") != string::npos  || target_string.find("대학 본부") != string::npos){
           initializeGoal(goal_msg, "Main_University");
           goal_pub.publish(goal_msg);
       ss << "Main_University";
@@ -181,7 +181,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("미디어랩스") != string::npos || target_string.find("미디어랩쓰") != string::npos || target_string.find("미디어렙스") != string::npos || target_string.find("미디어렙쓰") != string::npos){
+        else if(target_string.find("미디어랩스") != string::npos || target_string.find("미디어랩쓰") != string::npos || target_string.find("미디어렙스") != string::npos || target_string.find("미디어렙쓰") != string::npos  || target_string.find("미디어 랩스") != string::npos){
           initializeGoal(goal_msg, "Media_Laps");
           goal_pub.publish(goal_msg);
       ss << "Media_Laps";
@@ -191,7 +191,7 @@ int main(int argc, char** argv) {
       count++;
         }
 
-        else if(target_string.find("글로벌빌리지") != string::npos || target_string.find("글로벌빌리쥐") != string::npos || target_string.find("글로벌빌래지") != string::npos || target_string.find("글로벌빌레지") != string::npos){
+        else if(target_string.find("글로벌빌리지") != string::npos || target_string.find("글로벌빌리쥐") != string::npos || target_string.find("글로벌빌래지") != string::npos || target_string.find("글로벌빌레지") != string::npos  || target_string.find("글로벌 빌리지") != string::npos){
           initializeGoal(goal_msg, "Global_Village");
           goal_pub.publish(goal_msg);
       ss << "Global_Village";
