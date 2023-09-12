@@ -1,0 +1,66 @@
+#include <iostream>
+
+class PIDController {
+public:
+    PIDController(double kp, double ki, double kd)
+        : kp_(kp), ki_(ki), kd_(kd), prev_error_(0), integral_(0) {}
+
+    double calculate(double setpoint, double current_value) {
+        // Calculate the error
+        double error = setpoint - current_value;
+
+        // Calculate the proportional term
+        double p_term = kp_ * error;
+
+        // Calculate the integral term
+        integral_ += error;
+        double i_term = ki_ * integral_;
+
+        // Calculate the derivative term
+        double d_term = kd_ * (error - prev_error_);
+        prev_error_ = error;
+
+        // Calculate the control signal
+        double control_signal = p_term + i_term + d_term;
+
+        return control_signal;
+    }
+
+private:
+    double kp_;
+    double ki_;
+    double kd_;
+    double prev_error_;
+    double integral_;
+};
+
+int main() {
+    // PID controller gains
+    double kp = 0.1;  // Proportional gain
+    double ki = 0.01; // Integral gain
+    double kd = 0.05; // Derivative gain
+
+    PIDController pid(kp, ki, kd);
+
+    // Setpoint (target value)
+    double setpoint = 100.0;
+
+    // Initial value (current value)
+    double current_value = 0.0;
+
+    // Number of iterations
+    int num_iterations = 100;
+
+    for (int i = 0; i < num_iterations; ++i) {
+        // Calculate control signal using PID controller
+        double control_signal = pid.calculate(setpoint, current_value);
+
+        // Simulate the system's response (e.g., update current value)
+        // In a real system, this would be replaced with actual sensor feedback
+        current_value += control_signal;
+
+        std::cout << "Iteration " << i << ": Current Value = " << current_value << std::endl;
+    }
+
+    return 0;
+}
