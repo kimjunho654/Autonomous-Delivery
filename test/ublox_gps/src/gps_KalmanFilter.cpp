@@ -3,22 +3,21 @@
 
 class KalmanFilter {
 public:
-    KalmanFilter(double initial_state, double initial_covariance, double process_noise, double measurement_noise) :
+    KalmanFilter(double initial_state, double measurement_noise, double process_noise, double initial_covariance) :
         state_(initial_state),
         covariance_(initial_covariance),
         process_noise_(process_noise),
         measurement_noise_(measurement_noise) {}
 
     double filter(double measurement, double position_covariance) {
-        // Calculate the weight based on position_covariance (you can adjust this as needed)
-        double weight = 1.0 / (1.0 + position_covariance);
+
 
         // Prediction
         double predicted_state = state_;
         double predicted_covariance = covariance_ + process_noise_;
 
         // Calculate Kalman Gain with weighted position_covariance
-        double kalman_gain = weight * predicted_covariance / (predicted_covariance + measurement_noise_);
+        double kalman_gain = predicted_covariance / (predicted_covariance + measurement_noise_);
 
         // Update
         state_ = predicted_state + kalman_gain * (measurement - predicted_state);
@@ -36,7 +35,7 @@ private:
 
 class GPSToKalmanNode {
 public:
-    GPSToKalmanNode() : nh_("~"), kalman_filter_lat_(0.0, 1.0, 0.1, 0.01), kalman_filter_lon_(0.0, 1.0, 0.1, 0.01) {
+    GPSToKalmanNode() : nh_("~"), kalman_filter_lat_(0.0, 0.01, 0.1, 1.0), kalman_filter_lon_(0.0, 0.01, 0.1, 1.0) {
         sub_ = nh_.subscribe("/ublox_gps/fix", 1, &GPSToKalmanNode::gpsCallback, this);
         pub_ = nh_.advertise<sensor_msgs::NavSatFix>("/filtered_gps_topic", 1);
         prev_latitude_ = 0.0;  // Initialize previous values
