@@ -5,14 +5,12 @@
 #include <std_msgs/Int32.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float32.h>
-#include <std_msgs/Bool.h>
 
 ros::NodeHandle  nh;
 
 std_msgs::Float32 encoder_data;
 std_msgs::Float32 steering_angle;
 
-bool lidar_detect;
 int f_speed = 0, r_speed = 0;
 int velocity = 0;
 int steer_angle = 0;
@@ -20,7 +18,7 @@ double dummy = 0;
 
 void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   dummy = msg.linear.x;       
-  steer_angle = 20*msg.angular.z;   
+  steer_angle = 10*msg.angular.z;   
 
   if(dummy > 0){
     velocity  = 80;  
@@ -28,6 +26,7 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
   else if (dummy < 0){
     velocity = -80; 
   }
+  else { velocity = 0; }
 
 }
 
@@ -38,24 +37,18 @@ void heading_angle_callback(const std_msgs::Int16& msg) {
 
 }
 
+double sub_speed_prev_time;
+
 void speed_callback(const std_msgs::Int16& msg) {
-   
-   velocity = msg.data;
+
+    velocity = msg.data;
+    sub_speed_prev_time = millis();
 
 }
 
-
-void lidar_object_detect_callback(const std_msgs::Bool& msg) {
-   
-   lidar_detect = msg.data;
-
-}
-
-ros::Subscriber<std_msgs::Int16> heading_angle_sub("Car_Control_cmd/SteerAngle_Int16", heading_angle_callback);
-ros::Subscriber<std_msgs::Int16> speed_sub("Car_Control_cmd/Speed_Int16", speed_callback);
+ros::Subscriber<std_msgs::Int16> heading_angle_sub("heading_angle", heading_angle_callback);
+ros::Subscriber<std_msgs::Int16> speed_sub("Car_Control_cmd/Speed_Int16", speed_callback); //Car_Control_cmd/Speed_Int16
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
-ros::Subscriber<std_msgs::Bool> lidar_detect_sub("lidar_object_detect", lidar_object_detect_callback);
-
 ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
 ros::Publisher steerAngle_pub("steering_angle", &steering_angle);
 
@@ -126,8 +119,8 @@ void motor_control(int front_speed, int rear_speed)
 ///////////////////////////////////////  Steering PID 제어 /////////////////////////////////////////////
 #define Steering_Sensor A8  // Analog input pin that the potentiometer is attached to
 #define NEURAL_ANGLE 0
-#define LEFT_STEER_ANGLE  -17.0
-#define RIGHT_STEER_ANGLE  17.0
+#define LEFT_STEER_ANGLE  -20.0
+#define RIGHT_STEER_ANGLE  20.0
 #define MOTOR2_PWM 14
 #define MOTOR2_DIR 15
 #define MOTOR2_BRK 16
@@ -206,13 +199,8 @@ void control_callback()
   // read the analog in value:
   sensorValue = analogRead(Steering_Sensor);
   // map it to the range of the analog out:
-  Steer_Angle_Measure = map(sensorValue, 0.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
-  
-  if(lidar_detect == true) { Steering_Angle = 0; }
-  else {
-    Steering_Angle = NEURAL_ANGLE + steer_angle;
-  }
-  
+  Steer_Angle_Measure = map(sensorValue, 72.0, 1023.0, LEFT_STEER_ANGLE, RIGHT_STEER_ANGLE);
+  Steering_Angle = NEURAL_ANGLE + steer_angle;
   steering_control();
   
 }
@@ -285,14 +273,12 @@ void setup() {
   error = error_s = error_d = error_old = 0.0;
   pwm_output = 0;
   dummy = 0;
-
+  
   nh.initNode();
   
   nh.subscribe(cmd_sub);
   nh.subscribe(speed_sub);
   nh.subscribe(heading_angle_sub);
-  nh.subscribe(lidar_detect_sub);
-
   nh.advertise(encoder_pub);
   nh.advertise(steerAngle_pub);
 
@@ -311,18 +297,17 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  //f_speed = r_speed = velocity;
-  if(lidar_detect == true) { f_speed = r_speed = 0; }
-  else {
-    f_speed = r_speed = velocity;
-  }
+  if( (millis() - sub_speed_prev_time) > 1000) { velocity = 0; }
   
+
+  f_speed = r_speed = velocity;
   motor_control(r_speed, r_speed);
   control_callback();
 
   encoder_data.data = encoder0Pos;
   encoder_pub.publish(&encoder_data);
 
+  //steering_angle.data = Steer_Angle_Measure;
   steering_angle.data = Steer_Angle_Measure;
   steerAngle_pub.publish(&steering_angle);
 
