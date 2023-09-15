@@ -1,0 +1,18 @@
+
+<launch>
+  <node pkg="rosserial_python" type="serial_node.py" name="arduino" output="screen"/>
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
+
+
+  <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+  <node pkg="lidar_detect" type="lidar_detect" name="lidar_detect" output="screen"/>
+
+  <include file="$(find ntrip_ros)/launch/ntrip_ros.launch"/>
+  <node pkg="ublox_gps" type="gps_KalmanFilter_node" name="gps_KalmanFilter_node" output="screen"/>
+  <include file="$(find utm_lla)/launch/coordinate_convertion.launch"/>
+  <include file="$(find iahrs_driver)/launch/iahrs_driver.launch"/>
+
+  <node pkg="waypoints_move" type="waypoints_move_node" name="Outdoor_Navigation_Drive" output="screen"/>
+  <node pkg="waypoints_move" type="angle_segmentation" name="angle_segmentation" output="screen"/>
+  <node pkg="speed_pid_control" type="speed_pid_control" name="speed_pid_control" output="screen"/>
+</launch>
