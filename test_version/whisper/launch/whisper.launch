@@ -1,0 +1,7 @@
+
+<launch>
+  <node pkg="whisper" type="transcriber.py" name="transcriber.py" output="screen"/>
+  <node pkg="whisper" type="outdoor_destination_pub" name="outdoor_destination_pub" output="screen"/>
+  <node pkg="whisper" type="speech.py" name="speech.py" output="screen"/>
+
+</launch>
