@@ -63,7 +63,7 @@ void speed_callback(const std_msgs::Int16& msg) {
 }
 
 ros::Subscriber<std_msgs::Int16> heading_angle_sub("heading_angle", heading_angle_callback);
-ros::Subscriber<std_msgs::Int16> speed_sub("Car_Control_cmd/Speed_Int16", speed_callback); //Car_Control_cmd/Speed_Int16
+ros::Subscriber<std_msgs::Int16> speed_sub("PID_car_speed", speed_callback); //Car_Control_cmd/Speed_Int16
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
 ros::Subscriber<sensor_msgs::Joy> joy_sub("joy", joy_callback);
 
