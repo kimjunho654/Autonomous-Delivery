@@ -44,8 +44,9 @@ double roll,pitch,yaw;
 bool start_command = false; ////////////
 bool emergency_stop = false; ////////////
 double depth; /////////////
+double start_joy = false; /////////////
 
-
+double sub_joy_current_time;
 
 
 geometry_msgs::Pose2D my_pose;
@@ -3886,6 +3887,13 @@ void wp_go_id_Callback(const std_msgs::Int16::ConstPtr& msg)
 
 }
 
+void start_joy_Callback(const std_msgs::Bool::ConstPtr& msg)
+{
+    start_joy = msg->data;
+
+    sub_joy_current_time = ros::Time::now().toSec();
+}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "Outdoor_Navigation_Drive");
@@ -3909,6 +3917,7 @@ int main(int argc, char **argv)
     ros::Subscriber detect_name_sub  = n.subscribe("/detect_name",10,&detect_name_Callback);
     ros::Subscriber depth_sub  = n.subscribe("/depth",10,&depth_Callback);
     ros::Subscriber wp_go_id_sub  = n.subscribe("/wp_go_id",10,&wp_go_id_Callback);
+    ros::Subscriber start_joy_sub  = n.subscribe("/start_joy",10,&start_joy_Callback);
 
     ros::Publisher SteerAngle_pub            = n.advertise<std_msgs::Int16>("Car_Control_cmd/SteerAngle_Int16", 10);
     ros::Publisher car_speed_pub             = n.advertise<std_msgs::Int16>("Car_Control_cmd/Speed_Int16", 10);
@@ -4116,11 +4125,15 @@ int main(int argc, char **argv)
         ROS_INFO("steering_angle : %d Speed : %d \n",s_angle.data ,c_speed.data);
         ROS_INFO("current_Destination : %s \n", destination_data.c_str() );
 
-        if(count>=2) {
+        if( count>=2 && (start_joy == false) ) {
 
             SteerAngle_pub.publish(s_angle);
             car_speed_pub.publish(c_speed);
         }
+
+
+        if(ros::Time::now().toSec() - sub_joy_current_time > 1){ start_joy = false; }
+
 
         avoid_function_start = false; //////////
 
