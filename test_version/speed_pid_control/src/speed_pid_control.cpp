@@ -21,6 +21,8 @@ double error = 0;
 int pid_output = 0;
 int control_output = 0;
 
+std_msgs::Float64 measure_speed_msg;
+std_msgs::Int16 speed_msg;
 std_msgs::Float64 pid_error_msg;
 
 
@@ -67,7 +69,6 @@ double speed_pid_control(double current_speed) {
 void odom_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     measure_msg = msg->twist.twist.linear.x;
 
-    std_msgs::Float64 measure_speed_msg;
     measure_speed_msg.data = measure_msg;
     measure_speed_pub.publish(measure_speed_msg);
 
@@ -76,7 +77,6 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     control_output = speed_pid_control(measure_msg);
 
     // 제어 출력값을 std_msgs::Int16 유형으로 변환하여 pub
-    std_msgs::Int16 speed_msg;
     speed_msg.data = control_output;
     speed_pub.publish(speed_msg);
 
