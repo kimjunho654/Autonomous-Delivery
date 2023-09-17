@@ -19,7 +19,7 @@ double error_derivative = 0.0;
 double error = 0;
 
 int pid_output = 0;
-int control_output = 20;
+int control_output = 0;
 
 double Kp = 2;  // P 게인
 double Ki = 1;  // I 게인
@@ -36,10 +36,17 @@ double speed_pid_control(double current_speed) {
 
     pid_output = Kp * error + Ki * error_integral + Kd * error_derivative;
 
-    if(  (error >= -0.01) && (error <= 0.01) ){
-        error_integral--;
+    if(desired_speed > 0){
+        if(  (error >= -0.01) && (error <= 0.01) ){
+            error_integral--;
+        }
     }
-
+    else if(desired_speed == 0){
+        if(  (error >= -0.01) && (error <= 0.01) ){
+            error_integral = 0;
+        }
+    }
+        
     prev_error = error;
 
     // 속도 값이 특정 범위를 벗어나면 조정
