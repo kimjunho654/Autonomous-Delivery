@@ -21,6 +21,9 @@ double error = 0;
 int pid_output = 0;
 int control_output = 0;
 
+std_msgs::Float64 pid_error_msg;
+
+
 double Kp = 2;  // P 게인
 double Ki = 1;  // I 게인
 double Kd = 0; // D 게인
@@ -77,7 +80,6 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     speed_msg.data = control_output;
     speed_pub.publish(speed_msg);
 
-    std_msgs::Float64 pid_error_msg;
     pid_error_msg.data = error;
     pid_error_pub.publish(pid_error_msg);
 
