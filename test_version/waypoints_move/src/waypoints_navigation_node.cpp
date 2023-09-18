@@ -30,7 +30,7 @@ using namespace std;
 
 
 double waypoint_line_angle = 0.0;
-float imu_offset = -53;
+float imu_offset = 75;
 double car_angle;
 int set_delivery_id = 0; //////////////////////
 bool received_product = false; ////////////
@@ -143,6 +143,78 @@ void init_waypoint(void)
 
         set_delivery_id = 6;
         wp_finish_id = 12;
+}
+
+void test_multi_hakyeah(void)
+{
+        my_waypoints_list[0].x = 315715.685936;
+        my_waypoints_list[0].y = 4071255.135317;
+
+        my_waypoints_list[1].x = 315711.666261;
+        my_waypoints_list[1].y = 4071260.220526;
+
+        my_waypoints_list[2].x = 315709.229462;
+        my_waypoints_list[2].y = 4071263.272175;
+
+        my_waypoints_list[3].x = 315705.782412;
+        my_waypoints_list[3].y = 4071265.844823;
+
+        my_waypoints_list[4].x = 315702.941951;
+        my_waypoints_list[4].y = 4071267.529584;
+
+        my_waypoints_list[5].x = 315700.231689;
+        my_waypoints_list[5].y = 4071269.461683;
+
+        my_waypoints_list[6].x = 315697.393840;
+        my_waypoints_list[6].y = 4071271.271419;
+
+        my_waypoints_list[7].x = 315694.313878;
+        my_waypoints_list[7].y = 4071273.461306;
+
+        my_waypoints_list[8].x = 315691.478641;
+        my_waypoints_list[8].y = 4071275.396017;
+
+        my_waypoints_list[9].x = 315688.409129;
+        my_waypoints_list[9].y = 4071278.085803;
+
+        my_waypoints_list[10].x = 315685.592180;
+        my_waypoints_list[10].y = 4071280.895339;
+
+        my_waypoints_list[11].x = 315683.157992;
+        my_waypoints_list[11].y = 4071284.071963;
+
+        my_waypoints_list[12].x = 315681.226318;
+        my_waypoints_list[12].y = 4071287.363112;
+        \
+        my_waypoints_list[13].x = 315679.672180;
+        my_waypoints_list[13].y = 4071290.771399;
+
+        my_waypoints_list[14].x = 315678.362768;
+        my_waypoints_list[14].y = 4071293.924510;
+
+        my_waypoints_list[15].x = 315677.550643;
+        my_waypoints_list[15].y = 4071296.942197;
+
+        my_waypoints_list[16].x = 315676.858268;
+        my_waypoints_list[16].y = 4071299.707321;
+
+        my_waypoints_list[17].x = 315675.929006;
+        my_waypoints_list[17].y = 4071303.102545;
+
+        my_waypoints_list[18].x = 315673.770894;
+        my_waypoints_list[18].y = 4071307.523694;
+
+        my_waypoints_list[19].x = 315665.150658;
+        my_waypoints_list[19].y = 4071313.830342;
+
+        my_waypoints_list[20].x = 315661.391384;
+        my_waypoints_list[20].y = 4071319.410229;
+
+        my_waypoints_list[21].x = 315654.023936;
+        my_waypoints_list[21].y = 4071331.817140;
+
+        set_delivery_id = 21;
+        wp_finish_id = 21;
 }
 
 void Unitophia(void)
