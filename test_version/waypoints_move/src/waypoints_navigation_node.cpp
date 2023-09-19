@@ -24,13 +24,13 @@ using namespace std;
 #define RAD2DEG(x) ((x)*180./M_PI)
 #define DEG2RAD(x) ((x)/180.*M_PI)
 #define WayPoints_NO 200
-#define WayPoint_X_Tor 0.3
-#define WayPoint_Y_Tor 0.5
+#define WayPoint_X_Tor 1.7
+#define WayPoint_Y_Tor 1.7
 
 
 
 double waypoint_line_angle = 0.0;
-float imu_offset = 75;
+float imu_offset = 134;
 double car_angle;
 int set_delivery_id = 0; //////////////////////
 bool received_product = false; ////////////
@@ -144,26 +144,44 @@ void init_waypoint(void)
         set_delivery_id = 6;
         wp_finish_id = 12;
 }
-
 void test_multi_hakyeah(void)
 {
-        my_waypoints_list[0].x = 315715.685936;
-        my_waypoints_list[0].y = 4071255.135317;
+    my_waypoints_list[0].x = 315709.077432; // .05
+    my_waypoints_list[0].y = 4071261.266174;
 
-        my_waypoints_list[1].x = 315711.666261;
-        my_waypoints_list[1].y = 4071260.220526;
+    my_waypoints_list[1].x = 315698.669490;  //.63
+    my_waypoints_list[1].y = 4071268.750179;
 
-        my_waypoints_list[2].x = 315709.229462;
-        my_waypoints_list[2].y = 4071263.272175;
+    my_waypoints_list[2].x = 315685.642247;  // .61
+    my_waypoints_list[2].y = 4071280.375904;
 
-        my_waypoints_list[3].x = 315705.782412;
-        my_waypoints_list[3].y = 4071265.844823;
+    my_waypoints_list[3].x = 315681.592046;  // .57
+    my_waypoints_list[3].y = 4071290.165631;
 
-        my_waypoints_list[4].x = 315702.941951;
-        my_waypoints_list[4].y = 4071267.529584;
+    set_delivery_id = 3;
+    wp_finish_id = 3;
 
-        my_waypoints_list[5].x = 315700.231689;
-        my_waypoints_list[5].y = 4071269.461683;
+}
+/*
+void test_multi_hakyeah(void)
+{
+        my_waypoints_list[0].x = 315713.919402;
+        my_waypoints_list[0].y = 4071254.986505;
+
+        my_waypoints_list[1].x = 315710.158260;
+        my_waypoints_list[1].y = 4071258.678265;
+
+        my_waypoints_list[2].x = 315708.013345;
+        my_waypoints_list[2].y = 4071261.12202;
+
+        my_waypoints_list[3].x = 315706.198322;
+        my_waypoints_list[3].y = 4071262.672744;
+
+        my_waypoints_list[4].x = 315702.189564;
+        my_waypoints_list[4].y = 4071265.576916;
+
+        my_waypoints_list[5].x = 315699.180150;
+        my_waypoints_list[5].y = 4071268.785999;
 
         my_waypoints_list[6].x = 315697.393840;
         my_waypoints_list[6].y = 4071271.271419;
@@ -174,11 +192,11 @@ void test_multi_hakyeah(void)
         my_waypoints_list[8].x = 315691.478641;
         my_waypoints_list[8].y = 4071275.396017;
 
-        my_waypoints_list[9].x = 315688.409129;
-        my_waypoints_list[9].y = 4071278.085803;
+        my_waypoints_list[9].x = 315690.986395;
+        my_waypoints_list[9].y = 4071274.052850;
 
-        my_waypoints_list[10].x = 315685.592180;
-        my_waypoints_list[10].y = 4071280.895339;
+        my_waypoints_list[10].x = 315684.639646;
+        my_waypoints_list[10].y = 4071281.205096;
 
         my_waypoints_list[11].x = 315683.157992;
         my_waypoints_list[11].y = 4071284.071963;
@@ -186,8 +204,8 @@ void test_multi_hakyeah(void)
         my_waypoints_list[12].x = 315681.226318;
         my_waypoints_list[12].y = 4071287.363112;
         \
-        my_waypoints_list[13].x = 315679.672180;
-        my_waypoints_list[13].y = 4071290.771399;
+        my_waypoints_list[13].x = 315679.837641;
+        my_waypoints_list[13].y = 4071289.214149;
 
         my_waypoints_list[14].x = 315678.362768;
         my_waypoints_list[14].y = 4071293.924510;
@@ -195,8 +213,8 @@ void test_multi_hakyeah(void)
         my_waypoints_list[15].x = 315677.550643;
         my_waypoints_list[15].y = 4071296.942197;
 
-        my_waypoints_list[16].x = 315676.858268;
-        my_waypoints_list[16].y = 4071299.707321;
+        my_waypoints_list[16].x = 315676.177860;
+        my_waypoints_list[16].y = 4071299.562299;
 
         my_waypoints_list[17].x = 315675.929006;
         my_waypoints_list[17].y = 4071303.102545;
@@ -211,12 +229,102 @@ void test_multi_hakyeah(void)
         my_waypoints_list[20].y = 4071319.410229;
 
         my_waypoints_list[21].x = 315654.023936;
-        my_waypoints_list[21].y = 4071331.817140;
+        my_waypoints_list[21].y = 4071331.817140;  // guest
+
+        ////////////////////////////////////////////////////////////////  back_init_place
+
+        my_waypoints_list[22].x = 315638.950693;
+        my_waypoints_list[22].y = 4071358.388451;
+
+        my_waypoints_list[23].x = 315639.882993;
+        my_waypoints_list[23].y = 4071361.119613;
+
+        my_waypoints_list[24].x = 315655.299756;
+        my_waypoints_list[24].y = 4071368.924258;
+
+        my_waypoints_list[25].x = 315659.155692;
+        my_waypoints_list[25].y = 4071367.968445;
+
+        my_waypoints_list[26].x = 315662.212141;
+        my_waypoints_list[26].y = 4071364.653782;
+
+        my_waypoints_list[27].x = 315664.083726;
+        my_waypoints_list[27].y = 4071358.488208;
+
+        my_waypoints_list[28].x = 315665.965762;
+        my_waypoints_list[28].y = 4071352.822534;
+
+        my_waypoints_list[29].x = 315668.209661;
+        my_waypoints_list[29].y = 4071346.524147;
+
+        my_waypoints_list[30].x = 315670.437884;
+        my_waypoints_list[30].y = 4071339.475911;
+
+        my_waypoints_list[31].x = 315672.437058;
+        my_waypoints_list[31].y = 4071333.432700;
+
+        my_waypoints_list[32].x = 315675.019306;
+        my_waypoints_list[32].y = 4071325.376827;
+
+        my_waypoints_list[33].x = 315674.560781;
+        my_waypoints_list[33].y = 4071321.385465;
+
+        my_waypoints_list[34].x = 315672.711431;
+        my_waypoints_list[34].y = 4071310.671581;
+
+        my_waypoints_list[35].x = 315673.093769;
+        my_waypoints_list[35].y = 4071305.037257;
+
+        my_waypoints_list[36].x = 315673.520519;
+        my_waypoints_list[36].y = 4071301.527508;
+
+        my_waypoints_list[37].x = 315674.311744;
+        my_waypoints_list[37].y = 4071297.510021;
+
+        my_waypoints_list[38].x = 315675.360756;
+        my_waypoints_list[38].y = 4071293.862235;
+
+        my_waypoints_list[39].x = 315677.841544;
+        my_waypoints_list[39].y = 4071286.933749;
+
+        my_waypoints_list[40].x = 315679.635181;
+        my_waypoints_list[40].y = 4071283.020338;
+
+        my_waypoints_list[41].x = 315683.186305;
+        my_waypoints_list[41].y = 4071279.445277;
+
+        my_waypoints_list[42].x = 315686.247980;
+        my_waypoints_list[42].y = 4071276.380566;
+
+        my_waypoints_list[43].x = 315689.681967;
+        my_waypoints_list[43].y = 4071273.183042;
+
+        my_waypoints_list[44].x = 315693.740829;
+        my_waypoints_list[44].y = 4071269.972457;
+
+        my_waypoints_list[45].x = 315697.570640;
+        my_waypoints_list[45].y = 4071267.766896;
+
+        my_waypoints_list[46].x = 315701.270252;
+        my_waypoints_list[46].y = 4071265.313997;
+
+        my_waypoints_list[47].x = 315704.842276;
+        my_waypoints_list[47].y = 4071262.738736;
+
+        my_waypoints_list[48].x = 315708.036763;
+        my_waypoints_list[48].y = 4071260.046338;
+
+        my_waypoints_list[49].x = 315710.710450;
+        my_waypoints_list[49].y = 4071256.364590;
+
+        my_waypoints_list[50].x = 315713.607962;
+        my_waypoints_list[50].y = 4071251.427868;
+
 
         set_delivery_id = 21;
-        wp_finish_id = 21;
+        wp_finish_id = 50;
 }
-
+*/
 void Unitophia(void)
 {
         my_waypoints_list[0].x = 315435.697968;
@@ -467,7 +575,7 @@ void Unitophia(void)
 	my_waypoints_list[81].x = 315388.943717;
         my_waypoints_list[81].y = 4071259.214869;
 
-	my_waypoints_list[82].x = 315398.464068;
+        my_waypoints_list[82].x = 315398.464068;
         my_waypoints_list[82].y = 4071242.136842;
 
 	my_waypoints_list[83].x = 315410.259674;
@@ -3927,7 +4035,7 @@ bool sub_destination = false;
 
 void destination_Callback(const std_msgs::String::ConstPtr& msg)
 {
-    if(msg->data == "Unitophia" || (msg->data == "Multi_Media_Gwan" || msg->data == "Hak_Ye_Gwan" || msg->data == "BRIX_Gwan" || msg->data == "San_Hak_Hyeop_Ryeok_Gwan" || msg->data == "Gong_Hak_Gwan" || msg->data == "Library" || msg->data == "Antire_preneur_Gwan" || msg->data == "Naturel_Science_Gwan" || msg->data == "Humanities_Social_Science_Gwan" || msg->data == "Main_University" || msg->data == "Global_Village" || msg->data == "Hyang_333") ){
+    if(msg->data == "Unitophia" || (msg->data == "Multi_Media_Gwan" || msg->data == "Hak_Ye_Gwan" || msg->data == "BRIX_Gwan" || msg->data == "San_Hak_Hyeop_Ryeok_Gwan" || msg->data == "Gong_Hak_Gwan" || msg->data == "Library" || msg->data == "Antire_preneur_Gwan" || msg->data == "Naturel_Science_Gwan" || msg->data == "Humanities_Social_Science_Gwan" || msg->data == "Main_University" || msg->data == "Global_Village" || msg->data == "Hyang_333" || msg->data == "test") ){
 
 
         if(start_command == false) {
@@ -4031,7 +4139,7 @@ int main(int argc, char **argv)
     else if( target_string == "Main_University" ){ Main_University();  destination_data = "Main_University"; }
     else if( target_string == "Global_Village" ){ Global_Village();  destination_data = "Global_Village"; }
     else if( target_string == "Hyang_333" ){ Hyang_333();   destination_data = "Hyang_333"; }
-    else{ Multi_Media_Gwan();  destination_data = "Unitophia"; }
+    else if( target_string == "test" ) { test_multi_hakyeah();  destination_data = "test_multi_hakyeah"; }
 
     int waypoint_id = 0;
 
@@ -4048,7 +4156,7 @@ int main(int argc, char **argv)
 
         if(emergency_stop == false){
             if(start_command == true){
-                c_speed.data = 100;
+                c_speed.data = 230;
                 s_angle.data = car_angle;
             }
             else if(start_command == false){
@@ -4121,7 +4229,7 @@ int main(int argc, char **argv)
                     s_angle.data = 0;
 	        }
                 else if( (wp_go_id == set_delivery_id) && (received_product == true) ) {
-                    c_speed.data = 100;
+                    c_speed.data = 230;
                     s_angle.data = car_angle;
                     wp_go_id++;
                     received_product = false;
@@ -4179,7 +4287,7 @@ int main(int argc, char **argv)
                     else if( target_string == "Main_University" ){ Main_University();  destination_data = "Main_University"; }
                     else if( target_string == "Global_Village" ){ Global_Village();  destination_data = "Global_Village"; }
                     else if( target_string == "Hyang_333" ){ Hyang_333();   destination_data = "Hyang_333"; }
-                    else{ Multi_Media_Gwan();  destination_data = "Unitophia"; }
+                    else if( target_string == "test" ) { test_multi_hakyeah();  destination_data = "test_multi_hakyeah"; }
 
                 }
 
