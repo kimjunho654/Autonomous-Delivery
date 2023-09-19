@@ -36,7 +36,7 @@ void scan_Callback(const sensor_msgs::LaserScan::ConstPtr& msg){
         INDEX = i + size/2;
 
 
-        if(msg->ranges[INDEX] <= 2.3) {
+        if(msg->ranges[INDEX] <= 2.7) {
             if(detect_count == 0) { object_right_angle_index = INDEX; }
             else if (detect_count != 0) { object_left_angle_index = INDEX; }
             detect_count ++;
