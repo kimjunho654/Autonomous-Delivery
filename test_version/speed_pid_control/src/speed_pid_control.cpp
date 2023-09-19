@@ -26,8 +26,8 @@ std_msgs::Int16 speed_msg;
 std_msgs::Float64 pid_error_msg;
 
 
-double Kp = 2;  // P 게인
-double Ki = 1;  // I 게인
+double Kp = 4;  // P 게인
+double Ki = 2;  // I 게인
 double Kd = 0; // D 게인
 
 // 속도 PID 제어 함수
@@ -35,15 +35,15 @@ double speed_pid_control(double current_speed) {
 
     error = desired_speed - current_speed;
     error_integral += error;
-    error_integral = (error_integral >= 100) ? 100 : error_integral;
-    error_integral = (error_integral <= -100) ? -100 : error_integral;
+    error_integral = (error_integral >= 255) ? 255 : error_integral;
+    error_integral = (error_integral <= -255) ? -255 : error_integral;
     error_derivative = error - prev_error;
 
     pid_output = Kp * error + Ki * error_integral + Kd * error_derivative;
 
     if(desired_speed > 0){
-        if(  (error >= -0.01) && (error <= 0.01) ){
-            error_integral--;
+        if(  (current_speed > 1.1) || (error >= -0.1) && (error <= 0.1) ){
+            error_integral = error_integral - 3;
         }
     }
     else if(desired_speed == 0){
@@ -55,10 +55,10 @@ double speed_pid_control(double current_speed) {
     prev_error = error;
 
     // 속도 값이 특정 범위를 벗어나면 조정
-    if (pid_output > 150.0) {
-        pid_output = 150.0;
-    } else if (pid_output < -150.0) {
-        pid_output = -150.0;
+    if (pid_output > 255.0) {
+        pid_output = 255.0;
+    } else if (pid_output < -255.0) {
+        pid_output = -255.0;
     }
 
     return pid_output;
@@ -90,8 +90,11 @@ void desire_speed_callback(const std_msgs::Int16::ConstPtr& msg) {
     desired_msg = msg->data;
 
 
-    if (desired_msg == 100) {
-        desired_speed = 0.66;
+    if (desired_msg == 230) {
+        desired_speed = 1.1;
+    }
+    else if (desired_msg == 60) {
+        desired_speed = 0.44;
     }
     else if (desired_msg == 0) {
         desired_speed = 0;
