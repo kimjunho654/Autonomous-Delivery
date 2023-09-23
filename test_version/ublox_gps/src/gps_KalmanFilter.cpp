@@ -35,7 +35,7 @@ private:
 
 class GPSToKalmanNode {
 public:
-    GPSToKalmanNode() : nh_("~"), kalman_filter_lat_(0.0, 0.01, 0.1, 1.0), kalman_filter_lon_(0.0, 0.01, 0.1, 1.0) {
+    GPSToKalmanNode() : nh_("~"), kalman_filter_lat_(36.769153, 0.01, 0.1, 1.0), kalman_filter_lon_(126.935201, 0.01, 0.1, 1.0) {
         sub_ = nh_.subscribe("/ublox_gps/fix", 1, &GPSToKalmanNode::gpsCallback, this);
         pub_ = nh_.advertise<sensor_msgs::NavSatFix>("/filtered_gps_topic", 1);
         prev_latitude_ = 0.0;  // Initialize previous values
