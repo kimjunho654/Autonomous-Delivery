@@ -34,7 +34,7 @@
     catkin_make         
     source devel/setup.bash    
     
-# rplidar_sdk 설치
+# rplidar_sdk 설치(생략 가능)
     git clone https://github.com/Slamtec/rplidar_sdk.git    //home 디렉토리에서 설치한다.
     cd rplidar_sdk
     make                                                    // 이 명령어를 통해 output/Linux/Release 경로가 생겼을 것이다.
@@ -78,7 +78,13 @@ ID_SERIAL= 의 뒤에 있는 내용들은 이후에 사용할 예정이므로 �
     
 복붙했다면 [ctrl + s] , [ctrl + x] 입력한다.(저장, 나가기)
 
-# lidar a2 실행
+
+# rplidar git 내용 변경된 문제 해결법
+    cd ~/catkin_ws/src/rplidar_ros
+    git reset --hard 4f8ddee37de1d9b5a3a1d222607b9097c15ba444
+
+
+# rplidar a2 실행
 
     sudo chmod 666 /dev/ttyUSB0                           //본인의 경우에 맞게 편집할것
     roscore
@@ -224,7 +230,7 @@ bashrc 파일을 수정해야 한다.
 압축해제
     
     cd ~/Downloads
-    tar xf cudnn-[버전]-linux-x64-v8.1.1.33.tgz                      // 본인이 설치한 압축파일의 이름을 복사, 붙여넣기 하여 압축 해제한다.
+    tar xf cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive.tar.xz                      // 본인이 설치한 압축파일의 이름을 복사, 붙여넣기 하여 압축 해제한다.
 
   여기서 압축해제한 폴더 이름은 cuda로 바꾼다.
   
@@ -232,6 +238,7 @@ bashrc 파일을 수정해야 한다.
     sudo cp cuda/include/cudnn* /usr/local/cuda/include
     sudo cp cuda/lib/libcudnn* /usr/local/cuda/lib64
     sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+    
     sudo ln -sf /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_adv_train.so.8.4.1 /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_adv_train.so.8
     sudo ln -sf /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_ops_infer.so.8.4.1  /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_ops_infer.so.8
     sudo ln -sf /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_cnn_train.so.8.4.1  /usr/local/cuda-11.7/targets/x86_64-linux/lib/libcudnn_cnn_train.so.8
@@ -248,7 +255,8 @@ bashrc 파일을 수정해야 한다.
   
   아래는 tensorflow, cuda, cuDNN 호환성 판별 링크이며 버전 참고용으로만 사용한다.
   https://www.tensorflow.org/install/source?hl=ko#gpu
-  
+
+    cd
     python3 -V
     sudo apt install python3-venv
     mkdir my_tensorflow
@@ -264,7 +272,8 @@ bashrc 파일을 수정해야 한다.
     deactivate
 
 # realsense object detection
-  
+
+    cd
     git clone https://github.com/WongKinYiu/yolov7.git
     sudo apt install python3-pip
     pip3 install -U PyYAML
@@ -273,6 +282,7 @@ bashrc 파일을 수정해야 한다.
     pip3 install numpy                                              //==1.19.5   //pip3 install numpy==1.20.3
     sudo apt install libjpeg-dev
     pip3 install matplotlib
+    sudo apt-get install libhdf5-serial-dev hdf5-tools libhdf5-dev zip libjpeg8-dev libblas-dev
     sudo apt install gfortran
     sudo apt install libopenblas-dev
     sudo apt install liblapack-dev
@@ -280,7 +290,8 @@ bashrc 파일을 수정해야 한다.
     pip3 install typing-extensions
     pip3 install torch
     pip3 install torchvision
-    wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+    sudo apt-get install python3-opencv
+    wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl   // 생략 가능할듯
     sudo apt-get install python3-pip libopenblas-base libopenmpi-dev libomp-dev
     pip3 install torch-1.8.0-cp36-cp36m-linux_aarch64.whl
     sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
@@ -306,7 +317,7 @@ bashrc 파일을 수정해야 한다.
   
     ./buildLibrealsense.sh
   
-이제 ~/yolov7/detect.py 파일 내용을 아래로 바꾼다.
+이제 ~/yolov7/detect.py 파일 내용을 아래로 바꾼다. ( ros가 포함된 코드는 깃허브의 detect.py 로 작성 )
   
   ```py
 import argparse
@@ -508,7 +519,7 @@ if __name__ == '__main__':
     cd ~/yolov7
     python3 detect.py
 
-# 자율주행을 위한 ros 의존성 패키지 설치
+# 자율주행을 위한 ros 의존성 패키지 설치 (생략가능)
 
     sudo apt-get install ros-melodic-joy ros-melodic-teleop-twist-joy \
     ros-melodic-teleop-twist-keyboard ros-melodic-laser-proc \
@@ -520,7 +531,7 @@ if __name__ == '__main__':
     ros-melodic-compressed-image-transport ros-melodic-rqt* \
     ros-melodic-gmapping ros-melodic-navigation ros-melodic-interactive-markers
     
-# turtlebot3 패키지 설치
+# turtlebot3 패키지 설치 (생략가능)
 
     cd ~/catkin_ws/src/
     git clone -b melodic-devel https://github.com/ROBOTIS-GIT/DynamixelSDK.git
@@ -531,7 +542,7 @@ if __name__ == '__main__':
     source devel/setup.bash 
     echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
     
-# cartographer 패키지 설치
+# cartographer 패키지 설치 (생략가능)
     
     sudo apt-get update
     sudo apt-get install -y python-wstool python-rosdep ninja-build stow
@@ -553,13 +564,230 @@ catkin_make_isolated  이 빌드 명령어는 cartographer 패키지를 빌드�
 
     catkin_make --only-pkg-with-deps [패키지 명]
     
-# turtlebot3_slam 및 navigation 을 정상적으로 실행시키기 위한 bringup 패키지 생성
+# turtlebot3_slam 및 navigation 을 정상적으로 실행시키기 위한 bringup 패키지 생성 (생략가능)
 
 rplidar, arduino를 실행시키고 tf frame 변환관계 , /odom, /imu, /joint_states 토픽을 publish 하는 패키지를 제작하여 사용하였다.
 이를 통해 pc, lidar, arduino 만을 사용해서 turtlebot3 패키지를 사용할 수 있으며 navigation 코드 또한 사용 할 수 있다.
 
     roslaunch henes_bringup henes_bringup.launch
-    
-    
-    
-    
+
+# iAHRS 설치법
+
+    ls -l /dev |grep ttyUSB                                 // imu 센서의 포트를 찾는다. ex) /dev/ttyUSB1
+    cd catkin_ws/src
+    git clone https://github.com/wookbin/iahrs_driver.git
+    sudo usermod -a -G dialout $USER
+    lsusb
+    udevadm info -a /dev/ttyUSB1 | grep '{serial}'
+
+![image](https://github.com/kimjunho654/henes_develop/assets/105560901/1bb98caa-c175-4c9a-b77d-d72e38d66271)
+
+    cd /etc/udev/rules.d
+    nano IMU.rules
+
+아래 내용 입력
+
+    KERNEL=="ttyUSB1", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", MODE:="0666", GROUP:="dialout", SYMLINK+="IMU" 
+
+아래 명령어 입력후 pc 재시작
+
+    sudo service udev restart
+    cd ~/catkin_ws/src/iahrs_driver/src
+    gedit iahrs_driver.cpp
+
+아래 코드 변경
+
+    [변경 전] #define SERIAL_PORT        "/dev/IMU" 
+    [변경 후] #define SERIAL_PORT        "/dev/ttyUSB1" 
+
+    cd ~/catkin_ws
+    catkin_make
+
+imu 실행
+
+    roscore
+    roslaunch iahrs_driver iahrs_driver.launch
+
+# GPS 설치법
+
+준비
+
+    1. 국토지리정보원 회원가입
+    2. 국토정보플랫폼 화면 이동
+    3. 공간정보 -> 위성 기준점 서비스 -> 네트워크 RTK 서비스 클릭
+    4. VRS ID 에서 아이디 만든 후 등록(패스워드는 ngii 고정)
+    5. GPS HW 모듈연결(ZED-F9P를 C타입-USB PC와 연결)
+
+    ls -l /dev/ttyACM*                // 우분투 터미널에서 GPS RTK 보드 인식 확인
+    sudo chmod 777 /dev/ttyACM0       // 대부분은 ttyACM0로 인식하나 본인의 경우에 맞게 수정할 것
+
+## RTK-GPS install
+
+    cd ~/catkin_ws/src
+    git clone https://github.com/DigSafeMQP2020/ublox_f9p.git
+    cd ublox_f9p
+    git clone https://github.com/tilk/rtcm_msgs.git
+    git clone https://github.com/ros-agriculture/ntrip_ros.git
+    cd ~/catkin_ws
+    catkin_make
+
+## 파일 수정
+
+~catkin_ws/src/ublox_f9p/ublox_gps/launch/ublox_device.launch 파일의 일부를 수정한다
+
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <launch>
+      <arg name="node_name" value="ublox_gps"/>
+      <arg name="param_file_name" value="zed-f9p" />
+      <arg name="output" default="screen" />
+      <arg name="respawn" default="true" />
+      <arg name="respawn_delay" default="30" />
+      <arg name="clear_params" default="true" />
+
+      <node pkg="ublox_gps" type="ublox_gps" name="$(arg node_name)" 
+            output="$(arg output)" 
+            clear_params="$(arg clear_params)" 
+            respawn="$(arg respawn)" 
+            respawn_delay="$(arg respawn_delay)">
+        <rosparam command="load" 
+                  file="$(find ublox_gps)/config/zed-f9p.yaml" />
+      </node>
+    </launch>
+
+다음으로
+/catkin_ws/src/ublox_f9p/ublox_gps/config/zed_f9p.yaml 파일에서 device가 본인이 연결한 포트와 일치하는지 확인할 것 ex) device: /dev/ttyACM1
+
+다음으로 ~/catkin_ws/src/ublox_f9p/ublox_gps/src/node.cpp 파일에서 1861번줄 문장을 수정할것
+
+     //param_nh.param("rtcm_topic", rtcm_topic, std::string("rtcm"));              // 원래 코드
+      param_nh.param("/ublox_gps/rtcm", rtcm_topic, std::string("rtcm"));          // 변경한 코드
+
+~/catkin_ws/src/ublox_f9p/ntrip_ros/launch/ntrip_ros.launch 파일 아래와 같이 수정할것
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <launch>
+      <include file="$(find ublox_gps)/launch/ublox_device.launch"/>
+      <node pkg="ntrip_ros" type="ntripclient.py" name="ntrip_ros" output="screen">
+          <param name="rtcm_topic" value="/ublox_gps/rtcm"/>
+          <param name="ntrip_server" value="RTS1.ngii.go.kr:2101"/>
+          <param name="ntrip_user" value="pace0807"/>
+          <param name="ntrip_pass" value="ngii"/>
+          <param name="ntrip_stream" value="VRS-RTCM31"/>
+          <param name="nmea_gga" value="$GPGGA,123710.969,3646.149,N,12656.085,E,1,12,1.0,0.0,M,0.0,M,,*6E"/>
+      </node>
+    </launch>
+
+## GPS 실행
+
+    cd ~/catkin_ws
+    catkin_make
+    source devel/setup.bash
+    roscore
+    roslaunch ublox_gps ublox_device.launch           // source devel/setup.bash   각각의 터미널에서 입력해 줘야한다.
+    roslaunch ntrip_ros ntrip_ros.launch              // source devel/setup.bash
+
+# GPS-UTM-LLA
+
+    sudo apt-get install ros-melodic-geographic-*
+    sudo apt-get install geographiclib-*
+    sudo apt-get install libgeographiclib-*
+    sudo apt-get install libgeographic-dev
+    sudo ln -s /usr/share/cmake/geographiclib/FindGeographicLib.cmake /usr/share/cmake-3.10/Modules/
+
+    cd catkin_ws/src 
+    git clone https://github.com/arpg/ROS-UTM-LLA.git
+    cd ..
+    catkin_make
+
+# geonav_transform
+
+    cd catkin_ws/src
+    git clone https://github.com/bsb808/geonav_transform.git
+    cd ..
+    catkin_make
+
+## DigSafeMQP2020/ublox_f9p 파일 말고 ros-agriculture/ublox_f9p 파일을 사용할때 빌드 안돼는 문제 해결법
+
+~catkin_ws/src/ublox_f9p/ublox_gps/CMakeLists.txt 파일의 26줄의 코드를 수정한다.
+
+    //SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")        기존거
+    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")       // 수정한거
+
+# ubuntu에서 Arduino 설치법
+
+## 1. Install package
+
+    $ sudo apt-get install ros-melodic-rosserial-arduino              // arduino 시리얼 통신을 위한 패키지 설치
+    $ sudo apt-get install ros-melodic-rosserial                      // PC 시리얼 통신을 위한 패키지 설치
+
+## 2. InstalArduino IDE
+
+https://www.arduino.cc/en/Main/Software 해당 링크로 들어가서 아래로 스크롤 하여 Previous Release 1.8.18을 클릭한다.(다른 방법을 쓰던 release 파일로 들어가면 된다.)
+
+![image](https://github.com/kimjunho654/henes_develop/assets/105560901/a00151d1-182d-4b40-a705-ee70414f888a)
+![image](https://github.com/kimjunho654/henes_develop/assets/105560901/3ec72ed3-cf91-4a0b-99ce-0f489e1bb6ec)
+
+원하는 아두이노 버전을(우리는 1.8.9버전 사용함) 본인 컴퓨터에 맞게 선택하는데, 마우스 우클릭으로 링크주소복사를 한다.
+
+    $ cd ~/Downloads                                                                 // 터미널을 통해 Downloads 경로로 이동하여 그 위치에 아두이노 ide를 설치 할 것이다.
+    $ sudo wget https://downloads.arduino.cc/arduino-1.8.13-linux64.tar.xz           // 직접 "sudo wget " 을 타이핑 하고 복사한 링크를 붙여넣기 한다. (Linux 64bit의 경우)
+    $ sudo wget https://downloads.arduino.cc/arduino-1.8.19-linuxaarch64.tar.xz      // 본인 cpu 상황에 따라 둘중 하나만 선택하여 터미널에 입력하면 된다.(Linux ARM64의 경우) 
+
+여기서 설치한 아두이노 압축파일이 Downloads 경로에 위치하지 않다면 그냥 마우스로 끌어다가 Downloads에 옮겨놓는다.
+
+    $ cd ~/Downloads                                       // Downloads로 이동하는 것인데, 원래 이 경로에 있었다면 상관없다.
+    $ tar xf arduino-1.8.9.tar.xz                             // 해당 파일 압축 풀기 ( [filename] 을 지우고 arduino-1.8.9-linux64 이런 식으로 써있는거 복붙해준다.)
+    $ mv -f arduino-1.8.9 ~/                            // 홈 경로로 폴더 이동  (압축을 풀면 arduino-1.8.9 같은 이름의 파일이 생성되었을 것이다. 이를 홈 경로로 옮긴다.)
+    $ cd ~/arduino-1.8.9                                // [arduino_forder] 지우고 arduino-1.8.9 같은거 복붙, 위의 mv 명령의 경우도 마찬가지 였다.
+    $ sudo ./install.sh                                    // 아두이노 설치함
+
+## 4. Run Arduino
+
+    $ arduino  // 아두이노 실햄
+
+board 와 port 설정 (사진 내용은 그냥 예시임, 그리고 물리적으로 pc와 아두이노 연결되야함)
+![image](https://github.com/kimjunho654/henes_develop/assets/105560901/e956b82c-404e-4140-b945-5f1450123fe4)
+
+## 포트 찾기
+
+    ls -l /dev |grep ttyUSB
+    또는
+    dmesg | grep tty
+
+## Arduino 직렬 통신 시작
+
+    rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0
+
+# xbox controller 세팅법
+
+https://makingrobot.tistory.com/38
+
+    sudo apt-get update
+    sudo apt-add-repository ppa:rael-gc/ubuntu-xboxdrv
+    sudo apt-get install ubuntu-xboxdrv
+
+    sudo systemctl enable xboxdrv.service
+    sudo apt install sysfsutils
+
+    sudo nano /etc/sysfs.conf
+
+아래 내용 입력
+
+    /module/bluetooth/parameters/disable_ertm=1
+
+블루투스로 xbox controller 를 연결하여 connect 되는지 확인후, pc 재부팅 잘 동작하는지 확인
+
+    cd /dev/input
+    sudo jstest /dev/input/js4
+
+    sudo chmod a+rw /dev/input/js4
+    cd ~/catkin_ws/src
+    git clone https://github.com/ros-teleop/teleop_twist_joy.git
+    git clone https://github.com/ros-drivers/joystick_drivers.git
+    sudo apt-get install libspnav-dev
+    cd ~/catkin_ws
+    catkin_make
+
+![image](https://github.com/kimjunho654/henes_develop/assets/105560901/64a78176-d50d-4571-912e-c995555bb46d)
