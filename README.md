@@ -34,7 +34,7 @@
     catkin_make         
     source devel/setup.bash    
     
-# rplidar_sdk 설치(생략 가능)
+### rplidar_sdk 설치(생략 가능)
     git clone https://github.com/Slamtec/rplidar_sdk.git    //home 디렉토리에서 설치한다.
     cd rplidar_sdk
     make                                                    // 이 명령어를 통해 output/Linux/Release 경로가 생겼을 것이다.
