@@ -26,7 +26,7 @@
 
 
     
-# catkin_ws 작업공간 설정하기
+## catkin_ws 작업공간 설정하기
     mkdir -p ~/catkin_ws/src       
     cd ~/catkin_ws/src
     catkin_init_workspace          
@@ -197,8 +197,9 @@ image -> image Topic -> /camera/color/image_raw
   
 ### 카메라 파라미터 값 변경하기
     rosrun rqt_reconfigure rqt_reconfigure
+
   
-# nvidia driver 설치
+# NVIDIA Driver 설치 
     lshw -C display                                  // 본인 컴퓨터에 GPU가 물리적으로 설치 되었는지 확인
     ubuntu-drivers devices                           // 본인 컴퓨터에 설치 가능한 GPU 드라이버 찾기                           
     sudo apt install nvidia-driver-515               // 드라이버 뒤에 distro non-free 붙은거 아무거나 설치
@@ -516,12 +517,12 @@ if __name__ == '__main__':
             detect()
 ```
 
-# realsense D455 사물인식 실행
+## realsense D455 사물인식 실행
   
     cd ~/yolov7
     python3 detect.py
 
-# 자율주행을 위한 ros 의존성 패키지 설치 (생략가능)
+### 자율주행을 위한 ros 의존성 패키지 설치 (생략가능)
 
     sudo apt-get install ros-melodic-joy ros-melodic-teleop-twist-joy \
     ros-melodic-teleop-twist-keyboard ros-melodic-laser-proc \
@@ -533,7 +534,7 @@ if __name__ == '__main__':
     ros-melodic-compressed-image-transport ros-melodic-rqt* \
     ros-melodic-gmapping ros-melodic-navigation ros-melodic-interactive-markers
     
-# turtlebot3 패키지 설치 (생략가능)
+### turtlebot3 패키지 설치 (생략가능)
 
     cd ~/catkin_ws/src/
     git clone -b melodic-devel https://github.com/ROBOTIS-GIT/DynamixelSDK.git
@@ -544,7 +545,7 @@ if __name__ == '__main__':
     source devel/setup.bash 
     echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
     
-# cartographer 패키지 설치 (생략가능)
+### cartographer 패키지 설치 (생략가능)
     
     sudo apt-get update
     sudo apt-get install -y python-wstool python-rosdep ninja-build stow
@@ -566,7 +567,7 @@ catkin_make_isolated  이 빌드 명령어는 cartographer 패키지를 빌드�
 
     catkin_make --only-pkg-with-deps [패키지 명]
     
-# turtlebot3_slam 및 navigation 을 정상적으로 실행시키기 위한 bringup 패키지 생성 (생략가능)
+### turtlebot3_slam 및 navigation 을 정상적으로 실행시키기 위한 bringup 패키지 생성 (생략가능)
 
 rplidar, arduino를 실행시키고 tf frame 변환관계 , /odom, /imu, /joint_states 토픽을 publish 하는 패키지를 제작하여 사용하였다.
 이를 통해 pc, lidar, arduino 만을 사용해서 turtlebot3 패키지를 사용할 수 있으며 navigation 코드 또한 사용 할 수 있다.
@@ -690,7 +691,7 @@ imu 실행
     roslaunch ublox_gps ublox_device.launch           // source devel/setup.bash   각각의 터미널에서 입력해 줘야한다.
     roslaunch ntrip_ros ntrip_ros.launch              // source devel/setup.bash
 
-# GPS-UTM-LLA
+## GPS-UTM-LLA
 
     sudo apt-get install ros-melodic-geographic-*
     sudo apt-get install geographiclib-*
@@ -703,7 +704,7 @@ imu 실행
     cd ..
     catkin_make
 
-# geonav_transform
+## geonav_transform
 
     cd catkin_ws/src
     git clone https://github.com/bsb808/geonav_transform.git
