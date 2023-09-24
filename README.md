@@ -34,13 +34,7 @@
     catkin_make         
     source devel/setup.bash    
     
-### rplidar_sdk 설치(생략 가능)
-    git clone https://github.com/Slamtec/rplidar_sdk.git    //home 디렉토리에서 설치한다.
-    cd rplidar_sdk
-    make                                                    // 이 명령어를 통해 output/Linux/Release 경로가 생겼을 것이다.
-    cd output/Linux/Release
-    ./ultra_simple       
-sdk 설치에서 ultra_simple이 제대로 실행되지 않더라고 아래의 rplidar_ros 패키지를 통해 ros에서 라이더를 구동하는것에 큰 문제가 없다.
+
 
 # rplidar_ros 설치
     cd ~/catkin_ws/src                                               //만약 작업공간을 만들지 않았다면 "업무 #316 ros 설치법"에서 작업공간을 설정한다.
@@ -79,18 +73,18 @@ ID_SERIAL= 의 뒤에 있는 내용들은 이후에 사용할 예정이므로 �
 복붙했다면 [ctrl + s] , [ctrl + x] 입력한다.(저장, 나가기)
 
 
-# rplidar git 내용 변경된 문제 해결법
+## rplidar git 내용 변경된 문제 해결법
     cd ~/catkin_ws/src/rplidar_ros
     git reset --hard 4f8ddee37de1d9b5a3a1d222607b9097c15ba444
 
 
-# rplidar a2 실행
+## rplidar a2 실행
 
     sudo chmod 666 /dev/ttyUSB0                           //본인의 경우에 맞게 편집할것
     roscore
     roslaunch rplidar_ros view_rplidar.launch             //lidar a1과 a2의 경우임
     
-#### roslaunch rplidar_ros view_rplidar.launch 에러 해결법
+### roslaunch rplidar_ros view_rplidar.launch 에러 해결법
 ![image](https://user-images.githubusercontent.com/105560901/222708540-a844a128-a1e4-4f74-9582-a9eb57c53d19.png)
 
     cd ~/catkin_ws
@@ -99,7 +93,7 @@ ID_SERIAL= 의 뒤에 있는 내용들은 이후에 사용할 예정이므로 �
     rospack profile
     rospack find rplidar_ros                    // 이 명령어로 패키지가 찾아지면 보통은 해결된다.
 
-#### operation time out 에러 해결법
+### operation time out 에러 해결법
 ~/catkin_ws/src/rplidar_ros/launch/rplidar.launch 파일에 들어가서 serial_baudrate의 값을 115200에서 256000으로 변경해준다.
 또한 라이더의 어뎁터에 물리적으로 baudrate를 결정하는 스위치가 있는데 그것도 변경해 준다.
 
@@ -108,11 +102,19 @@ ID_SERIAL= 의 뒤에 있는 내용들은 이후에 사용할 예정이므로 �
 Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 모델명은 rplidar a2m12 이다. 대부분의 a2 라이더는 115200으로 통신하지만
 해당 모델의 경우(rplidar a2m12) serial_baudrate를 256000으로 사용하기 때문에 launch 파일에서 이러한 부분을 수정 할 필요가 있다.
 
+### rplidar_sdk 설치(생략 가능)
+    git clone https://github.com/Slamtec/rplidar_sdk.git    //home 디렉토리에서 설치한다.
+    cd rplidar_sdk
+    make                                                    // 이 명령어를 통해 output/Linux/Release 경로가 생겼을 것이다.
+    cd output/Linux/Release
+    ./ultra_simple       
+sdk 설치에서 ultra_simple이 제대로 실행되지 않더라고 아래의 rplidar_ros 패키지를 통해 ros에서 라이더를 구동하는것에 큰 문제가 없다.
+
 # realsense 패키지 설치
     sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
     sudo apt-get install ros-$ROS_DISTRO-realsense2-description
     
-# 빌드 의존성 설치
+## 빌드 의존성 설치
     sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
     git clone https://github.com/IntelRealSense/librealsense.git
     cd librealsense
@@ -129,7 +131,7 @@ Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 
     // 우분투 18/20
     sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at
 
-# Intel® RealSense™ SDK 2.0 설치
+## Intel® RealSense™ SDK 2.0 설치
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
     
 만약 위의 명령어로 key를 검색하지 못했다면 오른쪽의 명령어를 입력하고 다시 시도한다. export http_proxy="http://<proxy>:<port>" 
@@ -140,10 +142,10 @@ Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 
     sudo apt-get install librealsense2-dev
     sudo apt-get install librealsense2-dbg                 // SDK 설치 완료
   
-#### realsense camera SDK 실행
+## realsense camera SDK 실행
     realsense-viewer
 
-# Intel® RealSense™ ROS 설치
+## Intel® RealSense™ ROS 설치
     cd ~/catkin_ws/src/
     git clone https://github.com/IntelRealSense/realsense-ros.git
     cd realsense-ros/
@@ -155,7 +157,7 @@ Description : 우리 팀에서 사용하는 라이더는 a2이지만, 정확한 
     echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
     source ~/.bashrc
   
-# pointcloud 옵션을 사용하여 카메라 노드 실행
+### pointcloud 옵션을 사용하여 카메라 노드 실행
     roslaunch realsense2_camera rs_camera.launch filters:=pointcloud              // 뒤에 붙는 옵션은 다양하게 붙을 수 있다.
     rviz
  
@@ -165,13 +167,13 @@ PointCloud2 -> Topic -> /camera/depth/color/points
 TF -> Frames -> camera_link, map 만 체크하고 나머지 체크 해제
 image -> image Topic -> /camera/color/image_raw
 
-# realsense camera를 이용한 SLAM
+### realsense camera를 이용한 SLAM
     sudo apt-get install ros-noetic-imu-filter-madgwick
     sudo apt-get install ros-noetic-rtabmap-ros
     sudo apt-get install ros-noetic-robot-localization
-# SLAM 사용가능한 카메라 노드 실행
+### SLAM 사용가능한 카메라 노드 실행
     roslaunch realsense2_camera opensource_tracking.launch
-# SLAM 녹화하기
+### SLAM 녹화하기
 저장이 아니라 녹화 기능이므로 처음 카메라 노드를 실행시켰을때 아래 명령어를 입력해야 한다.
 여러파일을 저장하려면 my_bagfile_1.bag <- 이름을 변경해야한다. 변경없이 실행시키면 데이터가 덮어씌어져 삭제된다.
                                 
@@ -193,7 +195,7 @@ image -> image Topic -> /camera/color/image_raw
     // 2D 맵 저장하기
     rosrun map_server map_saver map:=/rtabmap/proj_map –f my_map_1         // my_map_1 은 본인이 원하는 이름으로 저장 가능하다.
   
-#### 카메라 파라미터 값 변경하기
+### 카메라 파라미터 값 변경하기
     rosrun rqt_reconfigure rqt_reconfigure
   
 # nvidia driver 설치
