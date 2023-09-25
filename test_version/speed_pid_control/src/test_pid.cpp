@@ -48,7 +48,6 @@ double a4 = 0;
 double a5 = 0;
 double a6 = 0;
 
-double prev_desire_speed = 0;
 
 std_msgs::Float64 measure_speed_msg;
 std_msgs::Float64 desire_speed_msg;
@@ -148,7 +147,7 @@ void desire_speed_callback(const std_msgs::Int16::ConstPtr& msg) {
         }
 
         sp_60_to_230 = true;
-        prev_desire_speed = desired_speed;
+
     }
     /*
     else {
