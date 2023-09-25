@@ -137,7 +137,16 @@ void desire_speed_callback(const std_msgs::Int16::ConstPtr& msg) {
     desired_msg = msg->data;
 
     if(init_start_60 == false && desired_msg == 230){
-        a = desired_speed;
+        if(0.1 <= desired_speed && desired_speed <= 0.7){
+            a = desired_speed;
+        }
+        else if(desired_speed < 0.1){
+            a = 0.1;
+        }
+        else if(0.7 < desired_speed){
+            a = 0.7;
+        }
+
         sp_60_to_230 = true;
         prev_desire_speed = desired_speed;
     }
