@@ -2,6 +2,7 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float64.h>
+#include <cmath>
 
 ros::Publisher speed_pub;
 ros::Publisher pid_error_pub;
@@ -28,10 +29,26 @@ bool speed_230 = false;
 bool speed_60 = false;
 bool speed_0 = false;
 
+bool sp_60_to_230 = false;
+
 bool init_start_230 = true;
 bool init_start_60 = true;
 bool init_start_0 = true;
 
+double x = 0;
+
+double a = 0;
+double b = 0;
+
+double a0 = 0;
+double a1 = 0;
+double a2 = 0;
+double a3 = 0;
+double a4 = 0;
+double a5 = 0;
+double a6 = 0;
+
+double prev_desire_speed = 0;
 
 std_msgs::Float64 measure_speed_msg;
 std_msgs::Float64 desire_speed_msg;
@@ -119,6 +136,18 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg) {
 void desire_speed_callback(const std_msgs::Int16::ConstPtr& msg) {
     desired_msg = msg->data;
 
+    if(init_start_60 == false && desired_msg == 230){
+        a = desired_speed;
+        sp_60_to_230 = true;
+        prev_desire_speed = desired_speed;
+    }
+    /*
+    else {
+        sp_60_to_230 = false;
+    }
+    */
+
+
 
     if (desired_msg == 230) {
         //desired_speed = 1.1;
@@ -183,19 +212,40 @@ int main(int argc, char** argv) {
             // 현재 ROS 시간을 사용하여 x 값을 생성 (ROS 시간을 사용하려면 roscore가 실행 중이어야 함)
             ros::Time current_time = ros::Time::now();
             delta_time =  current_time.toSec() - init_time.toSec();  // x 값을 계산
-            double x = delta_time - 4;
+
+            x = delta_time - 4;
 
             // 시그모이드 함수 계산
-            sigmoid_value = 1.3 / (1.0 + std::exp(-x));
+            if( sp_60_to_230 == true ){
+                a0 = 2619.444444447213*pow(a, 6);
+                a1 = -7320.833333339944*pow(a, 5);
+                a2 = 8401.527777783953*pow(a, 4);
+                a3 = -5102.29166666951*pow(a, 3);
+                a4 = 1757.7727777784412*pow(a, 2);
+                a5 = -340.15000000007126*a;
+                a6 = 32.77000000000234;
 
-            desired_speed = sigmoid_value;
+                b = a0 + a1 + a2 + a3 + a4 + a5 + a6;
+
+                sigmoid_value = a*( b / (1.0 + std::exp(-x))) + a;
+            }
+            else {
+                sigmoid_value = 1.3 / (1.0 + std::exp(-x));
+            }
+
+            if(desired_speed < sigmoid_value){
+                desired_speed = sigmoid_value;
+            }
 
         }
         else if(speed_60 == true){
             // 현재 ROS 시간을 사용하여 x 값을 생성 (ROS 시간을 사용하려면 roscore가 실행 중이어야 함)
             ros::Time current_time = ros::Time::now();
             delta_time =  current_time.toSec() - init_time.toSec();  // x 값을 계산
-            double x = delta_time - 4;
+
+
+            x = delta_time - 4;
+
 
             // 시그모이드 함수 계산
             sigmoid_value = 0.7 / (1.0 + std::exp(-x));
@@ -206,7 +256,7 @@ int main(int argc, char** argv) {
             // 현재 ROS 시간을 사용하여 x 값을 생성 (ROS 시간을 사용하려면 roscore가 실행 중이어야 함)
             ros::Time current_time = ros::Time::now();
             delta_time =  current_time.toSec() - init_time.toSec();  // x 값을 계산
-            double x = delta_time - 4;
+            x = delta_time - 4;
 
             // 시그모이드 함수 계산
             sigmoid_value = 1.3 / (0.65 + 20*std::exp(x));
