@@ -124,8 +124,8 @@ include_directories(
 add_executable(speed_pid_control src/speed_pid_control.cpp)
 target_link_libraries(speed_pid_control ${catkin_LIBRARIES} )
 
-add_executable(smooth_speed src/smooth_speed.cpp)
-target_link_libraries(smooth_speed ${catkin_LIBRARIES} )
+#add_executable(smooth_speed src/smooth_speed.cpp)
+#target_link_libraries(smooth_speed ${catkin_LIBRARIES} )
 
 add_executable(test_pid src/test_pid.cpp)
 target_link_libraries(test_pid ${catkin_LIBRARIES} )
