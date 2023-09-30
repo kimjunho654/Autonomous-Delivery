@@ -2,12 +2,18 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Bool.h>
 #include <cmath>
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+
+#define RAD2DEG(x) ((x)*180./M_PI)
 
 ros::Publisher speed_pub;
 ros::Publisher pid_error_pub;
 ros::Publisher measure_speed_pub;
 ros::Publisher desire_speed_pub;
+ros::Publisher pitch_pub;
+ros::Publisher high_pitch_bool_pub;
 
 double current_speed = 0;
 double measure_msg = 0;
@@ -21,9 +27,12 @@ double error_derivative = 0.0;
 double error = 0;
 double sigmoid_value = 0;
 double delta_time = 0;
+double sub_pitch_current_time;
 
 int pid_output = 0;
 int control_output = 0;
+
+int count_speed_high = 0;
 
 bool speed_230 = false;
 bool speed_60 = false;
@@ -34,6 +43,11 @@ bool sp_60_to_230 = false;
 bool init_start_230 = true;
 bool init_start_60 = true;
 bool init_start_0 = true;
+
+bool sub_high_pitch = false;
+bool high_pitch_state = false;
+bool prev_pitch_state = false;
+bool imu_speed_control = false;
 
 double x = 0;
 
@@ -48,12 +62,16 @@ double a4 = 0;
 double a5 = 0;
 double a6 = 0;
 
+double roll2,pitch2,yaw2;
+float pitch_offset = 0;
 
 std_msgs::Float64 measure_speed_msg;
 std_msgs::Float64 desire_speed_msg;
 std_msgs::Int16 speed_msg;
 std_msgs::Float64 pid_error_msg;
 ros::Time init_time;
+std_msgs::Float64 pitch_msg;
+std_msgs::Bool pitch_bool_msg;
 
 double Kp = 0; //190;  // P 게인  // pid test indoor 70
 double Ki = 12; //3.5;  // I 게인
@@ -65,33 +83,75 @@ long map(long x, long in_min, long in_max,long out_min, long out_max)
 
 }
 
+void pitch_Callback(const nav_msgs::Odometry::ConstPtr& msg)
+{
+    tf2::Quaternion q2(
+    msg->pose.pose.orientation.x,
+    msg->pose.pose.orientation.y,
+    msg->pose.pose.orientation.z,
+    msg->pose.pose.orientation.w);
+
+    tf2::Matrix3x3 m2(q2);
+
+    m2.getRPY(roll2, pitch2, yaw2);
+    pitch2 = pitch2 + pitch_offset;
+
+    if( RAD2DEG(pitch2) < -20 && (sub_high_pitch == false) ) {
+        sub_pitch_current_time = ros::Time::now().toSec();
+        sub_high_pitch = true;
+    }
+    else if( RAD2DEG(pitch2) > -20 ) { 
+        sub_high_pitch = false; 
+    }
+
+
+}
+
 // 속도 PID 제어 함수
 double speed_pid_control(double current_speed) {
 
     error = desired_speed - current_speed;
     error_integral += error;
-    error_integral = (error_integral >= 255) ? 255 : error_integral;
-    error_integral = (error_integral <= -255) ? -255 : error_integral;
+    error_integral = (error_integral >= 19) ? 19 : error_integral;
+    error_integral = (error_integral <= -19) ? -19 : error_integral;
     error_derivative = error - prev_error;
+
+    // imu control speed
+    if(prev_pitch_state == true && high_pitch_state == false){ imu_speed_control = true; }
+    else { imu_speed_control = false; } 
+
+    prev_pitch_state = high_pitch_state;
+
+    if(imu_speed_control == true) { 
+        if (error_integral > 9) {
+            error_integral = error_integral - 9;
+        }
+        else if (error_integral < -9) {
+            error_integral = error_integral + 9;
+        }
+    }
 
     pid_output = Kp * error + Ki * error_integral + Kd * error_derivative;
 
     if(speed_230 == true){
-
         if(current_speed >= 0.1){
-            if(  (current_speed > desired_speed) || (error >= -0.05) && (error <= 0.05) ){
+            if( (current_speed > desired_speed) || (error >= -0.05) && (error <= 0.05) ){
                 error_integral = error_integral - 0.1;
             }
             else if( pid_output > 200 && current_speed > 0.8 ) {
-                error_integral = error_integral - 3;
+                error_integral = error_integral - 0.3;
             }
+
+            if( current_speed > 1.5 ){ count_speed_high++; }
+            else { count_speed_high = 0; }
+
+            if(count_speed_high > 30) { error_integral - 0.3;}
         }
     }
     else if(speed_0 == true){
         if(  (current_speed >= -0.05) && (current_speed <= 0.05) ){
             error_integral = 0;
         }
-
     }
         
     prev_error = error;
@@ -99,9 +159,12 @@ double speed_pid_control(double current_speed) {
     // 속도 값이 특정 범위를 벗어나면 조정
     if (pid_output > 255.0) {
         pid_output = 255.0;
-    } else if (pid_output < -255.0) {
+    } 
+    else if (pid_output < -255.0) {
         pid_output = -255.0;
     }
+
+
 
     return pid_output;
 }
@@ -126,10 +189,14 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     speed_msg.data = control_output;
     speed_pub.publish(speed_msg);
 
-    pid_error_msg.data = error;
+    pid_error_msg.data = error_integral;  //error;
     pid_error_pub.publish(pid_error_msg);
 
+    pitch_msg.data = RAD2DEG(pitch2); 
+    pitch_pub.publish(pitch_msg);
 
+    pitch_bool_msg.data = imu_speed_control; //high_pitch_state;
+    high_pitch_bool_pub.publish(pitch_bool_msg);
 }
 
 void desire_speed_callback(const std_msgs::Int16::ConstPtr& msg) {
@@ -206,13 +273,14 @@ int main(int argc, char** argv) {
 
     ros::Subscriber desire_sub = nh.subscribe("/Car_Control_cmd/Speed_Int16", 10, desire_speed_callback);
     ros::Subscriber odom_sub = nh.subscribe("/odom", 10, odom_callback);
-
+    ros::Subscriber pitch_sub  = nh.subscribe("/odometry/filtered",10,&pitch_Callback);
 
     speed_pub = nh.advertise<std_msgs::Int16>("PID_car_speed", 10);
     pid_error_pub = nh.advertise<std_msgs::Float64>("PID_error", 10);
     measure_speed_pub = nh.advertise<std_msgs::Float64>("measure_speed", 10);
     desire_speed_pub = nh.advertise<std_msgs::Float64>("desired_speed", 10);
-
+    pitch_pub = nh.advertise<std_msgs::Float64>("/pitch", 10);
+    high_pitch_bool_pub = nh.advertise<std_msgs::Bool>("/bool_pitch", 10);
 
     while (ros::ok())
     {
@@ -272,6 +340,11 @@ int main(int argc, char** argv) {
 
         }
 
+        if( (ros::Time::now().toSec() - sub_pitch_current_time > 2) && (sub_high_pitch == true) ){ high_pitch_state = true; }
+        else { high_pitch_state = false; }
+
+
+
         ros::spinOnce();
         //loop_rate.sleep();
     }
@@ -284,4 +357,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
