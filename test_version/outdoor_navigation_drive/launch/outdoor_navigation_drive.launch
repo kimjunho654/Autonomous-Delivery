@@ -17,5 +17,5 @@
 
   <node pkg="waypoints_move" type="waypoints_move_node" name="Outdoor_Navigation_Drive" output="screen"/>
   <node pkg="waypoints_move" type="angle_segmentation" name="angle_segmentation" output="screen"/>
-  <node pkg="speed_pid_control" type="speed_pid_control" name="speed_pid_control" output="screen"/>
+  <node pkg="speed_pid_control" type="test_pid" name="speed_pid_control" output="screen"/>
 </launch>
