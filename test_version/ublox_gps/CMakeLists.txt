@@ -50,8 +50,8 @@ set_target_properties(ublox_gps_node PROPERTIES OUTPUT_NAME ublox_gps)
 add_executable(gps_KalmanFilter_node src/gps_KalmanFilter.cpp)
 target_link_libraries(gps_KalmanFilter_node ${catkin_LIBRARIES})
 
-add_executable(dummy_gps src/dummy_gps.cpp)
-target_link_libraries(dummy_gps ${catkin_LIBRARIES})
+#add_executable(dummy_gps src/dummy_gps.cpp)
+#target_link_libraries(dummy_gps ${catkin_LIBRARIES})
 
 target_link_libraries(ublox_gps_node boost_system boost_regex boost_thread)
 target_link_libraries(ublox_gps_node ${catkin_LIBRARIES})
