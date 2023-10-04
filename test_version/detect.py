@@ -83,7 +83,7 @@ def detect(save_img=False):
     align = rs.align(align_to)
 
     while(True):
-       rospy.init_node('detect_publisher')
+       rospy.init_node('camera_detect')
        depth_pub = rospy.Publisher('/depth', Float64, queue_size=10)
        detect_name_pub = rospy.Publisher('/detect_name', String, queue_size=10)
 
