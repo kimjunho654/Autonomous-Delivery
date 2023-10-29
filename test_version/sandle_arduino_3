@@ -32,22 +32,45 @@ void cmd_vel_callback(const geometry_msgs::Twist& msg) {
 
 }
 
-float leftright = 0;
-float updown = 0;
 
+float forward = 0;
+float back = 0;
+float left = 0;
+float right = 0;
+
+float prev_forward = 0;
+float prev_back = 0;
+float prev_left = 0;
+float prev_right = 0;
 
 void joy_callback(const sensor_msgs::Joy& msg) {
 
-    leftright = msg.axes[0];
-    updown = msg.axes[1];
+    if(msg.buttons[3] == 1 && prev_forward == 0) forward = msg.buttons[3];
+    if(msg.buttons[0] == 1 && prev_back == 0)    back = msg.buttons[0];
+    if(msg.buttons[1] == 1 && prev_left == 0)    left = msg.buttons[1];
+    if(msg.buttons[2] == 1 && prev_right == 0)   right = msg.buttons[2];
+    
+    
+    if (forward == 1) velocity += 10; // forward
+    if (back == 1)    velocity -= 10; // forward
+    if (left == 1)    steer_angle -= 1; // forward
+    if (right == 1)   steer_angle += 1; // forward
 
-    if (leftright > 0) steer_angle = 10; // left
-    else if (leftright < 0) steer_angle = -10; // right
-    else if (leftright = 0) steer_angle = 0; // stop
+    if(msg.buttons[5] == 1 || msg.buttons[4] == 1){
+        velocity = 0;
+        steer_angle = 0;
+    }
+    
+    if(velocity > 255)    velocity = 255;
+    if(velocity < -255)   velocity = -255;
+    if(steer_angle > 20)  steer_angle = 20;
+    if(steer_angle < -20) steer_angle = -20;
+    
+    prev_forward = forward;
+    prev_back = back;
+    prev_left = left;
+    prev_right = right;
 
-    if (updown > 0) velocity = 60; // forward
-    else if (updown < 0) velocity = -60; // backward
-    else if (updown = 0) velocity = 0; // stop
 
 }
 
@@ -81,7 +104,7 @@ void start_joy_callback(const std_msgs::Bool& msg) {
 ros::Subscriber<std_msgs::Int16> heading_angle_sub("heading_angle", heading_angle_callback);
 ros::Subscriber<std_msgs::Int16> speed_sub("PID_car_speed", speed_callback); //Car_Control_cmd/Speed_Int16
 ros::Subscriber<geometry_msgs::Twist> cmd_sub("cmd_vel", cmd_vel_callback);
-ros::Subscriber<sensor_msgs::Joy> joy_sub("joy", joy_callback, 1);
+ros::Subscriber<sensor_msgs::Joy> joy_sub("joy", joy_callback);
 ros::Subscriber<std_msgs::Bool> start_joy_sub("start_joy", start_joy_callback);
 
 ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
@@ -103,13 +126,13 @@ void front_motor_control(int motor1_pwm)
 {
    if (motor1_pwm > 0) // forward
   {
-    digitalWrite(MOTOR1_DIR, HIGH);
+    digitalWrite(MOTOR1_DIR, LOW);
     digitalWrite(MOTOR1_BRK, LOW);
     analogWrite(MOTOR1_PWM, motor1_pwm);
   }
   else if (motor1_pwm < 0) // backward
   {
-    digitalWrite(MOTOR1_DIR, LOW);
+    digitalWrite(MOTOR1_DIR, HIGH);
     digitalWrite(MOTOR1_BRK, LOW);
     analogWrite(MOTOR1_PWM, -motor1_pwm);
   }
@@ -125,13 +148,13 @@ void rear_motor_control(int motor3_pwm)
 {
    if (motor3_pwm > 0) // forward
   {
-    digitalWrite(MOTOR3_DIR, HIGH);
+    digitalWrite(MOTOR3_DIR, LOW);
     digitalWrite(MOTOR3_BRK, LOW);
     analogWrite(MOTOR3_PWM, motor3_pwm);
   }
   else if (motor3_pwm < 0) // backward
   {
-    digitalWrite(MOTOR3_DIR, LOW);
+    digitalWrite(MOTOR3_DIR, HIGH);
     digitalWrite(MOTOR3_BRK, LOW);
     analogWrite(MOTOR3_PWM, -motor3_pwm);
   }
@@ -173,15 +196,15 @@ int Steering_Angle = NEURAL_ANGLE;
 
 void steer_motor_control(int motor_pwm)
 {
-  if (motor_pwm > 0) // forward
+  if (motor_pwm > 0) // right
   {
-    digitalWrite(MOTOR2_DIR, LOW);
+    digitalWrite(MOTOR2_DIR, HIGH);
     digitalWrite(MOTOR2_BRK, LOW);
     analogWrite(MOTOR2_PWM, motor_pwm);
   }
-  else if (motor_pwm < 0) // backward
+  else if (motor_pwm < 0) // left
   {
-    digitalWrite(MOTOR2_DIR, HIGH);
+    digitalWrite(MOTOR2_DIR, LOW);
     digitalWrite(MOTOR2_BRK, LOW);
     analogWrite(MOTOR2_PWM, -motor_pwm);
   }
@@ -336,8 +359,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if( start_joy == false && millis() - sub_speed_prev_time > 1000 ) { velocity = 0; }
-  if( (millis() - sub_start_command_prev_time) > 50) { start_joy = false; }
+  //if( start_joy == false && millis() - sub_speed_prev_time > 1000 ) { velocity = 0; }
+  //if( (millis() - sub_start_command_prev_time) > 50) { start_joy = false; }
 
 
   f_speed = r_speed = velocity;
@@ -348,8 +371,13 @@ void loop() {
   encoder_pub.publish(&encoder_data);
 
   //steering_angle.data = Steer_Angle_Measure;
-  steering_angle.data = velocity; //Steer_Angle_Measure
+  steering_angle.data = Steering_Angle; //Steer_Angle_Measure or velocity or Steering_Angle  for test
   steerAngle_pub.publish(&steering_angle);
+
+  forward = 0;
+  back = 0;
+  left = 0;
+  right = 0;
 
   nh.spinOnce();
 }
