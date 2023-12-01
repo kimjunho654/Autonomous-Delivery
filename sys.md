@@ -1112,6 +1112,17 @@ ros::Publisher encoder_pub("encoder_arduino", &encoder_data);
     이를 속도 PID 제어 노드가 sub 하여, 로봇 속도 측정값으로 사용하고 이를 통해 PID 제어를 통한 smooth한 가속 및 감속과 속도 제어를 수행한다.
 
 
+## 아두이노, 모터드라이버 연결도
+
+![image](https://github.com/kimjunho654/Autonomous-Delivery/assets/105560901/a392e792-32e8-43ff-8480-a792c43702fe)
+
+아두이노 4,5,6 핀에 연결된 것은 전륜 바퀴를 제어하는 모터드라이버이며,
+7, 8, 9 는 후륜-모터드라이버, 14, 15, 16 은 조향-모터드라이버이다.
+
+아두이노 핀 A, B, C는 각각 PWM(전압), DIR(방향), BRK(브레이크)를 담당한다.
+
+모터드라이버의 M1, M2 핀이 각각의 모터에 전압을 인가한다. (+, -)
+
 
 
 
